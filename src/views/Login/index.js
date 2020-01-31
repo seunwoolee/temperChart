@@ -15,6 +15,7 @@ import Page from 'src/components/Page';
 import gradients from 'src/utils/gradients';
 import LoginForm from './LoginForm';
 
+
 const useStyles = makeStyles((theme) => ({
   root: {
     height: '100%',
@@ -92,10 +93,10 @@ function Login() {
             gutterBottom
             variant="h3"
           >
-            Sign in
+            로그인
           </Typography>
           <Typography variant="subtitle2">
-            Sign in on the internal platform
+            페이퍼리스 전자결재
           </Typography>
           <LoginForm className={classes.loginForm} />
           <Divider className={classes.divider} />
