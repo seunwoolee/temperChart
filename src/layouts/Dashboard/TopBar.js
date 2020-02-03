@@ -33,7 +33,9 @@ import axios from 'src/utils/axios';
 import NotificationsPopover from 'src/components/NotificationsPopover';
 import PricingModal from 'src/components/PricingModal';
 import { logout } from 'src/actions';
+import NoteOutlinedIcon from '@material-ui/icons/NoteOutlined';
 import ChatBar from './ChatBar';
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -76,6 +78,10 @@ const useStyles = makeStyles((theme) => ({
     '&:hover': {
       backgroundColor: colors.green[900]
     }
+  },
+  logos: {
+    fontSize: '1rem',
+    color: theme.palette.common.white,
   },
   trialIcon: {
     marginRight: theme.spacing(1)
@@ -205,63 +211,14 @@ function TopBar({
           </IconButton>
         </Hidden>
         <RouterLink to="/">
-          <img
-            alt="Logo"
-            src="/images/logos/logo--white.svg"
-          />
+          <Button
+            className={classes.logos}
+          >
+            <NoteOutlinedIcon className={classes.logoutIcon} />
+            PaperLess
+          </Button>
         </RouterLink>
         <div className={classes.flexGrow} />
-        <Hidden smDown>
-          <div
-            className={classes.search}
-            ref={searchRef}
-          >
-            <SearchIcon className={classes.searchIcon} />
-            <Input
-              className={classes.searchInput}
-              disableUnderline
-              onChange={handleSearchChange}
-              placeholder="Search people &amp; places"
-              value={searchValue}
-            />
-          </div>
-          <Popper
-            anchorEl={searchRef.current}
-            className={classes.searchPopper}
-            open={openSearchPopover}
-            transition
-          >
-            <ClickAwayListener onClickAway={handleSearchPopverClose}>
-              <Paper
-                className={classes.searchPopperContent}
-                elevation={3}
-              >
-                <List>
-                  {popularSearches.map((search) => (
-                    <ListItem
-                      button
-                      key={search}
-                      onClick={handleSearchPopverClose}
-                    >
-                      <ListItemIcon>
-                        <SearchIcon />
-                      </ListItemIcon>
-                      <ListItemText primary={search} />
-                    </ListItem>
-                  ))}
-                </List>
-              </Paper>
-            </ClickAwayListener>
-          </Popper>
-          <Button
-            className={classes.trialButton}
-            onClick={handlePricingModalOpen}
-            variant="contained"
-          >
-            <LockIcon className={classes.trialIcon} />
-            Trial expired
-          </Button>
-        </Hidden>
         <IconButton
           className={classes.chatButton}
           color="inherit"
@@ -295,7 +252,7 @@ function TopBar({
             onClick={handleLogout}
           >
             <InputIcon className={classes.logoutIcon} />
-            Sign out
+            로그아웃
           </Button>
         </Hidden>
       </Toolbar>

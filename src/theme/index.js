@@ -6,8 +6,8 @@ import overrides from './overrides';
 const baseTheme = {
   palette,
   typography,
-  overrides
+  overrides,
 };
 
+// eslint-disable-next-line import/prefer-default-export
 export const theme = createMuiTheme(baseTheme);
-export const themeWithRtl = createMuiTheme({ ...baseTheme, direction: 'rtl' });

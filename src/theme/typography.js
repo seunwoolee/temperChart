@@ -1,7 +1,9 @@
 import palette from './palette';
 
 export default {
+  fontFamily: 'GmarketSansMedium',
   h1: {
+    fontFamily: 'GmarketSansBold',
     color: palette.text.primary,
     fontWeight: 500,
     fontSize: '35px',
@@ -9,6 +11,7 @@ export default {
     lineHeight: '40px'
   },
   h2: {
+    fontFamily: 'GmarketSansBold',
     color: palette.text.primary,
     fontWeight: 500,
     fontSize: '29px',
@@ -16,6 +19,7 @@ export default {
     lineHeight: '32px'
   },
   h3: {
+    fontFamily: 'GmarketSansBold',
     color: palette.text.primary,
     fontWeight: 500,
     fontSize: '24px',
@@ -23,6 +27,7 @@ export default {
     lineHeight: '28px'
   },
   h4: {
+    fontFamily: 'GmarketSansBold',
     color: palette.text.primary,
     fontWeight: 500,
     fontSize: '20px',
@@ -30,6 +35,7 @@ export default {
     lineHeight: '24px'
   },
   h5: {
+    fontFamily: 'GmarketSansBold',
     color: palette.text.primary,
     fontWeight: 500,
     fontSize: '16px',

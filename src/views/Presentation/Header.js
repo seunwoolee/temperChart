@@ -57,7 +57,7 @@ function Header({ className, ...rest }) {
           gutterBottom
           variant="h1"
         >
-          Devias React Material Kit - PRO
+          PaperLess
         </Typography>
         <Typography
           align="center"

@@ -1,5 +1,19 @@
 @import './prismjs';
 
+@font-face {
+  font-family: 'GmarketSansMedium';
+  src: url('../fonts/GmarketSansTTFMedium.ttf') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'GmarketSansBold';
+  src: url('../fonts/GmarketSansTTFBold.ttf') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
