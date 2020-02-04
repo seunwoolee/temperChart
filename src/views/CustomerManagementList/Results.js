@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
@@ -22,20 +22,33 @@ import {
   TableRow,
   Typography
 } from '@material-ui/core';
-import getInitials from 'src/utils/getInitials';
-import ReviewStars from 'src/components/ReviewStars';
 import GenericMoreButton from 'src/components/GenericMoreButton';
-import TableEditBar from 'src/components/TableEditBar';
+import BottomBar from "./BottomBar";
+import getShortBigo from "../../utils/getShortBigo";
+import useWindowDimensions from "./WindowDimenstions";
+import ReportModal from "./Modal/ReportModal";
+// import WriteReportModal from "../CustomerManagementDetails/Summary/WriteReporttModal";
 
 const useStyles = makeStyles((theme) => ({
   root: {},
   content: {
     padding: 0
   },
+  supplyCell: {
+    fontFamily: 'GmarketSansBold',
+  },
   inner: {
-    minWidth: 700
+    minWidth: 700,
+  },
+  whiteSpaceNoWrap: {
+    whiteSpace: 'nowrap'
+  },
+  mobileInner: {
+    minWidth: 700,
+    whiteSpace: 'nowrap'
   },
   nameCell: {
+    fontColor: 'red',
     display: 'flex',
     alignItems: 'center'
   },
@@ -51,10 +64,14 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Results({ className, customers, ...rest }) {
+
   const classes = useStyles();
   const [selectedCustomers, setSelectedCustomers] = useState([]);
+  const [selectedCustomerDatas, setSelectedCustomerDatas] = useState([]);
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [rowsPerPage, setRowsPerPage] = useState(25);
+  const [openModal, setOpenModal] = useState(false);
+  const { height, width } = useWindowDimensions();
 
   const handleSelectAll = (event) => {
     const selectedCustomers = event.target.checked
@@ -84,7 +101,6 @@ function Results({ className, customers, ...rest }) {
         selectedCustomers.slice(selectedIndex + 1)
       );
     }
-
     setSelectedCustomers(newSelectedCustomers);
   };
 
@@ -95,6 +111,20 @@ function Results({ className, customers, ...rest }) {
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(event.target.value);
   };
+
+  // eslint-disable-next-line max-len
+  const getSelectedCustomers = () => customers.filter(customer => selectedCustomers.includes(customer.id));
+
+  const handleWriteReport = () => {
+    setOpenModal(true);
+  };
+
+  const getClassName = () => width < 1024;
+
+  useEffect(() => {
+    setSelectedCustomerDatas(getSelectedCustomers());
+  }, [openModal]);
+
 
   return (
     <div
@@ -119,12 +149,12 @@ function Results({ className, customers, ...rest }) {
       <Card>
         <CardHeader
           action={<GenericMoreButton />}
-          title="All customers"
+          title="전표 내역"
         />
         <Divider />
         <CardContent className={classes.content}>
           <PerfectScrollbar>
-            <div className={classes.inner}>
+            <div className={getClassName() ? classes.mobileInner : classes.inner}>
               <Table>
                 <TableHead>
                   <TableRow>
@@ -139,13 +169,12 @@ function Results({ className, customers, ...rest }) {
                         onChange={handleSelectAll}
                       />
                     </TableCell>
-                    <TableCell>Name</TableCell>
-                    <TableCell>Location</TableCell>
-                    <TableCell>Money spent</TableCell>
-                    <TableCell>Type</TableCell>
-                    <TableCell>Projects held</TableCell>
-                    <TableCell>Reviews</TableCell>
-                    <TableCell align="right">Actions</TableCell>
+                    <TableCell>공급자명</TableCell>
+                    <TableCell>일자</TableCell>
+                    <TableCell>총액</TableCell>
+                    <TableCell>사용자</TableCell>
+                    <TableCell>비고</TableCell>
+                    <TableCell>배치번호</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -166,13 +195,7 @@ function Results({ className, customers, ...rest }) {
                         />
                       </TableCell>
                       <TableCell>
-                        <div className={classes.nameCell}>
-                          <Avatar
-                            className={classes.avatar}
-                            src={customer.avatar}
-                          >
-                            {getInitials(customer.name)}
-                          </Avatar>
+                        <div className={clsx(classes.nameCell, classes.whiteSpaceNoWrap)}>
                           <div>
                             <Link
                               color="inherit"
@@ -180,32 +203,29 @@ function Results({ className, customers, ...rest }) {
                               to="/management/customers/1"
                               variant="h6"
                             >
-                              {customer.name}
+                              {customer.공급자명}
                             </Link>
                             <div>{customer.email}</div>
                           </div>
                         </div>
                       </TableCell>
-                      <TableCell>{customer.location}</TableCell>
-                      <TableCell>
-                        {customer.currency}
-                        {customer.spent}
+                      <TableCell className={classes.whiteSpaceNoWrap}>{customer.일자}</TableCell>
+                      <TableCell className={classes.whiteSpaceNoWrap}>
+                        {customer.통화}
+                        {customer.총액}
                       </TableCell>
-                      <TableCell>{customer.type}</TableCell>
-                      <TableCell>{customer.projects}</TableCell>
-                      <TableCell>
-                        <ReviewStars value={customer.rating} />
+                      <TableCell className={classes.whiteSpaceNoWrap}>
+                        <div className={classes.nameCell}>
+                          <Avatar
+                            className={classes.avatar}
+                            src={customer.avatar}
+                          />
+                          {customer.사용자}
+                        </div>
                       </TableCell>
-                      <TableCell align="right">
-                        <Button
-                          color="primary"
-                          component={RouterLink}
-                          size="small"
-                          to="/management/customers/1"
-                          variant="outlined"
-                        >
-                          View
-                        </Button>
+                      <TableCell>{getShortBigo(width, customer.비고)}</TableCell>
+                      <TableCell className={classes.whiteSpaceNoWrap}>
+                        {customer.배치번호 + Math.floor(Math.random() * 70)}
                       </TableCell>
                     </TableRow>
                   ))}
@@ -226,7 +246,13 @@ function Results({ className, customers, ...rest }) {
           />
         </CardActions>
       </Card>
-      <TableEditBar selected={selectedCustomers} />
+      <BottomBar onWriteReport={handleWriteReport} selected={selectedCustomers} />
+      <ReportModal
+        customers={selectedCustomerDatas}
+        onClose={() => setOpenModal(false)}
+        open={openModal}
+      />
+
     </div>
   );
 }

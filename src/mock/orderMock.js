@@ -8,7 +8,7 @@ mock.onGet('/api/orders').reply(200, {
       id: uuid(),
       created_at: moment().subtract(10, 'minutes'),
       customer: {
-        name: 'Ekaterina Tankova'
+        name: 'Ekaterina Tankovaㅁㅇㄻ ㄴㅇㄻㄴㅇ '
       },
       payment: {
         ref: 'FAD103',

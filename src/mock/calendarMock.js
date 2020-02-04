@@ -46,7 +46,7 @@ mock.onGet('/api/calendar').reply(200, {
     {
       id: uuid(),
       title: 'Call Alex',
-      desc: 'Discuss about the new project',
+      desc: 'Discuss about the new selectedCustomers',
       allDay: true,
       start: moment('2019-07-30 08:00:00')
     },

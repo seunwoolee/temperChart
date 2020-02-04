@@ -6,8 +6,6 @@ import {
   Drawer, Grid, Typography, Button, Hidden
 } from '@material-ui/core';
 import CheckIcon from '@material-ui/icons/Check';
-import CloseIcon from '@material-ui/icons/Close';
-import DeleteIcon from '@material-ui/icons/DeleteOutline';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -23,15 +21,17 @@ const useStyles = makeStyles((theme) => ({
   },
   buttonIcon: {
     marginRight: theme.spacing(1)
+  },
+  button: {
+    fontFamily: 'GmarketSansBold',
+    fontSize: '1rem'
   }
 }));
 
-function TableEditBar({
+function BottomBar({
   selected,
   className,
-  onMarkPaid,
-  onMarkUnpaid,
-  onDelete,
+  onWriteReport,
   ...rest
 }) {
   const classes = useStyles();
@@ -65,7 +65,7 @@ function TableEditBar({
               >
                 {selected.length}
                 {' '}
-                selected
+                선택됨
               </Typography>
             </Grid>
           </Hidden>
@@ -75,17 +75,9 @@ function TableEditBar({
             xs={12}
           >
             <div className={classes.actions}>
-              <Button onClick={onMarkPaid}>
+              <Button onClick={onWriteReport} className={classes.button}>
                 <CheckIcon className={classes.buttonIcon} />
-                Mark Paid
-              </Button>
-              <Button onClick={onMarkUnpaid}>
-                <CloseIcon className={classes.buttonIcon} />
-                Mark Unpaid
-              </Button>
-              <Button onClick={onDelete}>
-                <DeleteIcon className={classes.buttonIcon} />
-                Delete
+                기안 작성
               </Button>
             </div>
           </Grid>
@@ -95,12 +87,10 @@ function TableEditBar({
   );
 }
 
-TableEditBar.propTypes = {
+BottomBar.propTypes = {
   className: PropTypes.string,
-  onDelete: PropTypes.func,
-  onMarkPaid: PropTypes.func,
-  onMarkUnpaid: PropTypes.func,
+  onWriteReport: PropTypes.func,
   selected: PropTypes.array.isRequired
 };
 
-export default TableEditBar;
+export default BottomBar;

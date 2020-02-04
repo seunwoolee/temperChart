@@ -59,6 +59,7 @@ function CustomerEditModal({
 
   return (
     <Modal
+      disableBackdropClick="true"
       onClose={onClose}
       open={open}
     >

@@ -6,7 +6,7 @@ mock.onGet('/api/tasks').reply(200, {
   tasks: [
     {
       id: uuid(),
-      title: 'Update the API for the project',
+      title: 'Update the API for the selectedCustomers',
       deadline: moment()
         .add(1, 'days')
         .add(1, 'hour'),

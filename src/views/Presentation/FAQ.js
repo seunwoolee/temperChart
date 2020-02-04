@@ -37,7 +37,7 @@ const faqs = [
       'No, we offer the design source file only to Standard Plus Sketch & Figma and Extended Package.'
   },
   {
-    title: 'Are you providing support for setting up my project?',
+    title: 'Are you providing support for setting up my selectedCustomers?',
     description:
       'Yes, we offer email support for all our customers & even skype meetings for our extended license customers.'
   }

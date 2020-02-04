@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import koLocale from "date-fns/locale/ko";
+import DateFnsUtils from "@date-io/date-fns";
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import moment from 'moment';
@@ -12,7 +14,7 @@ import {
   Chip,
   Typography
 } from '@material-ui/core';
-import { DatePicker } from '@material-ui/pickers';
+import {DatePicker, MuiPickersUtilsProvider} from '@material-ui/pickers';
 import AddIcon from '@material-ui/icons/Add';
 import CloseIcon from '@material-ui/icons/Close';
 import Alert from 'src/components/Alert';
@@ -182,7 +184,7 @@ function AboutProject({ className, ...rest }) {
                 label="Start Date"
                 name="startDate"
                 onClick={() => handleCalendarOpen('startDate')}
-                value={moment(values.startDate).format('DD/MM/YYYY')}
+                value={moment(values.startDate).format('YYYY-MM-DD')}
                 variant="outlined"
               />
               <TextField
@@ -190,23 +192,25 @@ function AboutProject({ className, ...rest }) {
                 label="End Date"
                 name="endDate"
                 onClick={() => handleCalendarOpen('endDate')}
-                value={moment(values.endDate).format('DD/MM/YYYY')}
+                value={moment(values.endDate).format('YYYY-MM-DD')}
                 variant="outlined"
               />
             </div>
           </div>
         </form>
       </CardContent>
-      <DatePicker
-        minDate={calendarMinDate}
-        onAccept={handleCalendarAccept}
-        onChange={handleCalendarChange}
-        onClose={handleCalendarClose}
-        open={calendarOpen}
-        style={{ display: 'none' }} // Hide the input element
-        value={calendarValue}
-        variant="dialog"
-      />
+      <MuiPickersUtilsProvider utils={DateFnsUtils} locale={koLocale}>
+        <DatePicker
+          minDate={calendarMinDate}
+          onAccept={handleCalendarAccept}
+          onChange={handleCalendarChange}
+          onClose={handleCalendarClose}
+          open={calendarOpen}
+          style={{ display: 'none' }} // Hide the input element
+          value={calendarValue}
+          variant="dialog"
+        />
+      </MuiPickersUtilsProvider>
     </Card>
   );
 }

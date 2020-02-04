@@ -9,8 +9,14 @@ import DashboardAnalyticsView from './views/DashboardAnalytics';
 import DashboardDefaultView from './views/DashboardDefault';
 import OverviewView from './views/Overview';
 import PresentationView from './views/Presentation';
+import CounterContainer from "./components/study/CounterContainer";
 
 export default [
+  {
+    path: '/counter',
+    exact: true,
+    component: CounterContainer
+  },
   {
     path: '/',
     exact: true,

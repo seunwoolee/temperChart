@@ -32,7 +32,7 @@ mock.onGet('/api/social-feed').reply(200, {
         name: 'Shen Zhi',
         avatar: '/images/avatars/avatar_11.png'
       },
-      message: 'Just made this home screen for a project, what-cha thinkin?',
+      message: 'Just made this home screen for a selectedCustomers, what-cha thinkin?',
       media: '/images/posts/post_1.jpg',
       liked: true,
       likes: 24,

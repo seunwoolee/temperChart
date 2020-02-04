@@ -46,7 +46,7 @@ function CustomerManagementList() {
   return (
     <Page
       className={classes.root}
-      title="Customer Management List"
+      title="결재작성"
     >
       <Container maxWidth={false}>
         <Header />

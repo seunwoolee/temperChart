@@ -14,6 +14,10 @@
     }
   },
   "rules": {
+    "no-shadow": "off",
+    "arrow-parens": "off",
+    "object-curly-spacing": "off",
+    "quotes": "off",
     "comma-dangle": "off",
     "no-plusplus": "off",
     "import/no-unresolved": "off", // Temporary fix

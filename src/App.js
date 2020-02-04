@@ -18,6 +18,7 @@ import './mixins/prismjs';
 import './mock';
 import './assets/scss/main.scss';
 
+
 const history = createBrowserHistory();
 const store = configureStore();
 

@@ -6,13 +6,12 @@ import { Grid, Button } from '@material-ui/core';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import Search from './Search';
 import Filter from './Filter';
+import CustomDate from "../CustomDate";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'space-between',
-    flexWrap: 'wrap'
   },
   search: {
     flexGrow: 1,
@@ -48,13 +47,16 @@ function SearchBar({
       container
       spacing={3}
     >
-      <Grid item>
+      <Grid item xs={12} md={4}>
+        <CustomDate />
+      </Grid>
+      <Grid item xs={12} md={4}>
         <Search
           className={classes.search}
           onSearch={onSearch}
         />
       </Grid>
-      <Grid item>
+      <Grid item xs={12} md={4}>
         <Button
           className={classes.filterButton}
           color="primary"
@@ -64,7 +66,7 @@ function SearchBar({
         >
           <FilterListIcon className={classes.filterIcon} />
           {' '}
-Show filters
+          Show filters
         </Button>
       </Grid>
       <Filter

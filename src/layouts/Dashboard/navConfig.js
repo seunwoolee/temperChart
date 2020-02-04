@@ -17,12 +17,39 @@ import PresentToAllIcon from '@material-ui/icons/PresentToAll';
 import PeopleIcon from '@material-ui/icons/PeopleOutlined';
 import PersonIcon from '@material-ui/icons/PersonOutlined';
 import ReceiptIcon from '@material-ui/icons/ReceiptOutlined';
+import ReceiptRoundedIcon from '@material-ui/icons/ReceiptRounded';
 import SettingsIcon from '@material-ui/icons/SettingsOutlined';
 import ViewConfigIcon from '@material-ui/icons/ViewComfy';
+import CreateIcon from '@material-ui/icons/Create';
 import ListIcon from '@material-ui/icons/List';
 import Label from 'src/components/Label';
 
 export default [
+  {
+    subheader: '결재문서',
+    items: [
+      {
+        title: '상신함',
+        href: '/getting-startedss',
+        icon: ReceiptRoundedIcon
+      },
+      {
+        title: '미결함',
+        href: '/getting-startedsss',
+        icon: ReceiptIcon
+      },
+    ]
+  },
+  {
+    subheader: '결재작성',
+    items: [
+      {
+        title: '결재작성',
+        href: '/management/customers',
+        icon: CreateIcon
+      }
+    ]
+  },
   {
     subheader: 'Pages',
     items: [

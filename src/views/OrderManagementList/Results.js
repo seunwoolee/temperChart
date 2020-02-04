@@ -24,7 +24,7 @@ import {
 } from '@material-ui/core';
 import Label from 'src/components/Label';
 import GenericMoreButton from 'src/components/GenericMoreButton';
-import TableEditBar from 'src/components/TableEditBar';
+import WriteTableEditBar from 'src/components/WriteTableEditBar';
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -210,7 +210,7 @@ function Results({ className, orders, ...rest }) {
           />
         </CardActions>
       </Card>
-      <TableEditBar selected={selectedOrders} />
+      <WriteTableEditBar selected={selectedOrders} />
     </div>
   );
 }

@@ -38,19 +38,19 @@ const options = [
   {
     value: 'freelancer',
     title: 'I\'m a freelancer',
-    description: 'I\'m looking for teamates to join in a personal project'
+    description: 'I\'m looking for teamates to join in a personal selectedCustomers'
   },
   {
     value: 'projectOwner',
-    title: 'I’m a project owner',
+    title: 'I’m a selectedCustomers owner',
     description:
-      'I\'m looking for freelancer or contractors to take care of my project'
+      'I\'m looking for freelancer or contractors to take care of my selectedCustomers'
   },
   {
     value: 'affiliate',
     title: 'I want to join affiliate',
     description:
-      'I\'m looking for freelancer or contractors to take care of my project'
+      'I\'m looking for freelancer or contractors to take care of my selectedCustomers'
   }
 ];
 

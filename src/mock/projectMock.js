@@ -255,7 +255,7 @@ I have attached a chat with our users most used devices.
         subject: 'Project owner',
         subject_type: 'user',
         action_type: 'price_change',
-        action_desc: 'raised the project budget',
+        action_desc: 'raised the selectedCustomers budget',
         created_at: moment().subtract(2, 'days')
       },
       {

@@ -22,7 +22,7 @@ mock.onGet('/api/chat/conversations').reply(200, {
             lastActivity: moment()
           },
           content:
-            'Hey, nice projects! I really liked the one in react. What\'s your quote on kinda similar project?',
+            'Hey, nice projects! I really liked the one in react. What\'s your quote on kinda similar selectedCustomers?',
           contentType: 'text',
           created_at: moment().subtract(10, 'hours')
         },
@@ -188,7 +188,7 @@ mock.onGet('/api/chat/conversations').reply(200, {
             avatar: '/images/avatars/avatar_11.png'
           },
           content:
-            'Hi Kwak! I\'ve seen your projects and we can work together on a project. Will send you the details later.',
+            'Hi Kwak! I\'ve seen your projects and we can work together on a selectedCustomers. Will send you the details later.',
           contentType: 'text',
           created_at: moment().subtract(3, 'days')
         },

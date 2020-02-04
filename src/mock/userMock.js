@@ -15,7 +15,7 @@ mock.onGet('/api/users/1/posts').reply(200, {
         name: 'Shen Zhi',
         avatar: '/images/avatars/avatar_11.png'
       },
-      message: 'Just made this home screen for a project, what-cha thinkin?',
+      message: 'Just made this home screen for a selectedCustomers, what-cha thinkin?',
       media: '/images/posts/post_1.jpg',
       liked: true,
       likes: 24,
@@ -146,7 +146,7 @@ mock.onGet('/api/users/1/reviews').reply(200, {
       id: uuid(),
       rating: 4,
       message:
-        'Shen was really great during the all time session we created the project',
+        'Shen was really great during the all time session we created the selectedCustomers',
       reviewer: {
         name: 'Ekaterina Tankova',
         avatar: '/images/avatars/avatar_2.png'

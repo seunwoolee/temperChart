@@ -28,22 +28,14 @@ function Header({ className, ...rest }) {
             gutterBottom
             variant="overline"
           >
-            Management
+            전자결재
           </Typography>
           <Typography
             component="h1"
             variant="h3"
           >
-            Customers
+            결재작성
           </Typography>
-        </Grid>
-        <Grid item>
-          <Button
-            color="primary"
-            variant="contained"
-          >
-            Add customer
-          </Button>
         </Grid>
       </Grid>
     </div>

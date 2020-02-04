@@ -81,7 +81,7 @@ mock.onGet('/api/account/todos').reply(200, {
     },
     {
       id: uuid(),
-      title: 'Send proposal for the fintech project',
+      title: 'Send proposal for the fintech selectedCustomers',
       deadline: moment().add(5, 'days'),
       done: false
     },
