@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
 
 function ReportCreate() {
   const classes = useStyles();
-  const [customers, setCustomers] = useState([]);
+  const [invoices, setInvoices] = useState([]);
 
   const handleFilter = () => {};
 
@@ -29,9 +29,9 @@ function ReportCreate() {
     let mounted = true;
 
     const fetchCustomers = () => {
-      axios.get('/api/management/customers').then((response) => {
+      axios.get('/api/invoices').then((response) => {
         if (mounted) {
-          setCustomers(response.data.customers);
+          setInvoices(response.data.invoices);
         }
       });
     };
@@ -54,10 +54,10 @@ function ReportCreate() {
           onFilter={handleFilter}
           onSearch={handleSearch}
         />
-        {customers && (
+        {invoices && (
           <Results
             className={classes.results}
-            customers={customers}
+            invoices={invoices}
           />
         )}
       </Container>

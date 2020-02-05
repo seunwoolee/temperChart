@@ -3,9 +3,9 @@ import moment from 'moment';
 import { colors } from '@material-ui/core';
 import mock from 'src/utils/mock';
 
-mock.onGet('/api/users').reply(200, {
-  users: []
-});
+// mock.onGet('/api/users').reply(200, {
+//   users: []
+// });
 
 mock.onGet('/api/users/1/posts').reply(200, {
   posts: [
@@ -203,6 +203,111 @@ mock.onGet('/api/users/1/connections').reply(200, {
       avatar: '/images/avatars/avatar_4.png',
       common: 8,
       status: 'pending'
+    },
+    {
+      id: uuid(),
+      name: 'Adam Denisov',
+      avatar: '/images/avatars/avatar_7.png',
+      common: 5,
+      status: 'not_connected'
+    },
+    {
+      id: uuid(),
+      name: 'Adam Denisov',
+      avatar: '/images/avatars/avatar_7.png',
+      common: 5,
+      status: 'not_connected'
+    },
+    {
+      id: uuid(),
+      name: 'Adam Denisov',
+      avatar: '/images/avatars/avatar_7.png',
+      common: 5,
+      status: 'not_connected'
+    },
+    {
+      id: uuid(),
+      name: 'Adam Denisov',
+      avatar: '/images/avatars/avatar_7.png',
+      common: 5,
+      status: 'not_connected'
+    },
+    {
+      id: uuid(),
+      name: 'Adam Denisov',
+      avatar: '/images/avatars/avatar_7.png',
+      common: 5,
+      status: 'not_connected'
+    },
+    {
+      id: uuid(),
+      name: 'Adam Denisov',
+      avatar: '/images/avatars/avatar_7.png',
+      common: 5,
+      status: 'not_connected'
+    },
+    {
+      id: uuid(),
+      name: 'Adam Denisov',
+      avatar: '/images/avatars/avatar_7.png',
+      common: 5,
+      status: 'not_connected'
+    },
+    {
+      id: uuid(),
+      name: 'Adam Denisov',
+      avatar: '/images/avatars/avatar_7.png',
+      common: 5,
+      status: 'not_connected'
+    },
+    {
+      id: uuid(),
+      name: 'Adam Denisov',
+      avatar: '/images/avatars/avatar_7.png',
+      common: 5,
+      status: 'not_connected'
+    },
+    {
+      id: uuid(),
+      name: 'Adam Denisov',
+      avatar: '/images/avatars/avatar_7.png',
+      common: 5,
+      status: 'not_connected'
+    },
+    {
+      id: uuid(),
+      name: 'Adam Denisov',
+      avatar: '/images/avatars/avatar_7.png',
+      common: 5,
+      status: 'not_connected'
+    },
+    {
+      id: uuid(),
+      name: 'Adam Denisov',
+      avatar: '/images/avatars/avatar_7.png',
+      common: 5,
+      status: 'not_connected'
+    },
+    {
+      id: uuid(),
+      name: 'Adam Denisov',
+      avatar: '/images/avatars/avatar_7.png',
+      common: 5,
+      status: 'not_connected'
+    },
+    {
+      id: uuid(),
+      name: 'Adam Denisov',
+      avatar: '/images/avatars/avatar_7.png',
+      common: 5,
+      status: 'not_connected'
+    },
+    {
+      id: uuid(),
+      name: 'Adam Denisov',
+      avatar: '/images/avatars/avatar_7.png',
+      common: 5,
+      status: 'not_connected'
     },
     {
       id: uuid(),

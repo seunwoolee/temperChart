@@ -8,6 +8,7 @@ import {
   Typography,
 } from '@material-ui/core';
 import getShortBigo from "../../../utils/getShortBigo";
+import {invoices} from "../../../mock";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -46,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function SelectedCards({ selectedCustomers, className, ...rest }) {
+function InvoiceCard({ invoice, className, ...rest }) {
   const classes = useStyles();
 
   return (
@@ -57,23 +58,23 @@ function SelectedCards({ selectedCustomers, className, ...rest }) {
       <CardContent className={classes.content}>
         <div className={classes.stats}>
           <Typography variant="body2">공급자명</Typography>
-          <Typography variant="h6">{selectedCustomers.공급자명}</Typography>
+          <Typography variant="h6">{invoice.공급자명}</Typography>
         </div>
         <div className={classes.stats}>
           <Typography variant="body2">금액</Typography>
           <Typography variant="h6">
-            {selectedCustomers.통화}
-            {selectedCustomers.총액}
+            {invoice.통화}
+            {invoice.총액}
           </Typography>
         </div>
         <div className={classes.bigo}>
           <Typography variant="body2">비고</Typography>
-          <Typography variant="h6">{getShortBigo(0, selectedCustomers.비고)}</Typography>
+          <Typography variant="h6">{getShortBigo(0, invoice.비고)}</Typography>
         </div>
         <div className={classes.stats}>
           <Typography variant="body2">일자</Typography>
           <Typography variant="h6">
-            {selectedCustomers.일자}
+            {invoice.일자}
           </Typography>
         </div>
       </CardContent>
@@ -81,9 +82,9 @@ function SelectedCards({ selectedCustomers, className, ...rest }) {
   );
 }
 
-SelectedCards.propTypes = {
+InvoiceCard.propTypes = {
   className: PropTypes.string,
-  selectedCustomers: PropTypes.object.isRequired
+  invoice: PropTypes.shape(invoices).isRequired
 };
 
-export default SelectedCards;
+export default InvoiceCard;

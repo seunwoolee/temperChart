@@ -15,9 +15,11 @@ import {
   Switch,
   Button, Table, TableBody, TableRow, TableCell, colors
 } from '@material-ui/core';
-import SelectedCards from "./SelectedCards";
-import SimpleDialog from '../Dialog'
+import InvoiceCard from "./InvoiceCard";
+import ChooseDialog from '../Dialog'
 import UploadAttachments from "./UploadAttachments";
+import axios from "../../../utils/axios";
+import {invoices} from "../../../mock";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -28,9 +30,12 @@ const useStyles = makeStyles((theme) => ({
     outline: 'none',
     boxShadow: theme.shadows[20],
     width: 800,
-    maxHeight: '100%',
+    maxHeight: '95%',
     overflowY: 'auto',
     maxWidth: '100%'
+  },
+  cardContent: {
+    paddingTop: theme.spacing(1)
   },
   cardHeaderRoot: {
     backgroundColor: theme.palette.primary.main,
@@ -44,11 +49,11 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Index({
-                 open, onClose, customers, className, ...rest
+                 open, onClose, invoices, className, ...rest
                }) {
   const classes = useStyles();
   const [openDialog, setOpenDialog] = React.useState(false);
-  const [selectedPeople, setSelectedPeople] = React.useState([]);
+  const [users, setUsers] = React.useState([]);
   const [inputTitle, setInputTitle] = useState('');
   const [inputContent, setInputContent] = useState('');
 
@@ -66,12 +71,26 @@ function Index({
 
   const handleClose = value => {
     setOpenDialog(false);
-    setSelectedPeople(value);
+    setUsers(value);
   };
 
-  if (!open) {
-    return null;
-  }
+  useEffect(() => {
+    let mounted = true;
+
+    const fetchUsers = () => {
+      axios.get('/api/users').then((response) => {
+        if (mounted) {
+          setUsers(response.data.users);
+        }
+      });
+    };
+
+    fetchUsers();
+
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
   return (
     <>
@@ -87,10 +106,10 @@ function Index({
           <form>
             <CardHeader classes={{root: classes.cardHeaderRoot, title: classes.cardHeaderTitle}} title="기안 작성"/>
             <Divider/>
-            <CardContent>
+            <CardContent className={classes.cardContent}>
               <Grid
                 container
-                spacing={3}
+                spacing={2}
               >
                 <Grid
                   item
@@ -147,10 +166,10 @@ function Index({
                   md={12}
                   xs={12}
                 >
-                  {customers.map((customer) => (
-                    <SelectedCards
-                      key={customer.id}
-                      selectedCustomers={customer}
+                  {invoices.map((invoice) => (
+                    <InvoiceCard
+                      key={invoice.id}
+                      invoice={invoice}
                     />
                   ))}
                 </Grid>
@@ -179,14 +198,14 @@ function Index({
           </form>
         </Card>
       </Modal>
-      <SimpleDialog open={openDialog} onClose={handleClose} />
+      <ChooseDialog users={users} open={openDialog} onClose={handleClose} />
     </>
   );
 }
 
 Index.propTypes = {
   className: PropTypes.string,
-  customer: PropTypes.any,
+  invoices: PropTypes.arrayOf(PropTypes.shape(invoices)),
   onClose: PropTypes.func,
   open: PropTypes.bool
 };

@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
   root: {},
   dropZone: {
     border: `1px dashed ${theme.palette.divider}`,
-    padding: theme.spacing(6),
+    padding: theme.spacing(3),
     outline: 'none',
     display: 'flex',
     justifyContent: 'center',
@@ -48,7 +48,7 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(1)
   },
   list: {
-    maxHeight: 320
+    maxHeight: 280
   },
   actions: {
     marginTop: theme.spacing(2),

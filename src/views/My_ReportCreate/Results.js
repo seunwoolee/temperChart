@@ -28,7 +28,7 @@ import getShortBigo from "../../utils/getShortBigo";
 import useWindowDimensions from "../../components/WindowDimenstions";
 import Index from "./Modal";
 import getCurrency from "../../utils/getCurrency";
-import {customers} from "../../mock";
+import {invoices} from "../../mock";
 // import WriteReportModal from "../CustomerManagementDetails/Summary/WriteReporttModal";
 
 const useStyles = makeStyles((theme) => ({
@@ -65,44 +65,44 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function Results({className, customers, ...rest}) {
+function Results({className, invoices, ...rest}) {
   const classes = useStyles();
-  const [selectedCustomers, setSelectedCustomers] = useState([]);
-  const [selectedCustomerDatas, setSelectedCustomerDatas] = useState([]);
+  const [selectedInvoices, setSelectedInvoices] = useState([]);
+  const [selectedInvoicesDatas, setSelectedInvoicesDatas] = useState([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(25);
   const [openModal, setOpenModal] = useState(false);
   const {height, width} = useWindowDimensions();
 
   const handleSelectAll = (event) => {
-    const selectedCustomers = event.target.checked
-      ? customers.map((customer) => customer.id)
+    const selectedInvoices = event.target.checked
+      ? invoices.map((invoice) => invoice.id)
       : [];
 
-    setSelectedCustomers(selectedCustomers);
+    setSelectedInvoices(selectedInvoices);
   };
 
   const handleSelectOne = (event, id) => {
-    const selectedIndex = selectedCustomers.indexOf(id);
-    let newSelectedCustomers = [];
+    const selectedIndex = selectedInvoices.indexOf(id);
+    let newSelectedInvocies = [];
 
     if (selectedIndex === -1) {
-      newSelectedCustomers = newSelectedCustomers.concat(selectedCustomers, id);
+      newSelectedInvocies = newSelectedInvocies.concat(selectedInvoices, id);
     } else if (selectedIndex === 0) {
-      newSelectedCustomers = newSelectedCustomers.concat(
-        selectedCustomers.slice(1)
+      newSelectedInvocies = newSelectedInvocies.concat(
+        selectedInvoices.slice(1)
       );
-    } else if (selectedIndex === selectedCustomers.length - 1) {
-      newSelectedCustomers = newSelectedCustomers.concat(
-        selectedCustomers.slice(0, -1)
+    } else if (selectedIndex === selectedInvoices.length - 1) {
+      newSelectedInvocies = newSelectedInvocies.concat(
+        selectedInvoices.slice(0, -1)
       );
     } else if (selectedIndex > 0) {
-      newSelectedCustomers = newSelectedCustomers.concat(
-        selectedCustomers.slice(0, selectedIndex),
-        selectedCustomers.slice(selectedIndex + 1)
+      newSelectedInvocies = newSelectedInvocies.concat(
+        selectedInvoices.slice(0, selectedIndex),
+        selectedInvoices.slice(selectedIndex + 1)
       );
     }
-    setSelectedCustomers(newSelectedCustomers);
+    setSelectedInvoices(newSelectedInvocies);
   };
 
   const handleChangePage = (event, page) => {
@@ -114,7 +114,7 @@ function Results({className, customers, ...rest}) {
   };
 
   // eslint-disable-next-line max-len
-  const getSelectedCustomers = () => customers.filter(customer => selectedCustomers.includes(customer.id));
+  const getSelectedCustomers = () => invoices.filter(customer => selectedInvoices.includes(customer.id));
 
   const openReportModal = () => setOpenModal(true);
 
@@ -124,14 +124,14 @@ function Results({className, customers, ...rest}) {
 
 
   useEffect(() => {
-    setSelectedCustomerDatas(getSelectedCustomers());
+    setSelectedInvoicesDatas(getSelectedCustomers());
   }, [openModal]);
 
   let modal = null;
   if (openModal) {
     modal = (
       <Index
-        customers={selectedCustomerDatas}
+        invoices={selectedInvoicesDatas}
         onClose={closeReportModal}
         open={openModal}
       />
@@ -148,7 +148,7 @@ function Results({className, customers, ...rest}) {
         gutterBottom
         variant="body2"
       >
-        {customers.length}
+        {invoices.length}
         {' '}
         Records found. Page
         {' '}
@@ -156,7 +156,7 @@ function Results({className, customers, ...rest}) {
         {' '}
         of
         {' '}
-        {Math.ceil(customers.length / rowsPerPage)}
+        {Math.ceil(invoices.length / rowsPerPage)}
       </Typography>
       <Card>
         <CardHeader
@@ -172,11 +172,11 @@ function Results({className, customers, ...rest}) {
                   <TableRow>
                     <TableCell padding="checkbox">
                       <Checkbox
-                        checked={selectedCustomers.length === customers.length}
+                        checked={selectedInvoices.length === invoices.length}
                         color="primary"
                         indeterminate={
-                          selectedCustomers.length > 0
-                          && selectedCustomers.length < customers.length
+                          selectedInvoices.length > 0
+                          && selectedInvoices.length < invoices.length
                         }
                         onChange={handleSelectAll}
                       />
@@ -190,20 +190,20 @@ function Results({className, customers, ...rest}) {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {customers.slice(0, rowsPerPage).map((customer) => (
+                  {invoices.slice(0, rowsPerPage).map((customer) => (
                     <TableRow
                       hover
                       key={customer.id}
-                      selected={selectedCustomers.indexOf(customer.id) !== -1}
+                      selected={selectedInvoices.indexOf(customer.id) !== -1}
                     >
                       <TableCell padding="checkbox">
                         <Checkbox
                           checked={
-                            selectedCustomers.indexOf(customer.id) !== -1
+                            selectedInvoices.indexOf(customer.id) !== -1
                           }
                           color="primary"
                           onChange={(event) => handleSelectOne(event, customer.id)}
-                          value={selectedCustomers.indexOf(customer.id) !== -1}
+                          value={selectedInvoices.indexOf(customer.id) !== -1}
                         />
                       </TableCell>
                       <TableCell>
@@ -248,7 +248,7 @@ function Results({className, customers, ...rest}) {
         <CardActions className={classes.actions}>
           <TablePagination
             component="div"
-            count={customers.length}
+            count={invoices.length}
             onChangePage={handleChangePage}
             onChangeRowsPerPage={handleChangeRowsPerPage}
             page={page}
@@ -257,7 +257,7 @@ function Results({className, customers, ...rest}) {
           />
         </CardActions>
       </Card>
-      <BottomBar onOpenModal={openReportModal} selected={selectedCustomers} />
+      <BottomBar onOpenModal={openReportModal} selected={selectedInvoices} />
       {modal}
     </div>
   );
@@ -265,11 +265,11 @@ function Results({className, customers, ...rest}) {
 
 Results.propTypes = {
   className: PropTypes.string,
-  customers: PropTypes.arrayOf(PropTypes.shape(customers))
+  invoices: PropTypes.arrayOf(PropTypes.shape(invoices))
 };
 
 Results.defaultProps = {
-  customers: []
+  invoices: []
 };
 
 export default Results;

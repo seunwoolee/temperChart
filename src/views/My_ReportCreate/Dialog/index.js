@@ -13,6 +13,8 @@ import PersonIcon from '@material-ui/icons/Person';
 import AddIcon from '@material-ui/icons/Add';
 import Typography from '@material-ui/core/Typography';
 import { blue } from '@material-ui/core/colors';
+import {users} from "../../../mock";
+import UserList from "./UserList";
 
 const emails = ['username@gmail.com', 'user02@gmail.com'];
 const useStyles = makeStyles({
@@ -22,9 +24,9 @@ const useStyles = makeStyles({
   },
 });
 
-function SimpleDialog(props) {
+function ChooseDialog({ users, open, onClose  }) {
   const classes = useStyles();
-  const { onClose, open } = props;
+  // const { users, open, onClose  } = props;
 
   const handleClose = () => {
     console.log('#')
@@ -37,61 +39,38 @@ function SimpleDialog(props) {
 
   return (
     <Dialog onClose={handleClose} aria-labelledby="simple-dialog-title" open={open}>
-      <DialogTitle id="simple-dialog-title">Set backup account</DialogTitle>
-      <List>
-        {emails.map(email => (
-          <ListItem button onClick={() => handleListItemClick(email)} key={email}>
-            <ListItemAvatar>
-              <Avatar className={classes.avatar}>
-                <PersonIcon />
-              </Avatar>
-            </ListItemAvatar>
-            <ListItemText primary={email} />
-          </ListItem>
-        ))}
+      {/*<DialogTitle id="simple-dialog-title">Set backup account</DialogTitle>*/}
+        <UserList />
 
-        <ListItem autoFocus button onClick={() => handleListItemClick('addAccount')}>
-          <ListItemAvatar>
-            <Avatar>
-              <AddIcon />
-            </Avatar>
-          </ListItemAvatar>
-          <ListItemText primary="Add account" />
-        </ListItem>
-      </List>
+      {/*<List>*/}
+      {/*  {emails.map(email => (*/}
+      {/*    <ListItem button onClick={() => handleListItemClick(email)} key={email}>*/}
+      {/*      <ListItemAvatar>*/}
+      {/*        <Avatar className={classes.avatar}>*/}
+      {/*          <PersonIcon />*/}
+      {/*        </Avatar>*/}
+      {/*      </ListItemAvatar>*/}
+      {/*      <ListItemText primary={email} />*/}
+      {/*    </ListItem>*/}
+      {/*  ))}*/}
+
+      {/*  <ListItem autoFocus button onClick={() => handleListItemClick('addAccount')}>*/}
+      {/*    <ListItemAvatar>*/}
+      {/*      <Avatar>*/}
+      {/*        <AddIcon />*/}
+      {/*      </Avatar>*/}
+      {/*    </ListItemAvatar>*/}
+      {/*    <ListItemText primary="Add account" />*/}
+      {/*  </ListItem>*/}
+      {/*</List>*/}
     </Dialog>
   );
 }
 
-SimpleDialog.propTypes = {
-  onClose: PropTypes.func.isRequired,
+ChooseDialog.propTypes = {
+  users: PropTypes.arrayOf(PropTypes.shape(users)),
   open: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
 };
 
-export default SimpleDialog;
-
-// export default function SimpleDialogDemo() {
-//   console.log('####')
-//   const [open, setOpen] = React.useState(false);
-//   const [selectedValue, setSelectedValue] = React.useState(emails[1]);
-//
-//   const handleClickOpen = () => {
-//     setOpen(true);
-//   };
-//
-//   const handleClose = value => {
-//     setOpen(false);
-//     setSelectedValue(value);
-//   };
-//
-//   return (
-//     <div>
-//       <Typography variant="subtitle1">Selected: {selectedValue}</Typography>
-//       <br />
-//       <Button variant="outlined" color="primary" onClick={handleClickOpen}>
-//         Open simple dialog
-//       </Button>
-//       <SimpleDialog selectedValue={selectedValue} open={open} onClose={handleClose} />
-//     </div>
-//   );
-// }
+export default ChooseDialog;

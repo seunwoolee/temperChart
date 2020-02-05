@@ -2,9 +2,9 @@ import uuid from 'uuid/v1';
 import moment from 'moment';
 import mock from 'src/utils/mock';
 
-mock.onGet('/api/invoices').reply(200, {
-  invoices: []
-});
+// mock.onGet('/api/invoices').reply(200, {
+//   invoices: []
+// });
 
 mock.onGet('/api/invoices/1').reply(200, {
   invoice: {
