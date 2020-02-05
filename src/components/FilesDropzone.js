@@ -101,18 +101,14 @@ function FilesDropzone({ className, ...rest }) {
             gutterBottom
             variant="h3"
           >
-            Select files
+            파일 선택
           </Typography>
           <Typography
             className={classes.info}
             color="textSecondary"
             variant="body1"
           >
-            Drop files here or click
-            {' '}
-            <Link underline="always">browse</Link>
-            {' '}
-            thorough your machine
+            파일을 끌어다 올리거나 클릭하세요
           </Typography>
         </div>
       </div>

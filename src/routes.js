@@ -70,6 +70,11 @@ export default [
     component: DashboardLayout,
     routes: [
       {
+        path: '/reportWrite',
+        exact: true,
+        component: lazy(() => import('src/views/My_ReportCreate'))
+      },
+      {
         path: '/calendar',
         exact: true,
         component: lazy(() => import('src/views/Calendar'))

@@ -1,6 +1,22 @@
 import uuid from 'uuid/v1';
 import moment from 'moment';
 import mock from 'src/utils/mock';
+import PT from 'prop-types';
+
+// eslint-disable-next-line import/prefer-default-export
+export const customers = {
+  id: PT.number.isRequired,
+  공급자명: PT.string.isRequired,
+  avatar: PT.string.isRequired,
+  email: PT.string.isRequired,
+  일자: PT.string.isRequired,
+  총액: PT.number.isRequired,
+  비고: PT.string.isRequired,
+  사용자: PT.string.isRequired,
+  배치번호: PT.number.isRequired,
+  location: PT.string.isRequired
+};
+
 
 mock.onGet('/api/management/customers').reply(200, {
   customers: [
@@ -10,7 +26,7 @@ mock.onGet('/api/management/customers').reply(200, {
       avatar: '/images/avatars/avatar_3.png',
       email: '',
       일자: '2020-01-02',
-      총액: '500.00',
+      총액: 500.00,
       통화: '\\',
       비고: '화상회의 임대료/1화상회의 임대료/1화상회의 임대료/1화상회의 임대료/1화상회의 임대료/1화상회의 임대료/1화상회의 임대료/1화상회의 임대료/1화상회의 임대료/1화상회의 임대료/1화상회의 임대료/1화상회의 임대료/1',
       사용자: '이승우',

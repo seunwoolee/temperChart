@@ -29,14 +29,14 @@ export default [
     subheader: '결재문서',
     items: [
       {
-        title: '상신함',
-        href: '/getting-startedss',
-        icon: ReceiptRoundedIcon
+        title: '미결함',
+        href: '/reportNotFinished',
+        icon: ReceiptIcon
       },
       {
-        title: '미결함',
-        href: '/getting-startedsss',
-        icon: ReceiptIcon
+        title: '상신함',
+        href: '/reportWritten',
+        icon: ReceiptRoundedIcon
       },
     ]
   },
@@ -45,7 +45,7 @@ export default [
     items: [
       {
         title: '결재작성',
-        href: '/management/customers',
+        href: '/reportWrite',
         icon: CreateIcon
       }
     ]
