@@ -20,6 +20,7 @@ import ChooseDialog from '../Dialog'
 import UploadAttachments from "./UploadAttachments";
 import axios from "../../../utils/axios";
 import {invoices} from "../../../mock";
+import IconButton from "@material-ui/core/IconButton";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -78,7 +79,7 @@ function Index({
     let mounted = true;
 
     const fetchUsers = () => {
-      axios.get('/api/users').then((response) => {
+      axios.get('/api/currentSelectedUsers').then((response) => {
         if (mounted) {
           setUsers(response.data.users);
         }
@@ -106,7 +107,7 @@ function Index({
           <form>
             <CardHeader classes={{root: classes.cardHeaderRoot, title: classes.cardHeaderTitle}} title="기안 작성"/>
             <Divider/>
-            <CardContent className={classes.cardContent}>
+            <CardContent>
               <Grid
                 container
                 spacing={2}
@@ -198,7 +199,7 @@ function Index({
           </form>
         </Card>
       </Modal>
-      <ChooseDialog users={users} open={openDialog} onClose={handleClose} />
+      <ChooseDialog defalutUsers={users} open={openDialog} onClose={handleClose} />
     </>
   );
 }

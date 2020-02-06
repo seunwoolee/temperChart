@@ -6,63 +6,242 @@ import PT from 'prop-types';
 // eslint-disable-next-line import/prefer-default-export
 export const users = {
   id: PT.number.isRequired,
-  이름: PT.string.isRequired,
+  name: PT.string.isRequired,
   avatar: PT.string.isRequired,
-  부서: PT.string.isRequired,
-  직책: PT.string.isRequired,
+  department: PT.string.isRequired,
+  position: PT.string.isRequired,
+  signType: PT.string.isRequired,
+  order: PT.number.isRequired
 };
 
 
-mock.onGet('/api/users').reply(200, {
+mock.onGet('/api/allUsers').reply(200, {
   users: [
     {
       id: uuid(),
-      이름: '이철용',
+      name: '이철용',
       avatar: '/images/avatars/avatar_4.png',
-      부서: '전산팀',
-      직책: '부장',
+      department: '전산팀',
+      position: '부장',
+      signType: '결재'
     },
     {
       id: uuid(),
-      이름: '이승우',
+      name: '이승우',
       avatar: '/images/avatars/avatar_1.png',
-      부서: '전산팀',
-      직책: '주임',
+      department: '전산팀',
+      position: '주임',
+      signType: '합의'
     },
     {
       id: uuid(),
-      이름: '서태호',
+      name: '서태호',
       avatar: '/images/avatars/avatar_2.png',
-      부서: '전산팀',
-      직책: '과장',
+      department: '전산팀',
+      position: '참조',
     },
     {
       id: uuid(),
-      이름: '이병학',
+      name: '이병학',
       avatar: '/images/avatars/avatar_3.png',
-      부서: '구매팀',
-      직책: '대리',
+      department: '구매팀',
+      position: '대리',
     },
     {
       id: uuid(),
-      이름: '김해림',
+      name: '김해림',
       avatar: '/images/avatars/avatar_2.png',
-      부서: '구매팀',
-      직책: '주임',
+      department: '구매팀',
+      position: '주임',
+      signType: '결재'
     },
     {
       id: uuid(),
-      이름: '윤주영',
+      name: '윤주영',
       avatar: '/images/avatars/avatar_4.png',
-      부서: '임원',
-      직책: '부사장',
+      department: '임원',
+      position: '부사장',
+      signType: '결재'
     },
     {
       id: uuid(),
-      이름: '홍길동',
+      name: '홍길동',
       avatar: '/images/avatars/avatar_1.png',
-      부서: '총무',
-      직책: '차장',
+      department: '총무',
+      position: '차장',
+      signType: '결재'
+    },
+    {
+      id: uuid(),
+      name: '이철용',
+      avatar: '/images/avatars/avatar_4.png',
+      department: '전산팀',
+      position: '부장',
+      signType: '결재'
+    },
+    {
+      id: uuid(),
+      name: '이승우',
+      avatar: '/images/avatars/avatar_1.png',
+      department: '전산팀',
+      position: '주임',
+      signType: '합의'
+    },
+    {
+      id: uuid(),
+      name: '서태호',
+      avatar: '/images/avatars/avatar_2.png',
+      department: '전산팀',
+      position: '참조',
+    },
+    {
+      id: uuid(),
+      name: '이병학',
+      avatar: '/images/avatars/avatar_3.png',
+      department: '구매팀',
+      position: '대리',
+    },
+    {
+      id: uuid(),
+      name: '김해림',
+      avatar: '/images/avatars/avatar_2.png',
+      department: '구매팀',
+      position: '주임',
+      signType: '결재'
+    },
+    {
+      id: uuid(),
+      name: '윤주영',
+      avatar: '/images/avatars/avatar_4.png',
+      department: '임원',
+      position: '부사장',
+      signType: '결재'
+    },
+    {
+      id: uuid(),
+      name: '홍길동',
+      avatar: '/images/avatars/avatar_1.png',
+      department: '총무',
+      position: '차장',
+      signType: '결재'
+    },
+    {
+      id: uuid(),
+      name: '이철용',
+      avatar: '/images/avatars/avatar_4.png',
+      department: '전산팀',
+      position: '부장',
+      signType: '결재'
+    },
+    {
+      id: uuid(),
+      name: '이승우',
+      avatar: '/images/avatars/avatar_1.png',
+      department: '전산팀',
+      position: '주임',
+      signType: '합의'
+    },
+    {
+      id: uuid(),
+      name: '서태호',
+      avatar: '/images/avatars/avatar_2.png',
+      department: '전산팀',
+      position: '참조',
+    },
+    {
+      id: uuid(),
+      name: '이병학',
+      avatar: '/images/avatars/avatar_3.png',
+      department: '구매팀',
+      position: '대리',
+    },
+    {
+      id: uuid(),
+      name: '김해림',
+      avatar: '/images/avatars/avatar_2.png',
+      department: '구매팀',
+      position: '주임',
+      signType: '결재'
+    },
+    {
+      id: uuid(),
+      name: '윤주영',
+      avatar: '/images/avatars/avatar_4.png',
+      department: '임원',
+      position: '부사장',
+      signType: '결재'
+    },
+    {
+      id: uuid(),
+      name: '홍길동',
+      avatar: '/images/avatars/avatar_1.png',
+      department: '총무',
+      position: '차장',
+      signType: '결재'
+    },
+  ]
+});
+
+mock.onGet('/api/defaultUsers').reply(200, {
+  users: [
+    {
+      id: uuid(),
+      name: '이철용',
+      avatar: '/images/avatars/avatar_4.png',
+      department: '전산팀',
+      position: '부장',
+      signType: '결재',
+      order: 0
+    },
+    {
+      id: uuid(),
+      name: '이병학',
+      avatar: '/images/avatars/avatar_3.png',
+      department: '구매팀',
+      position: '대리',
+      signType: '결재',
+      order: 1
+    },
+    {
+      id: uuid(),
+      name: '윤주영',
+      avatar: '/images/avatars/avatar_4.png',
+      department: '임원',
+      position: '부사장',
+      signType: '결재',
+      order: 2
+    },
+    {
+      id: uuid(),
+      name: '홍길동',
+      avatar: '/images/avatars/avatar_1.png',
+      department: '총무',
+      position: '차장',
+      signType: '결재',
+      order: 3
+    },
+  ]
+});
+
+mock.onGet('/api/departmentUsers').reply(200, {
+  users: [
+    {
+      id: uuid(),
+      name: '이철용',
+      avatar: '/images/avatars/avatar_4.png',
+      department: '전산팀',
+      position: '부장',
+      signType: '결재',
+      order: 0
+    },
+    {
+      id: uuid(),
+      name: '윤주영',
+      avatar: '/images/avatars/avatar_4.png',
+      department: '임원',
+      position: '부사장',
+      signType: '결재',
+      order: 2
     },
   ]
 });
