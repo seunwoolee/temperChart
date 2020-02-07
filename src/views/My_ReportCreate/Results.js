@@ -190,20 +190,20 @@ function Results({className, invoices, ...rest}) {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {invoices.slice(0, rowsPerPage).map((customer) => (
+                  {invoices.slice(0, rowsPerPage).map((invoice) => (
                     <TableRow
                       hover
-                      key={customer.id}
-                      selected={selectedInvoices.indexOf(customer.id) !== -1}
+                      key={invoice.id}
+                      selected={selectedInvoices.indexOf(invoice.id) !== -1}
                     >
                       <TableCell padding="checkbox">
                         <Checkbox
                           checked={
-                            selectedInvoices.indexOf(customer.id) !== -1
+                            selectedInvoices.indexOf(invoice.id) !== -1
                           }
                           color="primary"
-                          onChange={(event) => handleSelectOne(event, customer.id)}
-                          value={selectedInvoices.indexOf(customer.id) !== -1}
+                          onChange={(event) => handleSelectOne(event, invoice.id)}
+                          value={selectedInvoices.indexOf(invoice.id) !== -1}
                         />
                       </TableCell>
                       <TableCell>
@@ -215,28 +215,28 @@ function Results({className, invoices, ...rest}) {
                               to="/management/customers/1"
                               variant="h6"
                             >
-                              {customer.공급자명}
+                              {invoice.공급자명}
                             </Link>
-                            <div>{customer.email}</div>
+                            <div>{invoice.email}</div>
                           </div>
                         </div>
                       </TableCell>
-                      <TableCell className={classes.whiteSpaceNoWrap}>{customer.일자}</TableCell>
+                      <TableCell className={classes.whiteSpaceNoWrap}>{invoice.일자}</TableCell>
                       <TableCell className={classes.whiteSpaceNoWrap}>
-                        {getCurrency(customer.총액)}
+                        {getCurrency(invoice.총액)}
                       </TableCell>
                       <TableCell className={classes.whiteSpaceNoWrap}>
                         <div className={classes.nameCell}>
                           <Avatar
                             className={classes.avatar}
-                            src={customer.avatar}
+                            src={invoice.avatar}
                           />
-                          {customer.사용자}
+                          {invoice.사용자}
                         </div>
                       </TableCell>
-                      <TableCell>{getShortBigo(width, customer.비고)}</TableCell>
+                      <TableCell>{getShortBigo(width, invoice.비고)}</TableCell>
                       <TableCell className={classes.whiteSpaceNoWrap}>
-                        {customer.배치번호 + Math.floor(Math.random() * 70)}
+                        {invoice.배치번호 + Math.floor(Math.random() * 70)}
                       </TableCell>
                     </TableRow>
                   ))}

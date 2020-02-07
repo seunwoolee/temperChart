@@ -10,17 +10,14 @@ import {
   CardActions,
   Grid,
   Divider,
-  Typography,
   TextField,
-  Switch,
-  Button, Table, TableBody, TableRow, TableCell, colors
+  Button, Table, TableBody, TableRow, TableCell
 } from '@material-ui/core';
 import InvoiceCard from "./InvoiceCard";
 import ChooseDialog from '../Dialog'
 import UploadAttachments from "./UploadAttachments";
 import axios from "../../../utils/axios";
 import {invoices} from "../../../mock";
-import IconButton from "@material-ui/core/IconButton";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -54,7 +51,6 @@ function Index({
                }) {
   const classes = useStyles();
   const [openDialog, setOpenDialog] = React.useState(false);
-  const [users, setUsers] = React.useState([]);
   const [inputTitle, setInputTitle] = useState('');
   const [inputContent, setInputContent] = useState('');
 
@@ -70,28 +66,9 @@ function Index({
     setOpenDialog(true);
   };
 
-  const handleClose = value => {
+  const handleClose = () => {
     setOpenDialog(false);
-    setUsers(value);
   };
-
-  useEffect(() => {
-    let mounted = true;
-
-    const fetchUsers = () => {
-      axios.get('/api/currentSelectedUsers').then((response) => {
-        if (mounted) {
-          setUsers(response.data.users);
-        }
-      });
-    };
-
-    fetchUsers();
-
-    return () => {
-      mounted = false;
-    };
-  }, []);
 
   return (
     <>
@@ -199,7 +176,7 @@ function Index({
           </form>
         </Card>
       </Modal>
-      <ChooseDialog defalutUsers={users} open={openDialog} onClose={handleClose} />
+      <ChooseDialog open={openDialog} onClose={handleClose} />
     </>
   );
 }

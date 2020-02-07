@@ -1,4 +1,4 @@
-import React, {useDebugValue, useEffect, useState} from 'react';
+import React, {Fragment, useDebugValue, useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
@@ -9,7 +9,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Dialog from '@material-ui/core/Dialog';
 import Typography from '@material-ui/core/Typography';
 import { blue } from '@material-ui/core/colors';
-import {users} from "../../../mock";
+import {users, signType} from "../../../mock";
 import {Card, CardActions, CardContent, colors, Divider, Snackbar} from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
 import IconButton from "@material-ui/core/IconButton";
@@ -130,11 +130,9 @@ function ChooseDialog({ open, onClose  }) {
   const [allUsers,setAllUsers] = React.useState([]);
   const [checked, setChecked] = React.useState(-1);
   const [expanded, setExpanded] = React.useState(false);
-  const [selectType, setSelectType] = React.useState(10);
+  const [addUserType, setAddUserType] = React.useState(10);
 
-  const handleSnackbarClose = () => {
-    setOpenSnackbar(false);
-  };
+  const handleSnackbarClose = () => setOpenSnackbar(false);
 
   const handleSubmit = () => {
     onClose()
@@ -148,8 +146,22 @@ function ChooseDialog({ open, onClose  }) {
     setChecked(i);
   };
 
-  const handleTypeChange = event => {
-    setSelectType(event.target.value);
+  const handleAddUserTypeChange = event => setAddUserType(event.target.value);
+
+  const handleUserTypeChange = (event, userId) => {
+      const newUsers = users.filter(user => user.id !== userId);
+      const changedUser = users.find(user => user.id === userId);
+      setUsers([...newUsers, changedUser].sort(sortUsers));
+  };
+
+  const handleAddButton = (userId) => {
+    const newTypeUsers = typeUsers.filter(user => user.id !== userId);
+    const newUser = typeUsers.find(user => user.id === userId);
+    if(users.find(user => user.id === userId)){
+      return alert('이미 등록되어 있습니다.');
+    }
+    setUsers([...users, newUser].sort(sortUsers));
+    addUserType === 10 ? setDepartmentUsers(newTypeUsers) : setAllUsers(newTypeUsers);
   };
 
   const deleteUser = (index) => {
@@ -229,7 +241,7 @@ function ChooseDialog({ open, onClose  }) {
     };
   }, []);
 
-  const typeUsers = selectType === 10 ? departmentUsers : allUsers;
+  const typeUsers = addUserType === 10 ? departmentUsers : allUsers;
 
   return (
     <Dialog onClose={handleSubmit} aria-labelledby="simple-dialog-title" open={open}>
@@ -267,13 +279,13 @@ function ChooseDialog({ open, onClose  }) {
           <PerfectScrollbar>
             <List disablePadding>
               {users.map((user, i) => (
-                <>
+                <Fragment key={user.id}>
                 <FormControl className={classes.formControl}>
                   <Select
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"
-                    defaultValue={10}
-                    // onChange={}
+                    defaultValue={user.signType}
+                    onChange={(event) => handleUserTypeChange(event, user.id)}
                   >
                     <MenuItem value={10}>결재</MenuItem>
                     <MenuItem value={20}>합의</MenuItem>
@@ -308,7 +320,7 @@ function ChooseDialog({ open, onClose  }) {
                   </IconButton>
                 </ListItemSecondaryAction>
                 </ListItem>
-                </>
+                </Fragment>
               ))}
             </List>
           </PerfectScrollbar>
@@ -326,7 +338,6 @@ function ChooseDialog({ open, onClose  }) {
             완료
           </Button>
         </CardActions>
-        {/* ## Collapse ## */}
         <Collapse in={expanded} timeout="auto" unmountOnExit>
           <CardHeader
             action={
@@ -339,12 +350,10 @@ function ChooseDialog({ open, onClose  }) {
               <List disablePadding>
                 <ListItem className={classes.search}>
                   <Select
-                    onChange={handleTypeChange}
+                    onChange={handleAddUserTypeChange}
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"
-                    defaultValue={selectType}
-                    // value={10}
-                    // onChange={}
+                    defaultValue={addUserType}
                   >
                     <MenuItem value={10}>내부서</MenuItem>
                     <MenuItem value={20}>이름</MenuItem>
@@ -361,9 +370,7 @@ function ChooseDialog({ open, onClose  }) {
                 </ListItem>
                 {typeUsers.map((user, i) => (
                     <ListItem
-                      selected={user.order === checked}
                       button
-                      onClick={() => handleChecked(user.order)}
                       className={classes.listItem}
                       disableGutters
                       divider={user.order < users.length - 1}
@@ -383,7 +390,7 @@ function ChooseDialog({ open, onClose  }) {
                       >
                       </ListItemText>
                       <ListItemSecondaryAction classes={{root: classes.deleteUserButton}}>
-                        <IconButton onClick={() => deleteUser(user.order)} aria-label="add-user">
+                        <IconButton onClick={() => handleAddButton(user.id)} aria-label="add-user">
                           <AddCircleOutlineOutlinedIcon fontSize="large"/>
                         </IconButton>
                       </ListItemSecondaryAction>
@@ -398,7 +405,6 @@ function ChooseDialog({ open, onClose  }) {
 }
 
 ChooseDialog.propTypes = {
-  users: PropTypes.arrayOf(PropTypes.shape(users)),
   open: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
 };
