@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, {useState, useCallback, useEffect} from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import uuid from 'uuid/v1';
@@ -20,6 +20,8 @@ import {
 import FileCopyIcon from '@material-ui/icons/FileCopy';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import bytesToSize from 'src/utils/bytesToSize';
+import CancelPresentationIcon from "@material-ui/icons/CancelPresentation";
+import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -60,7 +62,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function FilesDropzone({ className, ...rest }) {
+function FilesDropzone({ handleAttachments, className, ...rest }) {
   const classes = useStyles();
   const [files, setFiles] = useState([]);
 
@@ -68,9 +70,11 @@ function FilesDropzone({ className, ...rest }) {
     setFiles((prevFiles) => [...prevFiles].concat(acceptedFiles));
   }, []);
 
-  const handleRemoveAll = () => {
-    setFiles([]);
-  };
+  const handleRemoveAll = () => setFiles([]);
+
+  useEffect(() => {
+    handleAttachments(files);
+  }, [files]);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop: handleDrop
@@ -129,28 +133,18 @@ function FilesDropzone({ className, ...rest }) {
                     primaryTypographyProps={{ variant: 'h5' }}
                     secondary={bytesToSize(file.size)}
                   />
-                  <Tooltip title="More options">
-                    <IconButton edge="end">
-                      <MoreIcon />
-                    </IconButton>
-                  </Tooltip>
                 </ListItem>
               ))}
             </List>
           </PerfectScrollbar>
           <div className={classes.actions}>
             <Button
+              color="secondary"
+              variant="contained"
               onClick={handleRemoveAll}
               size="small"
             >
-              Remove all
-            </Button>
-            <Button
-              color="secondary"
-              size="small"
-              variant="contained"
-            >
-              Upload files
+              모두 삭제
             </Button>
           </div>
         </>
@@ -160,6 +154,7 @@ function FilesDropzone({ className, ...rest }) {
 }
 
 FilesDropzone.propTypes = {
+  handleAttachments: PropTypes.func.isRequired,
   className: PropTypes.string
 };
 

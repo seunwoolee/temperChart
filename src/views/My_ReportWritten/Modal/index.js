@@ -11,7 +11,7 @@ import {
   Grid,
   Divider,
   TextField,
-  Button, Table, TableBody, TableRow, TableCell, Typography
+  Button, Table, TableBody, TableRow, TableCell
 } from '@material-ui/core';
 import MySnackbars from "../../../components/MY_snackbar";
 import InvoiceCard from "./InvoiceCard";
@@ -19,7 +19,6 @@ import ChooseDialog from '../Dialog'
 import UploadAttachments from "./UploadAttachments";
 import axios from "../../../utils/axios";
 import {invoices} from "../../../mock";
-import getCurrency from "../../../utils/getCurrency";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -87,16 +86,6 @@ function Index({
     // axios call
   };
 
-  const getSumInvoices = () => {
-    if(invoices.length > 0){
-      debugger;
-      console.log(invoices);
-      return getCurrency(invoices.reduce((prev, curr) => prev.총액 + curr.총액))
-    }
-    return 0;
-  };
-
-  console.log('[Modal]', invoices);
 
   return (
     <>
@@ -172,9 +161,6 @@ function Index({
                   md={12}
                   xs={12}
                 >
-                  <Typography variant="h5">
-                    총 {invoices.length}건 / {getSumInvoices()}원
-                  </Typography>
                   {invoices.map((invoice) => (
                     <InvoiceCard
                       key={invoice.id}

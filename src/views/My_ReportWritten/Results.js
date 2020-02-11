@@ -155,7 +155,6 @@ function Results({className, invoices, ...rest}) {
     );
   }
 
-  console.log('[Result]');
   return (
     <div
       {...rest}
