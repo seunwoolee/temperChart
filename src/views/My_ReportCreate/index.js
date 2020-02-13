@@ -48,7 +48,10 @@ function ReportCreate() {
       className={classes.root}
       title="결재작성"
     >
-      <Container maxWidth={false}>
+      <Container
+        maxWidth={false}
+        className={classes.container}
+        >
         <Header />
         <SearchBar
           onFilter={handleFilter}

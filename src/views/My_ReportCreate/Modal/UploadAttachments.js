@@ -4,6 +4,7 @@ import clsx from 'clsx';
 import { makeStyles } from '@material-ui/styles';
 import { Card, CardHeader, CardContent } from '@material-ui/core';
 import FilesDropzone from 'src/components/FilesDropzone';
+import MyDropzone from "../../../components/MY_upload";
 
 const useStyles = makeStyles(() => ({
   root: {}
@@ -18,8 +19,11 @@ function UploadAttachments({ handleAttachments, className, ...rest }) {
       className={clsx(classes.root, className)}
     >
       <CardHeader title="첨부파일" />
+      {/*<CardContent>*/}
+      {/*  <FilesDropzone handleAttachments={handleAttachments}/>*/}
+      {/*</CardContent>*/}
       <CardContent>
-        <FilesDropzone handleAttachments={handleAttachments}/>
+        <MyDropzone />
       </CardContent>
     </Card>
   );
