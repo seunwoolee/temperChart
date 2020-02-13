@@ -88,12 +88,7 @@ function Index({
   };
 
   const getSumInvoices = () => {
-    if(invoices.length > 0){
-      debugger;
-      console.log(invoices);
-      return getCurrency(invoices.reduce((prev, curr) => prev.총액 + curr.총액))
-    }
-    return 0;
+      return getCurrency(invoices.map(invoice => invoice.총액).reduce((prev, curr) => prev + curr));
   };
 
   console.log('[Modal]', invoices);

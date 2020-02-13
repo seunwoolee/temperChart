@@ -34,6 +34,10 @@ import MySnackbars from "../../components/MY_snackbar";
 
 const useStyles = makeStyles((theme) => ({
   root: {},
+  header: {
+    fontWeight: 650,
+    textAlign: 'center',
+  },
   content: {
     padding: 0
   },
@@ -63,13 +67,15 @@ const useStyles = makeStyles((theme) => ({
   actions: {
     padding: theme.spacing(1),
     justifyContent: 'flex-end'
+  },
+  tableRow: {
+    cursor: 'pointer'
   }
 }));
 
 function Results({className, invoices, ...rest}) {
   const classes = useStyles();
   const [selectedInvoices, setSelectedInvoices] = useState([]);
-  const [selectedInvoicesDatas, setSelectedInvoicesDatas] = useState([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(25);
   const [openModal, setOpenModal] = useState(false);
@@ -79,19 +85,15 @@ function Results({className, invoices, ...rest}) {
 
 
   const handleSelectAll = (event) => {
-    const selectedInvoices = event.target.checked
-      ? invoices.map((invoice) => invoice.id)
-      : [];
-
-    setSelectedInvoices(selectedInvoices);
+    event.target.checked ? setSelectedInvoices(invoices) : setSelectedInvoices([]);
   };
 
-  const handleSelectOne = (event, id) => {
-    const selectedIndex = selectedInvoices.indexOf(id);
+  const handleSelectOne = (event, invoice) => {
+    const selectedIndex = selectedInvoices.map(invoice => invoice.id).indexOf(invoice.id);
     let newSelectedInvocies = [];
 
     if (selectedIndex === -1) {
-      newSelectedInvocies = newSelectedInvocies.concat(selectedInvoices, id);
+      newSelectedInvocies = newSelectedInvocies.concat(selectedInvoices, invoice);
     } else if (selectedIndex === 0) {
       newSelectedInvocies = newSelectedInvocies.concat(
         selectedInvoices.slice(1)
@@ -117,9 +119,6 @@ function Results({className, invoices, ...rest}) {
     setRowsPerPage(event.target.value);
   };
 
-  // eslint-disable-next-line max-len
-  const getSelectedCustomers = () => invoices.filter(customer => selectedInvoices.includes(customer.id));
-
   const openReportModal = () => setOpenModal(true);
 
   const completeReportModal = () => {
@@ -136,26 +135,9 @@ function Results({className, invoices, ...rest}) {
   const getClassName = () => width < 1024;
 
   const handleSnackbarOpen = (bool) => {
-      setSnackbarOpen(bool);
+    setSnackbarOpen(bool);
   };
 
-  useEffect(() => {
-    setSelectedInvoicesDatas(getSelectedCustomers());
-  }, [openModal]);
-
-  let modal = null;
-  if (openModal) {
-    modal = (
-      <Index
-        invoices={selectedInvoicesDatas}
-        onClose={closeReportModal}
-        onComplete={completeReportModal}
-        open={openModal}
-      />
-    );
-  }
-
-  console.log('[Result]');
   return (
     <div
       {...rest}
@@ -178,17 +160,17 @@ function Results({className, invoices, ...rest}) {
       </Typography>
       <Card>
         <CardHeader
-          action={<GenericMoreButton />}
+          action={<GenericMoreButton/>}
           title="전표 내역"
         />
-        <Divider />
+        <Divider/>
         <CardContent className={classes.content}>
           <PerfectScrollbar>
             <div className={getClassName() ? classes.mobileInner : classes.inner}>
               <Table>
                 <TableHead>
                   <TableRow>
-                    <TableCell padding="checkbox">
+                    <TableCell align='center' padding="checkbox">
                       <Checkbox
                         checked={selectedInvoices.length === invoices.length}
                         color="primary"
@@ -199,12 +181,12 @@ function Results({className, invoices, ...rest}) {
                         onChange={handleSelectAll}
                       />
                     </TableCell>
-                    <TableCell>공급자명</TableCell>
-                    <TableCell>일자</TableCell>
-                    <TableCell>총액</TableCell>
-                    <TableCell>사용자</TableCell>
-                    <TableCell>비고</TableCell>
-                    <TableCell>배치번호</TableCell>
+                    <TableCell className={classes.header}>공급자명</TableCell>
+                    <TableCell className={classes.header}>일자</TableCell>
+                    <TableCell className={classes.header}>총액</TableCell>
+                    <TableCell className={classes.header}>사용자</TableCell>
+                    <TableCell className={classes.header}>비고</TableCell>
+                    <TableCell className={clsx(classes.header, classes.whiteSpaceNoWrap)}>배치번호</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -212,38 +194,28 @@ function Results({className, invoices, ...rest}) {
                     <TableRow
                       hover
                       key={invoice.id}
-                      selected={selectedInvoices.indexOf(invoice.id) !== -1}
+                      selected={selectedInvoices.map(invoice => invoice.id).indexOf(invoice.id) !== -1}
                     >
-                      <TableCell padding="checkbox">
+                      <TableCell align='center' padding="checkbox">
                         <Checkbox
                           checked={
-                            selectedInvoices.indexOf(invoice.id) !== -1
+                            selectedInvoices.map(invoice => invoice.id).indexOf(invoice.id) !== -1
                           }
                           color="primary"
-                          onChange={(event) => handleSelectOne(event, invoice.id)}
-                          value={selectedInvoices.indexOf(invoice.id) !== -1}
+                          onChange={(event) => handleSelectOne(event, invoice)}
+                          value={selectedInvoices.map(invoice => invoice.id).indexOf(invoice.id) !== -1}
                         />
                       </TableCell>
-                      <TableCell>
+                      <TableCell align='center'>
                         <div className={clsx(classes.nameCell, classes.whiteSpaceNoWrap)}>
-                          <div>
-                            <Link
-                              color="inherit"
-                              component={RouterLink}
-                              to="/management/customers/1"
-                              variant="h6"
-                            >
                               {invoice.공급자명}
-                            </Link>
-                            <div>{invoice.email}</div>
-                          </div>
                         </div>
-                      </TableCell>
-                      <TableCell className={classes.whiteSpaceNoWrap}>{invoice.일자}</TableCell>
-                      <TableCell className={classes.whiteSpaceNoWrap}>
+                      </TableCell >
+                      <TableCell align='center' className={classes.whiteSpaceNoWrap}>{invoice.일자}</TableCell>
+                      <TableCell align='center' className={classes.whiteSpaceNoWrap}>
                         {getCurrency(invoice.총액)}
                       </TableCell>
-                      <TableCell className={classes.whiteSpaceNoWrap}>
+                      <TableCell align='center' className={classes.whiteSpaceNoWrap}>
                         <div className={classes.nameCell}>
                           <Avatar
                             className={classes.avatar}
@@ -253,7 +225,7 @@ function Results({className, invoices, ...rest}) {
                         </div>
                       </TableCell>
                       <TableCell>{getShortBigo(width, invoice.비고)}</TableCell>
-                      <TableCell className={classes.whiteSpaceNoWrap}>
+                      <TableCell align='center' className={classes.whiteSpaceNoWrap}>
                         {invoice.배치번호 + Math.floor(Math.random() * 70)}
                       </TableCell>
                     </TableRow>
@@ -275,9 +247,15 @@ function Results({className, invoices, ...rest}) {
           />
         </CardActions>
       </Card>
-      <BottomBar onOpenModal={openReportModal} selected={selectedInvoices} />
-      {modal}
-      {snackbarOpen ? <MySnackbars open={snackbarOpen} setOpen={handleSnackbarOpen} isSuccess={isSuccess} /> : null}
+      <BottomBar onOpenModal={openReportModal} selected={selectedInvoices}/>
+      {openModal &&
+        <Index
+          invoices={selectedInvoices}
+          onClose={closeReportModal}
+          onComplete={completeReportModal}
+          open={openModal}
+        /> }
+      {snackbarOpen ? <MySnackbars open={snackbarOpen} setOpen={handleSnackbarOpen} isSuccess={isSuccess}/> : null}
 
     </div>
   );

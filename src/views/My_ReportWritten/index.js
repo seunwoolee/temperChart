@@ -6,6 +6,7 @@ import Page from 'src/components/Page';
 import SearchBar from 'src/components/SearchBar';
 import Header from './Header';
 import Results from './Results';
+import MY_approverLine from "../../components/MY_approverLine";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -17,9 +18,9 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function ReportCreate() {
+function ReportWritten() {
   const classes = useStyles();
-  const [invoices, setInvoices] = useState([]);
+  const [documents, setDocuments] = useState([]);
 
   const handleFilter = () => {};
 
@@ -28,15 +29,15 @@ function ReportCreate() {
   useEffect(() => {
     let mounted = true;
 
-    const fetchCustomers = () => {
-      axios.get('/api/invoices').then((response) => {
+    const fetchDocuments = () => {
+      axios.get('/api/documents').then((response) => {
         if (mounted) {
-          setInvoices(response.data.invoices);
+          setDocuments(response.data.documents);
         }
       });
     };
 
-    fetchCustomers();
+    fetchDocuments();
 
     return () => {
       mounted = false;
@@ -54,15 +55,16 @@ function ReportCreate() {
           onFilter={handleFilter}
           onSearch={handleSearch}
         />
-        {invoices && (
+        {documents && (
           <Results
             className={classes.results}
-            invoices={invoices}
+            documents={documents}
           />
         )}
       </Container>
+      {/*<MY_approverLine />*/}
     </Page>
   );
 }
 
-export default ReportCreate;
+export default ReportWritten;

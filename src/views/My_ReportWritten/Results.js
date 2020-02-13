@@ -23,18 +23,22 @@ import {
   Typography
 } from '@material-ui/core';
 import GenericMoreButton from 'src/components/GenericMoreButton';
-import BottomBar from "./BottomBar";
-import getShortBigo from "../../utils/getShortBigo";
 import useWindowDimensions from "../../components/WindowDimenstions";
 import Index from "./Modal";
-import getCurrency from "../../utils/getCurrency";
-import {invoices} from "../../mock";
 import MySnackbars from "../../components/MY_snackbar";
-// import WriteReportModal from "../CustomerManagementDetails/Summary/WriteReporttModal";
+import {documents} from '../../mock/my_documentsMock'
 
 const useStyles = makeStyles((theme) => ({
   root: {},
+  header: {
+    fontWeight: 650,
+    textAlign: 'center',
+  },
+  tableRows: {
+    cursor: 'pointer'
+  },
   content: {
+    textAlign: 'center',
     padding: 0
   },
   supplyCell: {
@@ -50,64 +54,26 @@ const useStyles = makeStyles((theme) => ({
     minWidth: 700,
     whiteSpace: 'nowrap'
   },
+  actions: {
+    padding: theme.spacing(1),
+    justifyContent: 'flex-end'
+  },
   nameCell: {
     fontColor: 'red',
     display: 'flex',
     alignItems: 'center'
   },
-  avatar: {
-    height: 42,
-    width: 42,
-    marginRight: theme.spacing(1)
-  },
-  actions: {
-    padding: theme.spacing(1),
-    justifyContent: 'flex-end'
-  }
 }));
 
-function Results({className, invoices, ...rest}) {
+function Results({className, documents, ...rest}) {
   const classes = useStyles();
-  const [selectedInvoices, setSelectedInvoices] = useState([]);
-  const [selectedInvoicesDatas, setSelectedInvoicesDatas] = useState([]);
   const [page, setPage] = useState(0);
+  const [selectedDocument, setSelectedDocument] = useState({});
   const [rowsPerPage, setRowsPerPage] = useState(25);
   const [openModal, setOpenModal] = useState(false);
   const {height, width} = useWindowDimensions();
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [isSuccess, setIsSuccess] = useState(true);
-
-
-  const handleSelectAll = (event) => {
-    const selectedInvoices = event.target.checked
-      ? invoices.map((invoice) => invoice.id)
-      : [];
-
-    setSelectedInvoices(selectedInvoices);
-  };
-
-  const handleSelectOne = (event, id) => {
-    const selectedIndex = selectedInvoices.indexOf(id);
-    let newSelectedInvocies = [];
-
-    if (selectedIndex === -1) {
-      newSelectedInvocies = newSelectedInvocies.concat(selectedInvoices, id);
-    } else if (selectedIndex === 0) {
-      newSelectedInvocies = newSelectedInvocies.concat(
-        selectedInvoices.slice(1)
-      );
-    } else if (selectedIndex === selectedInvoices.length - 1) {
-      newSelectedInvocies = newSelectedInvocies.concat(
-        selectedInvoices.slice(0, -1)
-      );
-    } else if (selectedIndex > 0) {
-      newSelectedInvocies = newSelectedInvocies.concat(
-        selectedInvoices.slice(0, selectedIndex),
-        selectedInvoices.slice(selectedIndex + 1)
-      );
-    }
-    setSelectedInvoices(newSelectedInvocies);
-  };
 
   const handleChangePage = (event, page) => {
     setPage(page);
@@ -117,16 +83,13 @@ function Results({className, invoices, ...rest}) {
     setRowsPerPage(event.target.value);
   };
 
-  // eslint-disable-next-line max-len
-  const getSelectedCustomers = () => invoices.filter(customer => selectedInvoices.includes(customer.id));
-
-  const openReportModal = () => setOpenModal(true);
+  const handleTableClick = (id) => {
+    const newDocument = documents.find(document => document.id === id);
+    setSelectedDocument(newDocument);
+    setOpenModal(true);
+  };
 
   const completeReportModal = () => {
-    setSnackbarOpen(true);
-    setIsSuccess(true);
-    setOpenModal(false);
-    setSelectedInvoices([]);
   };
 
   const closeReportModal = () => {
@@ -139,22 +102,6 @@ function Results({className, invoices, ...rest}) {
       setSnackbarOpen(bool);
   };
 
-  useEffect(() => {
-    setSelectedInvoicesDatas(getSelectedCustomers());
-  }, [openModal]);
-
-  let modal = null;
-  if (openModal) {
-    modal = (
-      <Index
-        invoices={selectedInvoicesDatas}
-        onClose={closeReportModal}
-        onComplete={completeReportModal}
-        open={openModal}
-      />
-    );
-  }
-
   return (
     <div
       {...rest}
@@ -165,7 +112,7 @@ function Results({className, invoices, ...rest}) {
         gutterBottom
         variant="body2"
       >
-        {invoices.length}
+        {documents.length}
         {' '}
         Records found. Page
         {' '}
@@ -173,12 +120,12 @@ function Results({className, invoices, ...rest}) {
         {' '}
         of
         {' '}
-        {Math.ceil(invoices.length / rowsPerPage)}
+        {Math.ceil(documents.length / rowsPerPage)}
       </Typography>
       <Card>
         <CardHeader
           action={<GenericMoreButton />}
-          title="전표 내역"
+          title="상신 내역"
         />
         <Divider />
         <CardContent className={classes.content}>
@@ -186,75 +133,35 @@ function Results({className, invoices, ...rest}) {
             <div className={getClassName() ? classes.mobileInner : classes.inner}>
               <Table>
                 <TableHead>
-                  <TableRow>
-                    <TableCell padding="checkbox">
-                      <Checkbox
-                        checked={selectedInvoices.length === invoices.length}
-                        color="primary"
-                        indeterminate={
-                          selectedInvoices.length > 0
-                          && selectedInvoices.length < invoices.length
-                        }
-                        onChange={handleSelectAll}
-                      />
-                    </TableCell>
-                    <TableCell>공급자명</TableCell>
-                    <TableCell>일자</TableCell>
-                    <TableCell>총액</TableCell>
-                    <TableCell>사용자</TableCell>
-                    <TableCell>비고</TableCell>
-                    <TableCell>배치번호</TableCell>
+                  <TableRow >
+                    <TableCell className={classes.header}>문서번호</TableCell>
+                    <TableCell className={classes.header}>제목</TableCell>
+                    <TableCell className={classes.header}>기안일자</TableCell>
+                    <TableCell className={classes.header}>기안부서</TableCell>
+                    <TableCell className={classes.header}>기안자</TableCell>
+                    <TableCell className={classes.header}>문서상태</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {invoices.slice(0, rowsPerPage).map((invoice) => (
+                  {documents.slice(0, rowsPerPage).map((document, i) => (
                     <TableRow
+                      className={classes.tableRows}
+                      onClick={() => handleTableClick(document.id)}
                       hover
-                      key={invoice.id}
-                      selected={selectedInvoices.indexOf(invoice.id) !== -1}
+                      key={document.id}
                     >
-                      <TableCell padding="checkbox">
-                        <Checkbox
-                          checked={
-                            selectedInvoices.indexOf(invoice.id) !== -1
-                          }
-                          color="primary"
-                          onChange={(event) => handleSelectOne(event, invoice.id)}
-                          value={selectedInvoices.indexOf(invoice.id) !== -1}
-                        />
+                      <TableCell align='center' className={classes.whiteSpaceNoWrap }>{i}</TableCell>
+                      <TableCell className={classes.whiteSpaceNoWrap}>{document.title}</TableCell>
+                      <TableCell align='center' className={classes.whiteSpaceNoWrap}>
+                        {document.created}
                       </TableCell>
-                      <TableCell>
-                        <div className={clsx(classes.nameCell, classes.whiteSpaceNoWrap)}>
-                          <div>
-                            <Link
-                              color="inherit"
-                              component={RouterLink}
-                              to="/management/customers/1"
-                              variant="h6"
-                            >
-                              {invoice.공급자명}
-                            </Link>
-                            <div>{invoice.email}</div>
-                          </div>
-                        </div>
+                      <TableCell align='center' className={classes.whiteSpaceNoWrap}>
+                        {document.group}
                       </TableCell>
-                      <TableCell className={classes.whiteSpaceNoWrap}>{invoice.일자}</TableCell>
-                      <TableCell className={classes.whiteSpaceNoWrap}>
-                        {getCurrency(invoice.총액)}
+                      <TableCell align='center' className={classes.whiteSpaceNoWrap}>
+                          {document.author}
                       </TableCell>
-                      <TableCell className={classes.whiteSpaceNoWrap}>
-                        <div className={classes.nameCell}>
-                          <Avatar
-                            className={classes.avatar}
-                            src={invoice.avatar}
-                          />
-                          {invoice.사용자}
-                        </div>
-                      </TableCell>
-                      <TableCell>{getShortBigo(width, invoice.비고)}</TableCell>
-                      <TableCell className={classes.whiteSpaceNoWrap}>
-                        {invoice.배치번호 + Math.floor(Math.random() * 70)}
-                      </TableCell>
+                      <TableCell align='center'>{document.doc_status}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
@@ -265,7 +172,7 @@ function Results({className, invoices, ...rest}) {
         <CardActions className={classes.actions}>
           <TablePagination
             component="div"
-            count={invoices.length}
+            count={documents.length}
             onChangePage={handleChangePage}
             onChangeRowsPerPage={handleChangeRowsPerPage}
             page={page}
@@ -274,21 +181,26 @@ function Results({className, invoices, ...rest}) {
           />
         </CardActions>
       </Card>
-      <BottomBar onOpenModal={openReportModal} selected={selectedInvoices} />
-      {modal}
-      {snackbarOpen ? <MySnackbars open={snackbarOpen} setOpen={handleSnackbarOpen} isSuccess={isSuccess} /> : null}
+      {openModal &&
+      <Index
+        document={selectedDocument}
+        onClose={closeReportModal}
+        onComplete={completeReportModal}
+        open={openModal}
+      /> }
 
+      {snackbarOpen ? <MySnackbars open={snackbarOpen} setOpen={handleSnackbarOpen} isSuccess={isSuccess} /> : null}
     </div>
   );
 }
 
 Results.propTypes = {
   className: PropTypes.string,
-  invoices: PropTypes.arrayOf(PropTypes.shape(invoices))
+  documents: PropTypes.arrayOf(PropTypes.shape(documents))
 };
 
 Results.defaultProps = {
-  invoices: []
+  documents: []
 };
 
 export default Results;

@@ -11,14 +11,18 @@ import {
   Grid,
   Divider,
   TextField,
-  Button, Table, TableBody, TableRow, TableCell
+  Button, Table, TableBody, TableRow, TableCell, Typography
 } from '@material-ui/core';
 import MySnackbars from "../../../components/MY_snackbar";
 import InvoiceCard from "./InvoiceCard";
 import ChooseDialog from '../Dialog'
 import UploadAttachments from "./UploadAttachments";
 import axios from "../../../utils/axios";
-import {invoices} from "../../../mock";
+import {documents} from "../../../mock/my_documentsMock";
+import MY_approverLine from "../../../components/MY_approverLine";
+import TableContainer from "@material-ui/core/TableContainer";
+import Paper from "@material-ui/core/Paper";
+import getCurrency from "../../../utils/getCurrency";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -33,6 +37,12 @@ const useStyles = makeStyles((theme) => ({
     overflowY: 'auto',
     maxWidth: '100%'
   },
+  tableCellContent: {
+    width: '50px',
+    whiteSpace: 'nowrap',
+    backgroundColor: '#eeeeee'
+
+  },
   cardContent: {
     paddingTop: theme.spacing(1)
   },
@@ -44,31 +54,17 @@ const useStyles = makeStyles((theme) => ({
   },
   actions: {
     justifyContent: 'flex-end'
+  },
+  approverGrid: {
+    paddingBottom: theme.spacing(8)
   }
 }));
 
 function Index({
-                 open, onClose, onComplete, invoices, className, ...rest
+                 open, onClose, onComplete, document, className, ...rest
                }) {
   const classes = useStyles();
   const [openDialog, setOpenDialog] = useState(false);
-  const [inputTitle, setInputTitle] = useState('');
-  const [inputContent, setInputContent] = useState('');
-  const [inputAttachments,setInputAttachments]  = useState([]);
-  const [inputUsers,setInputUsers]  = useState([]);
-
-
-  const handleChangeTitle = (event) => {
-    setInputTitle(event.target.value);
-  };
-
-  const handleChangeContent = (event) => {
-    setInputContent(event.target.value);
-  };
-
-  const handleAttachments = (attachments: Array) => {
-    setInputAttachments(attachments);
-  };
 
   const handleClickOpen = () => {
     setOpenDialog(true);
@@ -78,12 +74,8 @@ function Index({
     setOpenDialog(false);
   };
 
-  const handleSubmit = (users: Array) => {
-    setInputUsers(users);
-    setOpenDialog(false);
-    onComplete();
-
-    // axios call
+  const getSumInvoices = () => {
+    return getCurrency(document.invoices.map(invoice => invoice.총액).reduce((prev, curr) => prev + curr));
   };
 
 
@@ -99,9 +91,24 @@ function Index({
           className={clsx(classes.root, className)}
         >
           <form>
-            <CardHeader classes={{root: classes.cardHeaderRoot, title: classes.cardHeaderTitle}} title="기안 작성"/>
+            <CardHeader classes={{root: classes.cardHeaderRoot, title: classes.cardHeaderTitle}} title="상신문서"/>
             <Divider/>
             <CardContent>
+              <Grid
+                className={classes.approverGrid}
+                container
+                direction="row"
+                justify="flex-end"
+                alignItems="center"
+              >
+                <Grid
+                  item
+                  md={document.approvers.length +2}
+                  xs={12}
+                >
+                  <MY_approverLine approvers={document.approvers} />
+                </Grid>
+              </Grid>
               <Grid
                 container
                 spacing={2}
@@ -111,49 +118,28 @@ function Index({
                   md={12}
                   xs={12}
                 >
-                  <Table>
-                    <TableBody>
-                      <TableRow>
-                        <TableCell>작성자</TableCell>
-                        <TableCell>이승우</TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell>작성일자</TableCell>
-                        <TableCell>2020-01-02</TableCell>
-                      </TableRow>
-                    </TableBody>
-                  </Table>
-                </Grid>
-                <Grid
-                  item
-                  md={12}
-                  xs={12}
-                >
-                  <TextField
-                    fullWidth
-                    label="제목"
-                    name="title"
-                    onChange={handleChangeTitle}
-                    value={inputTitle}
-                    variant="outlined"
-                  />
-                </Grid>
-                <Grid
-                  item
-                  md={12}
-                  xs={12}
-                >
-                  <TextField
-                    multiline
-                    rows="3"
-                    rowsMax="50"
-                    fullWidth
-                    label="내용"
-                    name="title"
-                    onChange={handleChangeContent}
-                    value={inputContent}
-                    variant="outlined"
-                  />
+                  <TableContainer component={Paper}>
+                    <Table>
+                      <TableBody>
+                        <TableRow>
+                          <TableCell className={classes.tableCellContent}>작성자</TableCell>
+                          <TableCell>{document.author}</TableCell>
+                        </TableRow>
+                        <TableRow>
+                          <TableCell className={classes.tableCellContent}>작성일자</TableCell>
+                          <TableCell>{document.created}</TableCell>
+                        </TableRow>
+                        <TableRow>
+                          <TableCell className={classes.tableCellContent}>제목</TableCell>
+                          <TableCell>{document.title}</TableCell>
+                        </TableRow>
+                        <TableRow>
+                          <TableCell className={classes.tableCellContent}>내용</TableCell>
+                          <TableCell>{document.content}</TableCell>
+                        </TableRow>
+                      </TableBody>
+                    </Table>
+                  </TableContainer>
                 </Grid>
                 <Divider/>
                 <Grid
@@ -161,7 +147,10 @@ function Index({
                   md={12}
                   xs={12}
                 >
-                  {invoices.map((invoice) => (
+                  <Typography variant="h5">
+                    총 {document.invoices.length}건 / {getSumInvoices()}원
+                  </Typography>
+                  {document.invoices.map((invoice) => (
                     <InvoiceCard
                       key={invoice.id}
                       invoice={invoice}
@@ -173,35 +162,28 @@ function Index({
                   md={12}
                   xs={12}
                 >
-                  <UploadAttachments handleAttachments={handleAttachments}/>
                 </Grid>
               </Grid>
             </CardContent>
             <Divider/>
             <CardActions className={classes.actions}>
-              <Button onClick={onClose}>
-                닫기
-              </Button>
               <Button
-                disabled={!(inputTitle && inputContent)}
                 color="primary"
-                onClick={handleClickOpen}
                 variant="contained"
-              >
-                결재요청
+                onClick={onClose}>
+                닫기
               </Button>
             </CardActions>
           </form>
         </Card>
       </Modal>
-      <ChooseDialog open={openDialog} onClose={handleClose}  onSubmit={handleSubmit}/>
     </>
   );
 }
 
 Index.propTypes = {
   className: PropTypes.string,
-  invoices: PropTypes.arrayOf(PropTypes.shape(invoices)),
+  document: PropTypes.shape(documents),
   onClose: PropTypes.func,
   onComplete: PropTypes.func,
   open: PropTypes.bool

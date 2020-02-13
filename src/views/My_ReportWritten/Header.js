@@ -34,7 +34,7 @@ function Header({ className, ...rest }) {
             component="h1"
             variant="h3"
           >
-            결재작성
+            상신함
           </Typography>
         </Grid>
       </Grid>
