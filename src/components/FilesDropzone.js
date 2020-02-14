@@ -7,21 +7,15 @@ import PerfectScrollbar from 'react-perfect-scrollbar';
 import { makeStyles } from '@material-ui/styles';
 import {
   Button,
-  IconButton,
-  Link,
   List,
   ListItem,
   ListItemIcon,
   ListItemText,
   Typography,
-  Tooltip,
   colors
 } from '@material-ui/core';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
-import MoreIcon from '@material-ui/icons/MoreVert';
 import bytesToSize from 'src/utils/bytesToSize';
-import CancelPresentationIcon from "@material-ui/icons/CancelPresentation";
-import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -154,7 +148,7 @@ function FilesDropzone({ handleAttachments, className, ...rest }) {
 }
 
 FilesDropzone.propTypes = {
-  handleAttachments: PropTypes.func.isRequired,
+  handleAttachments: PropTypes.func,
   className: PropTypes.string
 };
 

@@ -19,12 +19,12 @@ function UploadAttachments({ handleAttachments, className, ...rest }) {
       className={clsx(classes.root, className)}
     >
       <CardHeader title="첨부파일" />
-      {/*<CardContent>*/}
-      {/*  <FilesDropzone handleAttachments={handleAttachments}/>*/}
-      {/*</CardContent>*/}
       <CardContent>
-        <MyDropzone />
+        <FilesDropzone handleAttachments={handleAttachments}/>
       </CardContent>
+      {/*<CardContent>*/}
+      {/*  <MyDropzone />*/}
+      {/*</CardContent>*/}
     </Card>
   );
 }

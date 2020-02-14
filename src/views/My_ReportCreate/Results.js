@@ -1,5 +1,4 @@
-import React, {useEffect, useState} from 'react';
-import {Link as RouterLink} from 'react-router-dom';
+import React, {useState} from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import PerfectScrollbar from 'react-perfect-scrollbar';
@@ -12,8 +11,6 @@ import {
   CardHeader,
   Checkbox,
   Divider,
-  Button,
-  Link,
   Table,
   TableBody,
   TableCell,
@@ -30,6 +27,7 @@ import Index from "./Modal";
 import getCurrency from "../../utils/getCurrency";
 import {invoices} from "../../mock";
 import MySnackbars from "../../components/MY_snackbar";
+import getPerfectScrollbarHeight from "../../utils/getPerfectScrollbarHeight";
 // import WriteReportModal from "../CustomerManagementDetails/Summary/WriteReporttModal";
 
 const useStyles = makeStyles((theme) => ({
@@ -50,10 +48,11 @@ const useStyles = makeStyles((theme) => ({
   whiteSpaceNoWrap: {
     whiteSpace: 'nowrap'
   },
-  mobileInner: {
-    minWidth: 700,
+  mobileInner: props => ({
+    minWidth: 500,
+    height: props.mobileInnerHeight,
     whiteSpace: 'nowrap'
-  },
+  }),
   nameCell: {
     fontColor: 'red',
     display: 'flex',
@@ -74,7 +73,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Results({className, invoices, ...rest}) {
-  const classes = useStyles();
   const [selectedInvoices, setSelectedInvoices] = useState([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(25);
@@ -83,6 +81,8 @@ function Results({className, invoices, ...rest}) {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [isSuccess, setIsSuccess] = useState(true);
 
+  const props = { mobileInnerHeight: getPerfectScrollbarHeight(rowsPerPage, invoices.length, 80)};
+  const classes = useStyles(props);
 
   const handleSelectAll = (event) => {
     event.target.checked ? setSelectedInvoices(invoices) : setSelectedInvoices([]);
@@ -160,17 +160,17 @@ function Results({className, invoices, ...rest}) {
       </Typography>
       <Card>
         <CardHeader
-          action={<GenericMoreButton/>}
+          action={<GenericMoreButton />}
           title="전표 내역"
         />
-        <Divider/>
+        <Divider />
         <CardContent className={classes.content}>
           <PerfectScrollbar>
             <div className={getClassName() ? classes.mobileInner : classes.inner}>
               <Table>
                 <TableHead>
                   <TableRow>
-                    <TableCell align='center' padding="checkbox">
+                    <TableCell align="center" padding="checkbox">
                       <Checkbox
                         checked={selectedInvoices.length === invoices.length}
                         color="primary"
@@ -196,7 +196,7 @@ function Results({className, invoices, ...rest}) {
                       key={invoice.id}
                       selected={selectedInvoices.map(invoice => invoice.id).indexOf(invoice.id) !== -1}
                     >
-                      <TableCell align='center' padding="checkbox">
+                      <TableCell align="center" padding="checkbox">
                         <Checkbox
                           checked={
                             selectedInvoices.map(invoice => invoice.id).indexOf(invoice.id) !== -1
@@ -206,16 +206,16 @@ function Results({className, invoices, ...rest}) {
                           value={selectedInvoices.map(invoice => invoice.id).indexOf(invoice.id) !== -1}
                         />
                       </TableCell>
-                      <TableCell align='center'>
+                      <TableCell align="center">
                         <div className={clsx(classes.nameCell, classes.whiteSpaceNoWrap)}>
-                              {invoice.공급자명}
+                          {invoice.공급자명}
                         </div>
-                      </TableCell >
-                      <TableCell align='center' className={classes.whiteSpaceNoWrap}>{invoice.일자}</TableCell>
-                      <TableCell align='center' className={classes.whiteSpaceNoWrap}>
+                      </TableCell>
+                      <TableCell align="center" className={classes.whiteSpaceNoWrap}>{invoice.일자}</TableCell>
+                      <TableCell align="center" className={classes.whiteSpaceNoWrap}>
                         {getCurrency(invoice.총액)}
                       </TableCell>
-                      <TableCell align='center' className={classes.whiteSpaceNoWrap}>
+                      <TableCell align="center" className={classes.whiteSpaceNoWrap}>
                         <div className={classes.nameCell}>
                           <Avatar
                             className={classes.avatar}
@@ -225,7 +225,7 @@ function Results({className, invoices, ...rest}) {
                         </div>
                       </TableCell>
                       <TableCell>{getShortBigo(width, invoice.비고)}</TableCell>
-                      <TableCell align='center' className={classes.whiteSpaceNoWrap}>
+                      <TableCell align="center" className={classes.whiteSpaceNoWrap}>
                         {invoice.배치번호 + Math.floor(Math.random() * 70)}
                       </TableCell>
                     </TableRow>
@@ -247,15 +247,17 @@ function Results({className, invoices, ...rest}) {
           />
         </CardActions>
       </Card>
-      <BottomBar onOpenModal={openReportModal} selected={selectedInvoices}/>
-      {openModal &&
+      <BottomBar onOpenModal={openReportModal} selected={selectedInvoices} />
+      {openModal
+        && (
         <Index
           invoices={selectedInvoices}
           onClose={closeReportModal}
           onComplete={completeReportModal}
           open={openModal}
-        /> }
-      {snackbarOpen ? <MySnackbars open={snackbarOpen} setOpen={handleSnackbarOpen} isSuccess={isSuccess}/> : null}
+        />
+        ) }
+      {snackbarOpen ? <MySnackbars open={snackbarOpen} setOpen={handleSnackbarOpen} isSuccess={isSuccess} /> : null}
 
     </div>
   );

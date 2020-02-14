@@ -27,6 +27,7 @@ import useWindowDimensions from "../../components/WindowDimenstions";
 import Index from "./Modal";
 import MySnackbars from "../../components/MY_snackbar";
 import {documents} from '../../mock/my_documentsMock'
+import getPerfectScrollbarHeight from "../../utils/getPerfectScrollbarHeight";
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -50,10 +51,11 @@ const useStyles = makeStyles((theme) => ({
   whiteSpaceNoWrap: {
     whiteSpace: 'nowrap'
   },
-  mobileInner: {
-    minWidth: 700,
+  mobileInner: props => ({
+    minWidth: 500,
+    height: props.mobileInnerHeight,
     whiteSpace: 'nowrap'
-  },
+  }),
   actions: {
     padding: theme.spacing(1),
     justifyContent: 'flex-end'
@@ -66,7 +68,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Results({className, documents, ...rest}) {
-  const classes = useStyles();
   const [page, setPage] = useState(0);
   const [selectedDocument, setSelectedDocument] = useState({});
   const [rowsPerPage, setRowsPerPage] = useState(25);
@@ -74,6 +75,9 @@ function Results({className, documents, ...rest}) {
   const {height, width} = useWindowDimensions();
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [isSuccess, setIsSuccess] = useState(true);
+
+  const props = { mobileInnerHeight: getPerfectScrollbarHeight(rowsPerPage, documents.length, 60)};
+  const classes = useStyles(props);
 
   const handleChangePage = (event, page) => {
     setPage(page);
@@ -133,7 +137,7 @@ function Results({className, documents, ...rest}) {
             <div className={getClassName() ? classes.mobileInner : classes.inner}>
               <Table>
                 <TableHead>
-                  <TableRow >
+                  <TableRow>
                     <TableCell className={classes.header}>문서번호</TableCell>
                     <TableCell className={classes.header}>제목</TableCell>
                     <TableCell className={classes.header}>기안일자</TableCell>

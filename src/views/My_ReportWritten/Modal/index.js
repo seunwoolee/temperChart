@@ -13,15 +13,15 @@ import {
   TextField,
   Button, Table, TableBody, TableRow, TableCell, Typography
 } from '@material-ui/core';
+import TableContainer from "@material-ui/core/TableContainer";
+import Paper from "@material-ui/core/Paper";
 import MySnackbars from "../../../components/MY_snackbar";
 import InvoiceCard from "./InvoiceCard";
-import ChooseDialog from '../Dialog'
-import UploadAttachments from "./UploadAttachments";
+import ChooseDialog from '../Dialog';
+import Attachments from "./attachments";
 import axios from "../../../utils/axios";
 import {documents} from "../../../mock/my_documentsMock";
 import MY_approverLine from "../../../components/MY_approverLine";
-import TableContainer from "@material-ui/core/TableContainer";
-import Paper from "@material-ui/core/Paper";
 import getCurrency from "../../../utils/getCurrency";
 
 const useStyles = makeStyles((theme) => ({
@@ -61,8 +61,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Index({
-                 open, onClose, onComplete, document, className, ...rest
-               }) {
+  open, onClose, onComplete, document, className, ...rest
+}) {
   const classes = useStyles();
   const [openDialog, setOpenDialog] = useState(false);
 
@@ -74,9 +74,8 @@ function Index({
     setOpenDialog(false);
   };
 
-  const getSumInvoices = () => {
-    return getCurrency(document.invoices.map(invoice => invoice.총액).reduce((prev, curr) => prev + curr));
-  };
+  const getSumInvoices = () => getCurrency(document.invoices.map(invoice => invoice.총액)
+    .reduce((prev, curr) => prev + curr));
 
 
   return (
@@ -91,8 +90,8 @@ function Index({
           className={clsx(classes.root, className)}
         >
           <form>
-            <CardHeader classes={{root: classes.cardHeaderRoot, title: classes.cardHeaderTitle}} title="상신문서"/>
-            <Divider/>
+            <CardHeader classes={{root: classes.cardHeaderRoot, title: classes.cardHeaderTitle}} title="상신문서" />
+            <Divider />
             <CardContent>
               <Grid
                 className={classes.approverGrid}
@@ -103,7 +102,7 @@ function Index({
               >
                 <Grid
                   item
-                  md={document.approvers.length +2}
+                  md={document.approvers.length + 2}
                   xs={12}
                 >
                   <MY_approverLine approvers={document.approvers} />
@@ -141,14 +140,20 @@ function Index({
                     </Table>
                   </TableContainer>
                 </Grid>
-                <Divider/>
+                <Divider />
                 <Grid
                   item
                   md={12}
                   xs={12}
                 >
                   <Typography variant="h5">
-                    총 {document.invoices.length}건 / {getSumInvoices()}원
+                    총
+                    {' '}
+                    {document.invoices.length}
+                    건 /
+                    {' '}
+                    {getSumInvoices()}
+                    원
                   </Typography>
                   {document.invoices.map((invoice) => (
                     <InvoiceCard
@@ -162,15 +167,17 @@ function Index({
                   md={12}
                   xs={12}
                 >
+                  <Attachments attachments={document.attachments}/>
                 </Grid>
               </Grid>
             </CardContent>
-            <Divider/>
+            <Divider />
             <CardActions className={classes.actions}>
               <Button
                 color="primary"
                 variant="contained"
-                onClick={onClose}>
+                onClick={onClose}
+              >
                 닫기
               </Button>
             </CardActions>
