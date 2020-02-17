@@ -173,7 +173,7 @@ mock.onGet('/api/management/customers/1/summary').reply(200, {
   }
 });
 
-mock.onGet('/api/management/customers/1/invoices').reply(200, {
+mock.onGet('/api/management/customers/1/documents').reply(200, {
   invoices: [
     {
       id: uuid(),

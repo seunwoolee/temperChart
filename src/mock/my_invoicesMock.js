@@ -18,7 +18,7 @@ export const invoices = {
 };
 
 
-mock.onGet('/api/invoices').reply(200, {
+mock.onGet('/api/documents').reply(200, {
   invoices: [
     {
       id: uuid(),

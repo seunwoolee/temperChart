@@ -30,7 +30,7 @@ export default [
     items: [
       {
         title: '미결함',
-        href: '/reportNotFinished',
+        href: '/reportSign',
         icon: ReceiptIcon
       },
       {
@@ -161,7 +161,7 @@ export default [
       },
       {
         title: 'Invoice',
-        href: '/invoices/1',
+        href: '/documents/1',
         icon: ReceiptIcon
       },
       {

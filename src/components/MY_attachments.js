@@ -16,6 +16,17 @@ import {
 } from '@material-ui/core';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
 import bytesToSize from 'src/utils/bytesToSize';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import Grid from "@material-ui/core/Grid";
+import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
+import GetAppIcon from '@material-ui/icons/GetApp';
+import IconButton from "@material-ui/core/IconButton";
+import Label from 'src/components/Label';
+import moment from "moment";
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -46,6 +57,12 @@ const useStyles = makeStyles((theme) => ({
   list: {
     maxHeight: 280
   },
+  img: {
+    width: '100%',
+  },
+  dialogPaper: {
+    margin: theme.spacing(1)
+  },
   actions: {
     marginTop: theme.spacing(2),
     display: 'flex',
@@ -58,8 +75,18 @@ const useStyles = makeStyles((theme) => ({
 
 function MY_attachments({ attachments, className, ...rest }) {
   const classes = useStyles();
+  const [open, setOpen] = React.useState(false);
+  const [selectedImgPath, setSelectedImgPath] = React.useState('');
 
-  console.log(attachments);
+  const handleClickOpen = (imgPath) => {
+    setOpen(true);
+    setSelectedImgPath(imgPath);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+    setSelectedImgPath('');
+  };
 
   return (
     <div
@@ -71,30 +98,50 @@ function MY_attachments({ attachments, className, ...rest }) {
           <List className={classes.list}>
             {attachments.map((file, i) => (
               <ListItem
+                button={file.isImg}
+                onClick={file.isImg ? () =>handleClickOpen(file.path) : null}
                 divider={i < attachments.length - 1}
                 key={uuid()}
               >
                 <ListItemIcon>
                   <FileCopyIcon />
                 </ListItemIcon>
-                <a target="_blank" href={file.path} download="ilovecheese">
                 <ListItemText
                   primary={file.title}
                   primaryTypographyProps={{ variant: 'h5' }}
                   secondary={bytesToSize(file.size)}
                 />
-                </a>
+                <ListItemSecondaryAction>
+                  <a target="_blank" href={file.path} download="ilovecheese">
+                  <Label >
+                      DownLoad
+                  </Label>
+                  <IconButton>
+                    <GetAppIcon />
+                  </IconButton>
+                  </a>
+                </ListItemSecondaryAction>
               </ListItem>
             ))}
           </List>
         </PerfectScrollbar>
       </>
+      <Dialog
+        classes={{paper: classes.dialogPaper}}
+        maxWidth='lg'
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <img src={selectedImgPath} className={classes.img}  alt='이미지'/>
+      </Dialog>
     </div>
   );
 }
 
 MY_attachments.propTypes = {
-  attachments: PropTypes.func,
+  attachments: PropTypes.array,
   className: PropTypes.string
 };
 

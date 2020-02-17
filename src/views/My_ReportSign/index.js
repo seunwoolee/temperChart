@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function ReportWritten() {
+function ReportCreate() {
   const classes = useStyles();
   const [documents, setDocuments] = useState([]);
 
@@ -46,9 +46,12 @@ function ReportWritten() {
   return (
     <Page
       className={classes.root}
-      title="상신함"
+      title="미결함"
     >
-      <Container maxWidth={false}>
+      <Container
+        maxWidth={false}
+        className={classes.container}
+        >
         <Header />
         <SearchBar
           onFilter={handleFilter}
@@ -65,4 +68,4 @@ function ReportWritten() {
   );
 }
 
-export default ReportWritten;
+export default ReportCreate;

@@ -24,7 +24,7 @@ function InvoiceDetails() {
     let mounted = true;
 
     const fetchInvoice = () => {
-      axios.get('/api/invoices/1').then((response) => {
+      axios.get('/api/documents/1').then((response) => {
         if (mounted) {
           setInvoice(response.data.invoice);
         }

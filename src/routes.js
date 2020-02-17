@@ -70,6 +70,11 @@ export default [
     component: DashboardLayout,
     routes: [
       {
+        path: '/reportSign',
+        exact: true,
+        component: lazy(() => import('src/views/My_ReportSign'))
+      },
+      {
         path: '/reportWritten',
         exact: true,
         component: lazy(() => import('src/views/My_ReportWritten'))
@@ -145,7 +150,7 @@ export default [
         component: DashboardDefaultView
       },
       {
-        path: '/invoices/:id',
+        path: '/documents/:id',
         exact: true,
         component: lazy(() => import('src/views/InvoiceDetails'))
       },

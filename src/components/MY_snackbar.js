@@ -5,7 +5,7 @@ import MuiAlert from '@material-ui/lab/Alert';
 import {makeStyles} from '@material-ui/core/styles';
 import ChooseDialog from "../views/My_ReportCreate/Dialog";
 import PropTypes from "prop-types";
-import {invoices} from "../mock";
+import {documents} from "../mock";
 import Index from "../views/My_ReportCreate/Modal";
 
 const useStyles = makeStyles(theme => ({

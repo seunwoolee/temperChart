@@ -18,7 +18,7 @@ import InvoiceCard from "./InvoiceCard";
 import ChooseDialog from '../Dialog'
 import UploadAttachments from "./UploadAttachments";
 import axios from "../../../utils/axios";
-import {invoices} from "../../../mock";
+// import {documents} from "../../../mock";
 import getCurrency from "../../../utils/getCurrency";
 
 const useStyles = makeStyles((theme) => ({
@@ -88,7 +88,7 @@ function Index({
   };
 
   const getSumInvoices = () => {
-    return getCurrency(invoices.map(invoice => invoice.총액).reduce((prev, curr) => prev + curr));
+      return getCurrency(invoices.map(invoice => invoice.총액).reduce((prev, curr) => prev + curr));
   };
 
   console.log('[Modal]', invoices);
@@ -210,7 +210,7 @@ function Index({
 
 Index.propTypes = {
   className: PropTypes.string,
-  invoices: PropTypes.arrayOf(PropTypes.shape(invoices)),
+  // invoices: PropTypes.arrayOf(PropTypes.shape(documents)),
   onClose: PropTypes.func,
   onComplete: PropTypes.func,
   open: PropTypes.bool

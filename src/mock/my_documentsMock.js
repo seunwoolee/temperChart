@@ -20,23 +20,27 @@ export const documents = {
 export const attachment = {
   title: PT.string.isRequired,
   size: PT.number.isRequired,
-  path: PT.string.isRequired
+  path: PT.string.isRequired,
+  isImg: PT.bool.isRequired,
 };
 
 const test_attachment1 = {
-  title: '아바타1',
+  title: '이미지1 파일',
   size: 2000,
-  path: '/images/avatars/avatar_4.png'
+  path: '/images/avatars/avatar_4.png',
+  isImg: true
 };
 const test_attachment2 = {
-  title: '아바타2',
+  title: 'PDF 파일',
   size: 23000,
-  path: '/images/test.pdf'
+  path: '/images/test.pdf',
+  isImg: false
 };
 const test_attachment3 = {
-  title: '아바타3',
+  title: '엑셀 파일',
   size: 20200,
-  path: '/images/test.xlsx'
+  path: '/images/test.xlsx',
+  isImg: false
 };
 
 mock.onGet('/api/documents').reply(200, {

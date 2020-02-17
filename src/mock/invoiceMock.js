@@ -2,11 +2,11 @@ import uuid from 'uuid/v1';
 import moment from 'moment';
 import mock from 'src/utils/mock';
 
-// mock.onGet('/api/invoices').reply(200, {
-//   invoices: []
+// mock.onGet('/api/documents').reply(200, {
+//   documents: []
 // });
 
-mock.onGet('/api/invoices/1').reply(200, {
+mock.onGet('/api/documents/1').reply(200, {
   invoice: {
     id: uuid(),
     due_date: moment(),

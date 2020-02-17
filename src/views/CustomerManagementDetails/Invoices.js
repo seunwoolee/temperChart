@@ -40,7 +40,7 @@ function Invoices({ className, ...rest }) {
     let mounted = true;
 
     const fetchInvoices = () => {
-      axios.get('/api/management/customers/1/invoices').then(response => {
+      axios.get('/api/management/customers/1/documents').then(response => {
         if (mounted) {
           setInvoices(response.data.invoices);
         }
@@ -112,7 +112,7 @@ function Invoices({ className, ...rest }) {
                           color="primary"
                           component={RouterLink}
                           size="small"
-                          to={'/management/invoices/1'}
+                          to={'/management/documents/1'}
                           variant="outlined"
                         >
                           View
