@@ -36,6 +36,7 @@ function BottomBar({
 }) {
   const classes = useStyles();
   const open = selected.length > 0;
+  console.log(selected);
 
   return (
     <Drawer

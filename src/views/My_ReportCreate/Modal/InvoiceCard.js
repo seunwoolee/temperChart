@@ -8,7 +8,7 @@ import {
   Typography,
 } from '@material-ui/core';
 import getShortBigo from "../../../utils/getShortBigo";
-import {documents} from "../../../mock";
+import {invoices} from "../../../mock/my_invoicesMock";
 import getCurrency from "../../../utils/getCurrency";
 import CardActions from "@material-ui/core/CardActions";
 import IconButton from "@material-ui/core/IconButton";
@@ -88,7 +88,7 @@ function InvoiceCard({ invoice, className, ...rest }) {
 
 InvoiceCard.propTypes = {
   className: PropTypes.string,
-  invoice: PropTypes.shape(documents).isRequired
+  invoice: PropTypes.shape(invoices).isRequired
 };
 
 export default InvoiceCard;

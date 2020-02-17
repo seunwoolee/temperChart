@@ -1,4 +1,5 @@
 export * from './my_invoicesMock.js'
+export * from './my_documentsMock.js'
 export * from './my_usersMock.js'
 export * from './accountMock';
 export * from './calendarMock';

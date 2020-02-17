@@ -35,23 +35,20 @@ function CustomizedSnackbars({open, setOpen, isSuccess}) {
 
   let message = (
     <Alert onClose={() => handleClick(false)} severity="success">
-      상신 완료
+      완료
     </Alert>
   );
 
   if(!isSuccess){
     message=(
      <Alert onClose={() => handleClick(false)} severity="error">
-       상신 실패(전산팀 문의 바랍니다)
+       실패(전산팀 문의 바랍니다)
      </Alert>
      )
    }
 
   return (
     <div className={classes.root}>
-      <Button variant="outlined" onClick={() => handleClick(true)}>
-        Open success snackbar
-      </Button>
       <Snackbar open={open} autoHideDuration={2000} onClose={() => handleClick(false)}>
         {message}
       </Snackbar>

@@ -20,7 +20,7 @@ import {
   Typography
 } from '@material-ui/core';
 import GenericMoreButton from 'src/components/GenericMoreButton';
-import BottomBar from "./BottomBar";
+import BottomBar from "./BottomBar/BottomBar";
 import getShortBigo from "../../utils/getShortBigo";
 import useWindowDimensions from "../../components/WindowDimenstions";
 import Index from "./Modal";
@@ -29,7 +29,6 @@ import getCurrency from "../../utils/getCurrency";
 import MySnackbars from "../../components/MY_snackbar";
 import getPerfectScrollbarHeight from "../../utils/getPerfectScrollbarHeight";
 import {documents} from "../../mock/my_documentsMock";
-// import WriteReportModal from "../CustomerManagementDetails/Summary/WriteReporttModal";
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -82,7 +81,7 @@ function Results({className, documents, ...rest}) {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [isSuccess, setIsSuccess] = useState(true);
 
-  const props = { mobileInnerHeight: getPerfectScrollbarHeight(rowsPerPage, documents.length, 80)};
+  const props = { mobileInnerHeight: getPerfectScrollbarHeight(rowsPerPage, documents.length, 60)};
   const classes = useStyles(props);
 
   const handleSelectAll = (event) => {
@@ -125,8 +124,12 @@ function Results({className, documents, ...rest}) {
   const completeReportModal = () => {
     setSnackbarOpen(true);
     setIsSuccess(true);
-    setOpenModal(false);
-    setSelectedDocuments([]);
+    const newDocuments = selectedDocuments.slice(1);
+    if(newDocuments.length === 0){
+      setOpenModal(false);
+    }
+    setSelectedDocuments(newDocuments);
+
   };
 
   const closeReportModal = () => {
@@ -264,17 +267,16 @@ function Results({className, documents, ...rest}) {
         </CardActions>
       </Card>
       <BottomBar onOpenModal={openReportModal} selected={selectedDocuments} />
-      {openModal
-        && (
+      {openModal && selectedDocuments.length
+         && (
         <Index
-          invoices={selectedDocuments}
+          document={selectedDocuments[0]}
           onClose={closeReportModal}
           onComplete={completeReportModal}
           open={openModal}
         />
         ) }
       {snackbarOpen ? <MySnackbars open={snackbarOpen} setOpen={handleSnackbarOpen} isSuccess={isSuccess} /> : null}
-
     </div>
   );
 }

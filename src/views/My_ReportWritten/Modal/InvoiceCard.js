@@ -8,7 +8,7 @@ import {
   Typography,
 } from '@material-ui/core';
 import getShortBigo from "../../../utils/getShortBigo";
-import {documents} from "../../../mock";
+import {invoices} from "../../../mock";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -84,7 +84,7 @@ function InvoiceCard({ invoice, className, ...rest }) {
 
 InvoiceCard.propTypes = {
   className: PropTypes.string,
-  invoice: PropTypes.shape(documents).isRequired
+  invoice: PropTypes.shape(invoices).isRequired
 };
 
 export default InvoiceCard;

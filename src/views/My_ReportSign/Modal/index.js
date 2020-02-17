@@ -13,13 +13,16 @@ import {
   TextField,
   Button, Table, TableBody, TableRow, TableCell, Typography
 } from '@material-ui/core';
+import TableContainer from "@material-ui/core/TableContainer";
+import Paper from "@material-ui/core/Paper";
 import MySnackbars from "../../../components/MY_snackbar";
 import InvoiceCard from "./InvoiceCard";
-import ChooseDialog from '../Dialog'
-import UploadAttachments from "./UploadAttachments";
+import Attachments from "./attachments";
 import axios from "../../../utils/axios";
-// import {documents} from "../../../mock";
+import {documents} from "../../../mock/my_documentsMock";
+import MY_approverLine from "../../../components/MY_approverLine";
 import getCurrency from "../../../utils/getCurrency";
+import FormDialog from "../Dialog";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -34,6 +37,12 @@ const useStyles = makeStyles((theme) => ({
     overflowY: 'auto',
     maxWidth: '100%'
   },
+  tableCellContent: {
+    width: '50px',
+    whiteSpace: 'nowrap',
+    backgroundColor: '#eeeeee'
+
+  },
   cardContent: {
     paddingTop: theme.spacing(1)
   },
@@ -45,31 +54,17 @@ const useStyles = makeStyles((theme) => ({
   },
   actions: {
     justifyContent: 'flex-end'
+  },
+  approverGrid: {
+    paddingBottom: theme.spacing(8)
   }
 }));
 
 function Index({
-                 open, onClose, onComplete, invoices, className, ...rest
-               }) {
+  open, onClose, onComplete, document, className, ...rest
+}) {
   const classes = useStyles();
   const [openDialog, setOpenDialog] = useState(false);
-  const [inputTitle, setInputTitle] = useState('');
-  const [inputContent, setInputContent] = useState('');
-  const [inputAttachments,setInputAttachments]  = useState([]);
-  const [inputUsers,setInputUsers]  = useState([]);
-
-
-  const handleChangeTitle = (event) => {
-    setInputTitle(event.target.value);
-  };
-
-  const handleChangeContent = (event) => {
-    setInputContent(event.target.value);
-  };
-
-  const handleAttachments = (attachments: Array) => {
-    setInputAttachments(attachments);
-  };
 
   const handleClickOpen = () => {
     setOpenDialog(true);
@@ -79,19 +74,19 @@ function Index({
     setOpenDialog(false);
   };
 
-  const handleSubmit = (users: Array) => {
-    setInputUsers(users);
-    setOpenDialog(false);
+  const handleApprove = (opinion: string) => {
     onComplete();
-
-    // axios call
+    handleClose();
   };
 
-  const getSumInvoices = () => {
-      return getCurrency(invoices.map(invoice => invoice.총액).reduce((prev, curr) => prev + curr));
+  const handleReject = (opinion: string) => {
+    onComplete();
+    handleClose();
   };
 
-  console.log('[Modal]', invoices);
+  const getSumInvoices = () => getCurrency(document.invoices.map(invoice => invoice.총액)
+    .reduce((prev, curr) => prev + curr));
+
 
   return (
     <>
@@ -104,10 +99,38 @@ function Index({
           {...rest}
           className={clsx(classes.root, className)}
         >
-          <form>
-            <CardHeader classes={{root: classes.cardHeaderRoot, title: classes.cardHeaderTitle}} title="기안 작성"/>
-            <Divider/>
+          <div>
+            <CardHeader
+              classes={{root: classes.cardHeaderRoot, title: classes.cardHeaderTitle}}
+              title="미결함"
+              action={
+                  <Button
+                    // onClick={onComplete}
+                    onClick={handleClickOpen}
+                    color="primary"
+                    variant="contained"
+                  >
+                    결재
+                  </Button>
+              }
+            />
+            <Divider />
             <CardContent>
+              <Grid
+                className={classes.approverGrid}
+                container
+                direction="row"
+                justify="flex-end"
+                alignItems="center"
+              >
+                <Grid
+                  item
+                  md={document.approvers.length + 2}
+                  xs={12}
+                >
+                  <MY_approverLine approvers={document.approvers} />
+                </Grid>
+              </Grid>
               <Grid
                 container
                 spacing={2}
@@ -117,60 +140,45 @@ function Index({
                   md={12}
                   xs={12}
                 >
-                  <Table>
-                    <TableBody>
-                      <TableRow>
-                        <TableCell>작성자</TableCell>
-                        <TableCell>이승우</TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell>작성일자</TableCell>
-                        <TableCell>2020-01-02</TableCell>
-                      </TableRow>
-                    </TableBody>
-                  </Table>
+                  <TableContainer component={Paper}>
+                    <Table>
+                      <TableBody>
+                        <TableRow>
+                          <TableCell className={classes.tableCellContent}>작성자</TableCell>
+                          <TableCell>{document.author}</TableCell>
+                        </TableRow>
+                        <TableRow>
+                          <TableCell className={classes.tableCellContent}>작성일자</TableCell>
+                          <TableCell>{document.created}</TableCell>
+                        </TableRow>
+                        <TableRow>
+                          <TableCell className={classes.tableCellContent}>제목</TableCell>
+                          <TableCell>{document.title}</TableCell>
+                        </TableRow>
+                        <TableRow>
+                          <TableCell className={classes.tableCellContent}>내용</TableCell>
+                          <TableCell>{document.content}</TableCell>
+                        </TableRow>
+                      </TableBody>
+                    </Table>
+                  </TableContainer>
                 </Grid>
-                <Grid
-                  item
-                  md={12}
-                  xs={12}
-                >
-                  <TextField
-                    fullWidth
-                    label="제목"
-                    name="title"
-                    onChange={handleChangeTitle}
-                    value={inputTitle}
-                    variant="outlined"
-                  />
-                </Grid>
-                <Grid
-                  item
-                  md={12}
-                  xs={12}
-                >
-                  <TextField
-                    multiline
-                    rows="3"
-                    rowsMax="50"
-                    fullWidth
-                    label="내용"
-                    name="title"
-                    onChange={handleChangeContent}
-                    value={inputContent}
-                    variant="outlined"
-                  />
-                </Grid>
-                <Divider/>
+                <Divider />
                 <Grid
                   item
                   md={12}
                   xs={12}
                 >
                   <Typography variant="h5">
-                    총 {invoices.length}건 / {getSumInvoices()}원
+                    총
+                    {' '}
+                    {document.invoices.length}
+                    건 /
+                    {' '}
+                    {getSumInvoices()}
+                    원
                   </Typography>
-                  {invoices.map((invoice) => (
+                  {document.invoices.map((invoice) => (
                     <InvoiceCard
                       key={invoice.id}
                       invoice={invoice}
@@ -182,35 +190,31 @@ function Index({
                   md={12}
                   xs={12}
                 >
-                  <UploadAttachments handleAttachments={handleAttachments}/>
+                  <Attachments attachments={document.attachments}/>
                 </Grid>
               </Grid>
             </CardContent>
-            <Divider/>
+            <Divider />
             <CardActions className={classes.actions}>
-              <Button onClick={onClose}>
+              <Button
+                color="primary"
+                variant="contained"
+                onClick={onClose}
+              >
                 닫기
               </Button>
-              <Button
-                disabled={!(inputTitle && inputContent)}
-                color="primary"
-                onClick={handleClickOpen}
-                variant="contained"
-              >
-                결재요청
-              </Button>
             </CardActions>
-          </form>
+          </div>
+          <FormDialog open={openDialog} onClose={handleClose} onApprove={handleApprove} onReject={handleReject}/>
         </Card>
       </Modal>
-      <ChooseDialog open={openDialog} onClose={handleClose}  onSubmit={handleSubmit}/>
     </>
   );
 }
 
 Index.propTypes = {
   className: PropTypes.string,
-  // invoices: PropTypes.arrayOf(PropTypes.shape(documents)),
+  document: PropTypes.shape(documents),
   onClose: PropTypes.func,
   onComplete: PropTypes.func,
   open: PropTypes.bool

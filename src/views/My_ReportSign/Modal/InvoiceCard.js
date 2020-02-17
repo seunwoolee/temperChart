@@ -8,12 +8,7 @@ import {
   Typography,
 } from '@material-ui/core';
 import getShortBigo from "../../../utils/getShortBigo";
-import {documents} from "../../../mock";
-import getCurrency from "../../../utils/getCurrency";
-import CardActions from "@material-ui/core/CardActions";
-import IconButton from "@material-ui/core/IconButton";
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-
+import {invoices} from "../../../mock";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -48,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(1),
     [theme.breakpoints.down('sm')]: {
       flexBasis: '50%'
-    },
+    }
   }
 }));
 
@@ -68,7 +63,8 @@ function InvoiceCard({ invoice, className, ...rest }) {
         <div className={classes.stats}>
           <Typography variant="body2">금액</Typography>
           <Typography variant="h6">
-            {getCurrency(invoice.총액)}
+            {invoice.통화}
+            {invoice.총액}
           </Typography>
         </div>
         <div className={classes.bigo}>
@@ -88,7 +84,7 @@ function InvoiceCard({ invoice, className, ...rest }) {
 
 InvoiceCard.propTypes = {
   className: PropTypes.string,
-  invoice: PropTypes.shape(documents).isRequired
+  invoice: PropTypes.shape(invoices).isRequired
 };
 
 export default InvoiceCard;

@@ -3,14 +3,13 @@ import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/styles';
 import { Card, CardHeader, CardContent } from '@material-ui/core';
-import FilesDropzone from 'src/components/FilesDropzone';
-import MyDropzone from "../../../components/MY_upload";
+import MY_attachments from "../../../components/MY_attachments";
 
 const useStyles = makeStyles(() => ({
   root: {}
 }));
 
-function UploadAttachments({ handleAttachments, className, ...rest }) {
+function Attachments({ attachments, className, ...rest }) {
   const classes = useStyles();
 
   return (
@@ -20,18 +19,15 @@ function UploadAttachments({ handleAttachments, className, ...rest }) {
     >
       <CardHeader title="첨부파일" />
       <CardContent>
-        <FilesDropzone handleAttachments={handleAttachments}/>
+        <MY_attachments attachments={attachments}/>
       </CardContent>
-      {/*<CardContent>*/}
-      {/*  <MyDropzone />*/}
-      {/*</CardContent>*/}
     </Card>
   );
 }
 
-UploadAttachments.propTypes = {
-  handleAttachments: PropTypes.func.isRequired,
+Attachments.propTypes = {
+  attachments: PropTypes.array.isRequired,
   className: PropTypes.string
 };
 
-export default UploadAttachments;
+export default Attachments;

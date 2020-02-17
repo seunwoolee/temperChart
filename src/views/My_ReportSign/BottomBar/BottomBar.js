@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/styles';
@@ -6,6 +6,8 @@ import {
   Drawer, Grid, Typography, Button, Hidden
 } from '@material-ui/core';
 import CheckIcon from '@material-ui/icons/Check';
+import DoneAllIcon from '@material-ui/icons/DoneAll';
+import MyDialog from './Dialog/'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -34,14 +36,22 @@ function BottomBar({
   onOpenModal,
   ...rest
 }) {
+  const [openDialog, setOpenDialog] = useState(false);
   const classes = useStyles();
   const open = selected.length > 0;
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false)
+  };
+
+  const handleOpenDialog = () => {
+    setOpenDialog(true)
+  };
 
   return (
     <Drawer
       anchor="bottom"
       open={open}
-      // eslint-disable-next-line react/jsx-sort-props
       PaperProps={{ elevation: 1 }}
       variant="persistent"
     >
@@ -77,12 +87,17 @@ function BottomBar({
             <div className={classes.actions}>
               <Button onClick={onOpenModal} className={classes.button}>
                 <CheckIcon className={classes.buttonIcon} />
-                기안 작성
+                결재
+              </Button>
+              <Button onClick={handleOpenDialog} className={classes.button}>
+                <DoneAllIcon className={classes.buttonIcon} />
+                일괄 결재
               </Button>
             </div>
           </Grid>
         </Grid>
       </div>
+      <MyDialog open={openDialog} onCloseDialog={handleCloseDialog}/>
     </Drawer>
   );
 }
