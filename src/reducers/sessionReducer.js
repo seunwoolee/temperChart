@@ -1,22 +1,38 @@
 import * as actionTypes from 'src/actions';
 
 const initialState = {
-  loggedIn: true,
+  loggedIn: false,
+  token: '',
   user: {
-    first_name: 'Shen',
-    last_name: 'Zhi',
-    email: 'demo@devias.io',
-    avatar: '/images/avatars/avatar_11.png',
-    bio: 'Brain Director',
-    role: 'ADMIN' // ['GUEST', 'USER', 'ADMIN']
+    id: 'swl21803',
+    name: '관리자',
+    department: '전산팀',
+    position: '부장',
+    avatar: '/images/avatars/avatar_10.png',
   }
 };
+
+// const authSuccess = (state, action) => ({
+//   ...state,
+//   token: action.token,
+//   userId: action.userId,
+//   error: null,
+//   loading: false
+// });
+//
+// const authLogout = (state, action) => ({
+//   ...state,
+//   token: null,
+//   userId: null
+// });
 
 const sessionReducer = (state = initialState, action) => {
   switch (action.type) {
     case actionTypes.SESSION_LOGIN: {
+      console.log('[sessionReducer]');
       return {
-        ...initialState
+        ...initialState,
+        token: action.token
       };
     }
 

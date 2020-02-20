@@ -3,12 +3,17 @@ import { Link as RouterLink } from 'react-router-dom';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/styles';
-import { AppBar, Toolbar } from '@material-ui/core';
+import {AppBar, Button, Toolbar} from '@material-ui/core';
+import NoteOutlinedIcon from "@material-ui/icons/NoteOutlined";
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     boxShadow: 'none'
-  }
+  },
+  logos: {
+    fontSize: '1rem',
+    color: theme.palette.common.white,
+  },
 }));
 
 function Topbar({ className, ...rest }) {
@@ -22,10 +27,12 @@ function Topbar({ className, ...rest }) {
     >
       <Toolbar>
         <RouterLink to="/">
-          <img
-            alt="Logo"
-            src="/images/logos/logo--white.svg"
-          />
+          <Button
+            className={classes.logos}
+          >
+            <NoteOutlinedIcon className={classes.logoutIcon} />
+            PaperLess
+          </Button>
         </RouterLink>
       </Toolbar>
     </AppBar>

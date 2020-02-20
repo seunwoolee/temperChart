@@ -75,6 +75,11 @@ export default [
         component: lazy(() => import('src/views/My_ReportSign'))
       },
       {
+        path: '/study',
+        exact: true,
+        component: lazy(() => import('src/components/study/CounterContainer'))
+      },
+      {
         path: '/reportWritten',
         exact: true,
         component: lazy(() => import('src/views/My_ReportWritten'))

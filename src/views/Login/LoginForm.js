@@ -1,21 +1,22 @@
 /* eslint-disable no-unused-vars */
-import React, { useState, useEffect } from 'react';
-import { useHistory } from 'react-router';
+import React, {useState, useEffect} from 'react';
+import {useHistory} from 'react-router';
 import validate from 'validate.js';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import { useDispatch } from 'react-redux';
-import { makeStyles } from '@material-ui/styles';
-import { Button, TextField } from '@material-ui/core';
-import { login } from 'src/actions';
+import {useDispatch} from 'react-redux';
+import {makeStyles} from '@material-ui/styles';
+import {Button, TextField} from '@material-ui/core';
+import {login} from 'src/actions';
+import {AxiosInstance, AxiosResponse} from "axios";
+import {storeLoginData} from "../../actions";
 
 const schema = {
-  email: {
-    presence: { allowEmpty: false, message: 'is required' },
-    email: true
+  username: {
+    presence: {allowEmpty: false, message: '를 확인하세요'}
   },
   password: {
-    presence: { allowEmpty: false, message: 'is required' }
+    presence: {allowEmpty: false, message: '를 확인하세요'}
   }
 };
 
@@ -36,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function LoginForm({ className, ...rest }) {
+function LoginForm({className, ...rest}) {
   const classes = useStyles();
   const history = useHistory();
   const dispatch = useDispatch();
@@ -54,10 +55,7 @@ function LoginForm({ className, ...rest }) {
       ...prevFormState,
       values: {
         ...prevFormState.values,
-        [event.target.name]:
-          event.target.type === 'checkbox'
-            ? event.target.checked
-            : event.target.value
+        [event.target.name]: event.target.value
       },
       touched: {
         ...prevFormState.touched,
@@ -68,15 +66,32 @@ function LoginForm({ className, ...rest }) {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    // dispatch(login());
-    history.push('/');
+    // eslint-disable-next-line max-len
+    const result: AxiosResponse = await dispatch(login(formState.values.username, formState.values.password));
+
+    if (result.status === 200) {
+      localStorage.setItem('token', result.data.key);
+      history.push('/');
+    } else if (result.status === 400) {
+      setFormState((prevFormState) => ({
+        ...prevFormState,
+        isValid: false,
+        errors: {
+          password: ['패스워드를 확인하세요'],
+          username: ['ID를 확인하세요']
+        }
+      }));
+    } else {
+      // TODO 에러 남기기
+      // eslint-disable-next-line no-alert
+      alert('에러발생');
+    }
   };
 
   const hasError = (field) => (!!(formState.touched[field] && formState.errors[field]));
 
   useEffect(() => {
     const errors = validate(formState.values, schema);
-
     setFormState((prevFormState) => ({
       ...prevFormState,
       isValid: !errors,
@@ -92,13 +107,13 @@ function LoginForm({ className, ...rest }) {
     >
       <div className={classes.fields}>
         <TextField
-          error={hasError('email')}
+          error={hasError('username')}
           fullWidth
-          helperText={hasError('email') ? formState.errors.email[0] : null}
-          label="Email address"
-          name="email"
+          helperText={hasError('username') ? formState.errors.username[0] : null}
+          label="ID"
+          name="username"
           onChange={handleChange}
-          value={formState.values.email || ''}
+          value={formState.values.username || ''}
           variant="outlined"
         />
         <TextField
@@ -123,7 +138,7 @@ function LoginForm({ className, ...rest }) {
         type="submit"
         variant="contained"
       >
-        Sign in
+        로그인
       </Button>
     </form>
   );

@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(6, 2)
   },
   card: {
-    width: theme.breakpoints.values.md,
+    width: theme.breakpoints.values.sm,
     maxWidth: '100%',
     overflow: 'visible',
     display: 'flex',
@@ -39,18 +39,18 @@ const useStyles = makeStyles((theme) => ({
   content: {
     padding: theme.spacing(8, 4, 3, 4)
   },
-  media: {
-    borderTopRightRadius: 4,
-    borderBottomRightRadius: 4,
-    padding: theme.spacing(3),
-    color: theme.palette.common.white,
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'flex-end',
-    [theme.breakpoints.down('md')]: {
-      display: 'none'
-    }
-  },
+  // media: {
+  //   borderTopRightRadius: 4,
+  //   borderBottomRightRadius: 4,
+  //   padding: theme.spacing(3),
+  //   color: theme.palette.common.white,
+  //   display: 'flex',
+  //   flexDirection: 'column',
+  //   justifyContent: 'flex-end',
+  //   [theme.breakpoints.down('md')]: {
+  //     display: 'none'
+  //   }
+  // },
   icon: {
     backgroundImage: gradients.green,
     color: theme.palette.common.white,
@@ -99,52 +99,7 @@ function Login() {
             페이퍼리스 전자결재
           </Typography>
           <LoginForm className={classes.loginForm} />
-          <Divider className={classes.divider} />
-          <Link
-            align="center"
-            color="secondary"
-            component={RouterLink}
-            to="/auth/register"
-            underline="always"
-            variant="subtitle2"
-          >
-            Don&apos;t have an account?
-          </Link>
         </CardContent>
-        <CardMedia
-          className={classes.media}
-          image="/images/auth.png"
-          title="Cover"
-        >
-          <Typography
-            color="inherit"
-            variant="subtitle1"
-          >
-            Hella narvwhal Cosby sweater McSweeney&apos;s, salvia kitsch before they
-            sold out High Life.
-          </Typography>
-          <div className={classes.person}>
-            <Avatar
-              alt="Person"
-              className={classes.avatar}
-              src="/images/avatars/avatar_2.png"
-            />
-            <div>
-              <Typography
-                color="inherit"
-                variant="body1"
-              >
-                Ekaterina Tankova
-              </Typography>
-              <Typography
-                color="inherit"
-                variant="body2"
-              >
-                Manager at inVision
-              </Typography>
-            </div>
-          </div>
-        </CardMedia>
       </Card>
     </Page>
   );
