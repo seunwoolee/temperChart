@@ -1,43 +1,70 @@
-import my_axios from "../utils/my_axios";
+import axios from "../utils/my_axios";
 
 export const SESSION_LOGIN = 'SESSION_LOGIN';
 export const SESSION_LOGOUT = 'SESSION_LOGOUT';
+export const EXPIRATIONDATE = 10
 
-export const storeLoginData = (token) => ({
+
+export const authSuccess = (data: Object) => ({
   type: SESSION_LOGIN,
-  token,
+  data,
 });
 
-// export const testss = () => (dispatch) => dispatch({
-//   type: SESSION_LOGIN
-// });
 
-// export const getUserData = () => {
-//   const url = 'http://localhost:8000/employee/get_employee/';
-//   return axios.post(url)
-//     .then(res => {
-//       // dispatch(storeLoginData(res.data.key));
-//       return res;
-//     })
-//     .catch(error => (error.response));
-// };
+export const authCheckState = () => dispatch => {
+  const token = localStorage.getItem('token');
+  const expirationDate = new Date(localStorage.getItem('expirationDate'));
+
+  if(!token){
+    dispatch(logout())
+  } else {
+    if(expirationDate <= new Date()) {
+      dispatch(logout())
+    } else {
+      dispatch(getUserData(token))
+    }
+  }
+};
+
+export const getUserData = (token) => dispatch => {
+  const headers = {
+    'Content-Type': 'application/json',
+    'Authorization': 'Token ' + token
+  }
+  const axiosConfig = {
+    headers: headers
+  };
+  const data = {token: token};
+  const url = 'employee/get_employee/';
+  return axios.post(url, data, axiosConfig)
+    .then(res => {
+      console.log(res);
+      dispatch(authSuccess(res.data));
+      return res;
+    })
+    .catch(error => (error.response));
+};
 
 export const login = (username: string, password: string) => dispatch => {
-  // const url = 'http://localhost:8000/rest-auth/login/';
   const authData = {
     username,
     password,
   };
-  return my_axios.post('rest-auth/login/', authData)
+  return axios.post('rest-auth/login/', authData)
     .then(res => {
-      dispatch(storeLoginData(res.data.key));
-      // getUserData();
+      const token = res.data.key;
+      dispatch(getUserData(token))
       return res;
     })
     .catch(error => (error.response));
 };
 
 
-export const logout = () => (dispatch) => dispatch({
-  type: SESSION_LOGOUT
-});
+export const logout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('expirationDate');
+    localStorage.removeItem('userId');
+    return {
+        type: SESSION_LOGOUT
+    }
+};

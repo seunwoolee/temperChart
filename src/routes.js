@@ -10,17 +10,18 @@ import DashboardDefaultView from './views/DashboardDefault';
 import OverviewView from './views/Overview';
 import PresentationView from './views/Presentation';
 import CounterContainer from "./components/study/CounterContainer";
+import AuthEx from "./components/study/AuthEx";
 
 export default [
   {
     path: '/counter',
     exact: true,
-    component: CounterContainer
+    component: AuthEx
   },
   {
     path: '/',
     exact: true,
-    component: () => <Redirect to="/presentation" />
+    component: () => <Redirect to="/reportSign" />
   },
   {
     path: '/auth',

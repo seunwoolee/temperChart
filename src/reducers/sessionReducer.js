@@ -12,43 +12,34 @@ const initialState = {
   }
 };
 
-// const authSuccess = (state, action) => ({
-//   ...state,
-//   token: action.token,
-//   userId: action.userId,
-//   error: null,
-//   loading: false
-// });
-//
-// const authLogout = (state, action) => ({
-//   ...state,
-//   token: null,
-//   userId: null
-// });
+const sessionLogin = (state, action) => {
+  const data = action.data;
+  return {
+    ...state,
+    loggedIn: true,
+    token: data.token,
+    user: {
+      id: data.user.username,
+      name: data.user.first_name,
+      department: data.department.name,
+      position: data.position.name,
+      avatar: 'http://localhost:8000' + data.avatar, // TODO URL 변경 필요
+    }
+  };
+};
+
+const sessionLogout = (state, action) => ({
+  ...state,
+  token: null,
+  loggedIn: false,
+  user: {},
+});
 
 const sessionReducer = (state = initialState, action) => {
   switch (action.type) {
-    case actionTypes.SESSION_LOGIN: {
-      console.log('[sessionReducer]');
-      return {
-        ...initialState,
-        token: action.token
-      };
-    }
-
-    case actionTypes.SESSION_LOGOUT: {
-      return {
-        ...state,
-        loggedIn: false,
-        user: {
-          role: 'GUEST'
-        }
-      };
-    }
-
-    default: {
-      return state;
-    }
+    case actionTypes.SESSION_LOGIN: return sessionLogin(state, action);
+    case actionTypes.SESSION_LOGOUT: return sessionLogout(state, action);
+    default: return state;
   }
 };
 

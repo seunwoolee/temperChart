@@ -4,12 +4,12 @@ import {useHistory} from 'react-router';
 import validate from 'validate.js';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {makeStyles} from '@material-ui/styles';
 import {Button, TextField} from '@material-ui/core';
-import {login} from 'src/actions';
+import {authCheckState, login} from 'src/actions';
 import {AxiosInstance, AxiosResponse} from "axios";
-import {storeLoginData} from "../../actions";
+import {EXPIRATIONDATE, getUserData, storeLoginData} from "../../actions";
 
 const schema = {
   username: {
@@ -41,6 +41,7 @@ function LoginForm({className, ...rest}) {
   const classes = useStyles();
   const history = useHistory();
   const dispatch = useDispatch();
+  const loggedIn: boolean = useSelector(state => state.session.loggedIn)
   const [formState, setFormState] = useState({
     isValid: false,
     values: {},
@@ -66,11 +67,14 @@ function LoginForm({className, ...rest}) {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    // eslint-disable-next-line max-len
-    const result: AxiosResponse = await dispatch(login(formState.values.username, formState.values.password));
-
+    const result: AxiosResponse = await dispatch(
+      login(formState.values.username, formState.values.password)
+    );
     if (result.status === 200) {
-      localStorage.setItem('token', result.data.key);
+      const token = result.data.key;
+      const expirationDate = new Date(new Date().getTime() + EXPIRATIONDATE * 1000);
+      localStorage.setItem('token', token);
+      localStorage.setItem('expirationDate', expirationDate);
       history.push('/');
     } else if (result.status === 400) {
       setFormState((prevFormState) => ({
@@ -83,12 +87,17 @@ function LoginForm({className, ...rest}) {
       }));
     } else {
       // TODO 에러 남기기
-      // eslint-disable-next-line no-alert
-      alert('에러발생');
     }
   };
 
   const hasError = (field) => (!!(formState.touched[field] && formState.errors[field]));
+
+  useEffect(() => {
+    if(loggedIn) {
+      history.push('/');
+    }
+  }, [])
+
 
   useEffect(() => {
     const errors = validate(formState.values, schema);
