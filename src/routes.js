@@ -9,8 +9,9 @@ import DashboardAnalyticsView from './views/DashboardAnalytics';
 import DashboardDefaultView from './views/DashboardDefault';
 import OverviewView from './views/Overview';
 import PresentationView from './views/Presentation';
-import CounterContainer from "./components/study/CounterContainer";
 import AuthEx from "./components/study/AuthEx";
+import ReportCreate from "./views/My_ReportCreate";
+import {PrivateRoute} from "./components/MY_privateRoute";
 
 export default [
   {
@@ -76,11 +77,6 @@ export default [
         component: lazy(() => import('src/views/My_ReportSign'))
       },
       {
-        path: '/study',
-        exact: true,
-        component: lazy(() => import('src/components/study/CounterContainer'))
-      },
-      {
         path: '/reportWritten',
         exact: true,
         component: lazy(() => import('src/views/My_ReportWritten'))
@@ -88,7 +84,9 @@ export default [
       {
         path: '/reportWrite',
         exact: true,
+        // render: (props) => (<PrivateRoute path={props.path}> <ReportCreate /> </PrivateRoute>)
         component: lazy(() => import('src/views/My_ReportCreate'))
+        // component: ReportCreate
       },
       {
         path: '/calendar',

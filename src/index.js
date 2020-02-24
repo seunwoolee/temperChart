@@ -10,9 +10,8 @@ import {Provider as StoreProvider} from "react-redux";
 import {ThemeProvider} from "@material-ui/styles";
 import {theme} from "./theme";
 
-const history = createBrowserHistory();
-const store = configureStore();
 
+const store = configureStore();
 const app = (
     <StoreProvider store={store}>
       <ThemeProvider theme={theme}>

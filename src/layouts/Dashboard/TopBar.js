@@ -132,8 +132,8 @@ function TopBar({
   const [pricingModalOpen, setPricingModalOpen] = useState(false);
 
   const handleLogout = () => {
+    dispatch(logout());
     history.push('/auth/login');
-    // dispatch(logout());
   };
 
   const handlePricingModalOpen = () => {

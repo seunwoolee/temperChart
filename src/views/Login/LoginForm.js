@@ -10,6 +10,7 @@ import {Button, TextField} from '@material-ui/core';
 import {authCheckState, login} from 'src/actions';
 import {AxiosInstance, AxiosResponse} from "axios";
 import {EXPIRATIONDATE, getUserData, storeLoginData} from "../../actions";
+import {Redirect} from "react-router-dom";
 
 const schema = {
   username: {
@@ -41,13 +42,13 @@ function LoginForm({className, ...rest}) {
   const classes = useStyles();
   const history = useHistory();
   const dispatch = useDispatch();
-  const loggedIn: boolean = useSelector(state => state.session.loggedIn)
   const [formState, setFormState] = useState({
     isValid: false,
     values: {},
     touched: {},
     errors: {}
   });
+  const [logging, setLogging] = useState(false);
 
   const handleChange = (event) => {
     event.persist();
@@ -75,7 +76,7 @@ function LoginForm({className, ...rest}) {
       const expirationDate = new Date(new Date().getTime() + EXPIRATIONDATE * 1000);
       localStorage.setItem('token', token);
       localStorage.setItem('expirationDate', expirationDate);
-      history.push('/');
+      setLogging(true);
     } else if (result.status === 400) {
       setFormState((prevFormState) => ({
         ...prevFormState,
@@ -92,11 +93,20 @@ function LoginForm({className, ...rest}) {
 
   const hasError = (field) => (!!(formState.touched[field] && formState.errors[field]));
 
+  // console.log(loggedIn);
+
   useEffect(() => {
-    if(loggedIn) {
-      history.push('/');
+    const token = localStorage.getItem('token');
+
+    if(token && logging) {
+      console.log('[useEffect]', token, logging);
+      history.push('/reportSign');
+      // window.location.reload();
+      // history.push('/auth/register');
+    } else {
+      console.log('else')
     }
-  }, [])
+  }, [logging])
 
 
   useEffect(() => {

@@ -38,7 +38,7 @@ export const getUserData = (token) => dispatch => {
   const url = 'employee/get_employee/';
   return axios.post(url, data, axiosConfig)
     .then(res => {
-      console.log(res);
+      console.log('[getUserData]',res);
       dispatch(authSuccess(res.data));
       return res;
     })
@@ -63,7 +63,6 @@ export const login = (username: string, password: string) => dispatch => {
 export const logout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('expirationDate');
-    localStorage.removeItem('userId');
     return {
         type: SESSION_LOGOUT
     }
