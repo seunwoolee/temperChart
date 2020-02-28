@@ -56,19 +56,13 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function FilesDropzone({ handleAttachments, className, ...rest }) {
+function FilesDropzone({ attachments, handleAttachments, className, ...rest }) {
   const classes = useStyles();
-  const [files, setFiles] = useState([]);
-
   const handleDrop = useCallback((acceptedFiles) => {
-    setFiles((prevFiles) => [...prevFiles].concat(acceptedFiles));
+    handleAttachments((prevFiles) => [...prevFiles].concat(acceptedFiles));
   }, []);
 
-  const handleRemoveAll = () => setFiles([]);
-
-  useEffect(() => {
-    handleAttachments(files);
-  }, [files]);
+  const handleRemoveAll = () => handleAttachments([]);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop: handleDrop
@@ -110,13 +104,13 @@ function FilesDropzone({ handleAttachments, className, ...rest }) {
           </Typography>
         </div>
       </div>
-      {files.length > 0 && (
+      {attachments.length > 0 && (
         <>
           <PerfectScrollbar options={{ suppressScrollX: true }}>
             <List className={classes.list}>
-              {files.map((file, i) => (
+              {attachments.map((file, i) => (
                 <ListItem
-                  divider={i < files.length - 1}
+                  divider={i < attachments.length - 1}
                   key={uuid()}
                 >
                   <ListItemIcon>
@@ -148,6 +142,7 @@ function FilesDropzone({ handleAttachments, className, ...rest }) {
 }
 
 FilesDropzone.propTypes = {
+  attachments: PropTypes.array,
   handleAttachments: PropTypes.func,
   className: PropTypes.string
 };

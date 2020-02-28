@@ -14,7 +14,19 @@ export const invoices = {
   비고: PT.string.isRequired,
   사용자: PT.string.isRequired,
   배치번호: PT.number.isRequired,
+  // 문서번호: PT.number.isRequired,
   location: PT.string.isRequired
+};
+
+export const voucher = {
+  id: PT.number.isRequired,
+  batchNumber: PT.number.isRequired,
+  gl_ymd: PT.string.isRequired,
+  supplyNumber: PT.string.isRequired,
+  accountName: PT.string.isRequired,
+  price: PT.number.isRequired,
+  bigo: PT.string.isRequired,
+  author: PT.string.isRequired,
 };
 
 
@@ -30,7 +42,7 @@ mock.onGet('/api/invoices').reply(200, {
       통화: '\\',
       비고: '화상회의 임대료/1화상회의 임대료/1화상회의 임대료/1화상회의 임대료/1화상회의 임대료/1화상회의 임대료/1화상회의 임대료/1화상회의 임대료/1화상회의 임대료/1화상회의 임대료/1화상회의 임대료/1화상회의 임대료/1',
       사용자: '이승우',
-      배치번호: 2368,
+      배치번호: 2367,
       location: 'West Virginia, USA'
     },
     {
@@ -69,7 +81,7 @@ mock.onGet('/api/invoices').reply(200, {
       통화: '\\',
       비고: '그룹웨어 클라우드 비용/1',
       사용자: '이승우',
-      배치번호: 2368,
+      배치번호: 2369,
       location: 'West Virginia, USA'
     },
     {
@@ -82,7 +94,7 @@ mock.onGet('/api/invoices').reply(200, {
       통화: '\\',
       비고: '그룹웨어 클라우드 비용/1',
       사용자: '이철용',
-      배치번호: 2368,
+      배치번호: 2369,
       location: 'West Virginia, USA'
     },
     {
@@ -95,7 +107,7 @@ mock.onGet('/api/invoices').reply(200, {
       통화: '\\',
       비고: '그룹웨어 클라우드 비용/1',
       사용자: '이승우',
-      배치번호: 2368,
+      배치번호: 2369,
       location: 'West Virginia, USA'
     },
     {
@@ -108,7 +120,20 @@ mock.onGet('/api/invoices').reply(200, {
       통화: '\\',
       비고: '그룹웨어 클라우드 비용/1',
       사용자: '이승우',
-      배치번호: 2368,
+      배치번호: 2370,
+      location: 'West Virginia, USA'
+    },
+    {
+      id: uuid(),
+      공급자명: '대한민국',
+      avatar: '/images/avatars/avatar_4.png',
+      email: '',
+      일자: '2020-01-31',
+      총액: 300.00,
+      통화: '\\',
+      비고: '그룹웨어 클라우드 비용/1',
+      사용자: '이승우',
+      배치번호: 2370,
       location: 'West Virginia, USA'
     },
   ]

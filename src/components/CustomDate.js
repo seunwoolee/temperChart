@@ -52,9 +52,9 @@ function CustomDate() {
   const [values, setValues] = useState({...initialValues});
   const [calendarTrigger, setCalendarTrigger] = useState(null);
   const calendarOpen = Boolean(calendarTrigger);
-  const calendarMinDate = calendarTrigger === 'startDate'
-    ? moment()
-    : moment(values.startDate).add(1, 'day');
+  // const calendarMinDate = calendarTrigger === 'startDate'
+  //   ? moment()
+  //   : moment(values.startDate).add(1, 'day');
   const calendarValue = values[calendarTrigger];
 
   const handleCalendarOpen = (trigger) => {
@@ -97,7 +97,7 @@ function CustomDate() {
       </div>
       <MuiPickersUtilsProvider utils={DateFnsUtils} locale={koLocale}>
         <DatePicker
-          minDate={calendarMinDate}
+          // minDate={calendarMinDate}
           onAccept={handleCalendarAccept}
           onChange={handleCalendarChange}
           onClose={handleCalendarClose}

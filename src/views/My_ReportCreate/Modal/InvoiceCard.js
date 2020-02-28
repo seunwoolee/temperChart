@@ -13,6 +13,7 @@ import getCurrency from "../../../utils/getCurrency";
 import CardActions from "@material-ui/core/CardActions";
 import IconButton from "@material-ui/core/IconButton";
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import {voucher} from "../../../mock";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -63,22 +64,22 @@ function InvoiceCard({ invoice, className, ...rest }) {
       <CardContent className={classes.content}>
         <div className={classes.stats}>
           <Typography variant="body2">공급자명</Typography>
-          <Typography variant="h6">{invoice.공급자명}</Typography>
+          <Typography variant="h6">{invoice.supplyNumber}</Typography>
         </div>
         <div className={classes.stats}>
           <Typography variant="body2">금액</Typography>
           <Typography variant="h6">
-            {getCurrency(invoice.총액)}
+            {getCurrency(invoice.price)}
           </Typography>
         </div>
         <div className={classes.bigo}>
           <Typography variant="body2">비고</Typography>
-          <Typography variant="h6">{getShortBigo(0, invoice.비고)}</Typography>
+          <Typography variant="h6">{getShortBigo(0, invoice.bigo)}</Typography>
         </div>
         <div className={classes.stats}>
           <Typography variant="body2">일자</Typography>
           <Typography variant="h6">
-            {invoice.일자}
+            {invoice.gl_ymd}
           </Typography>
         </div>
       </CardContent>
@@ -88,7 +89,7 @@ function InvoiceCard({ invoice, className, ...rest }) {
 
 InvoiceCard.propTypes = {
   className: PropTypes.string,
-  invoice: PropTypes.shape(invoices).isRequired
+  invoice: PropTypes.shape(voucher).isRequired
 };
 
 export default InvoiceCard;

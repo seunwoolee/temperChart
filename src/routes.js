@@ -11,7 +11,6 @@ import OverviewView from './views/Overview';
 import PresentationView from './views/Presentation';
 import AuthEx from "./components/study/AuthEx";
 import ReportCreate from "./views/My_ReportCreate";
-import {PrivateRoute} from "./components/MY_privateRoute";
 
 export default [
   {

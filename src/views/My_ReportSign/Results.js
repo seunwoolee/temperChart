@@ -25,10 +25,9 @@ import getShortBigo from "../../utils/getShortBigo";
 import useWindowDimensions from "../../components/WindowDimenstions";
 import Index from "./Modal";
 import getCurrency from "../../utils/getCurrency";
-// import {documents} from "../../mock";
 import MySnackbars from "../../components/MY_snackbar";
 import getPerfectScrollbarHeight from "../../utils/getPerfectScrollbarHeight";
-import {documents} from "../../mock/my_documentsMock";
+import {documents} from "../../mock";
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -275,7 +274,7 @@ function Results({className, documents, ...rest}) {
           onComplete={completeReportModal}
           open={openModal}
         />
-        ) }
+        )}
       {snackbarOpen ? <MySnackbars open={snackbarOpen} setOpen={handleSnackbarOpen} isSuccess={isSuccess} /> : null}
     </div>
   );

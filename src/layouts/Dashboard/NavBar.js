@@ -216,16 +216,16 @@ function NavBar({
             color="textPrimary"
             underline="none"
           >
-            {`${session.user.first_name} ${session.user.last_name}`}
+            {`${session.user.name} ${session.user.position}`}
           </Link>
-          <Typography variant="body2">{session.user.bio}</Typography>
+          <Typography variant="body2">{session.user.department}</Typography>
         </div>
-        <IconButton
-          className={classes.moreButton}
-          size="small"
-        >
-          <MoreIcon />
-        </IconButton>
+        {/*<IconButton*/}
+        {/*  className={classes.moreButton}*/}
+        {/*  size="small"*/}
+        {/*>*/}
+        {/*  <MoreIcon />*/}
+        {/*</IconButton>*/}
       </div>
     </div>
   );

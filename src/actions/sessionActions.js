@@ -2,7 +2,7 @@ import axios from "../utils/my_axios";
 
 export const SESSION_LOGIN = 'SESSION_LOGIN';
 export const SESSION_LOGOUT = 'SESSION_LOGOUT';
-export const EXPIRATIONDATE = 10
+export const EXPIRATIONDATE = 3600
 
 
 export const authSuccess = (data: Object) => ({

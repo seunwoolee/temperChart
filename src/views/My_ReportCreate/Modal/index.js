@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import {makeStyles} from '@material-ui/styles';
@@ -13,13 +13,12 @@ import {
   TextField,
   Button, Table, TableBody, TableRow, TableCell, Typography
 } from '@material-ui/core';
-import MySnackbars from "../../../components/MY_snackbar";
 import InvoiceCard from "./InvoiceCard";
 import ChooseDialog from '../Dialog'
 import UploadAttachments from "./UploadAttachments";
-import axios from "../../../utils/axios";
-import {invoices} from "../../../mock";
+import {voucher} from "../../../mock";
 import getCurrency from "../../../utils/getCurrency";
+import {useSelector} from "react-redux";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -52,9 +51,10 @@ function Index({
                  open, onClose, onComplete, invoices, className, ...rest
                }) {
   const classes = useStyles();
+  const session = useSelector((state) => state.session);
+
   const [openDialog, setOpenDialog] = useState(false);
   const [inputTitle, setInputTitle] = useState('');
-  const [inputContent, setInputContent] = useState('');
   const [inputAttachments,setInputAttachments]  = useState([]);
   const [inputUsers,setInputUsers]  = useState([]);
 
@@ -63,9 +63,9 @@ function Index({
     setInputTitle(event.target.value);
   };
 
-  const handleChangeContent = (event) => {
-    setInputContent(event.target.value);
-  };
+  // const handleChangeContent = (event) => {
+  //   setInputContent(event.target.value);
+  // };
 
   const handleAttachments = (attachments: Array) => {
     setInputAttachments(attachments);
@@ -82,16 +82,18 @@ function Index({
   const handleSubmit = (users: Array) => {
     setInputUsers(users);
     setOpenDialog(false);
+    setInputTitle('');
+    // setInputContent('');
+    setInputAttachments([]);
+    console.log(invoices, inputTitle, inputAttachments, inputUsers);
     onComplete();
 
     // axios call
   };
 
   const getSumInvoices = () => {
-    return getCurrency(invoices.map(invoice => invoice.총액).reduce((prev, curr) => prev + curr));
+    return getCurrency(invoices.map(invoice => invoice.price).reduce((prev, curr) => prev + curr));
   };
-
-  console.log('[Modal]', invoices);
 
   return (
     <>
@@ -121,11 +123,11 @@ function Index({
                     <TableBody>
                       <TableRow>
                         <TableCell>작성자</TableCell>
-                        <TableCell>이승우</TableCell>
+                        <TableCell>{session.user.name}</TableCell>
                       </TableRow>
                       <TableRow>
                         <TableCell>작성일자</TableCell>
-                        <TableCell>2020-01-02</TableCell>
+                        <TableCell>{new Date().toISOString().slice(0, 10)}</TableCell>
                       </TableRow>
                     </TableBody>
                   </Table>
@@ -144,23 +146,23 @@ function Index({
                     variant="outlined"
                   />
                 </Grid>
-                <Grid
-                  item
-                  md={12}
-                  xs={12}
-                >
-                  <TextField
-                    multiline
-                    rows="3"
-                    rowsMax="50"
-                    fullWidth
-                    label="내용"
-                    name="title"
-                    onChange={handleChangeContent}
-                    value={inputContent}
-                    variant="outlined"
-                  />
-                </Grid>
+                {/*<Grid*/}
+                {/*  item*/}
+                {/*  md={12}*/}
+                {/*  xs={12}*/}
+                {/*>*/}
+                {/*  <TextField*/}
+                {/*    multiline*/}
+                {/*    rows="3"*/}
+                {/*    rowsMax="50"*/}
+                {/*    fullWidth*/}
+                {/*    label="내용"*/}
+                {/*    name="title"*/}
+                {/*    onChange={handleChangeContent}*/}
+                {/*    value={inputContent}*/}
+                {/*    variant="outlined"*/}
+                {/*  />*/}
+                {/*</Grid>*/}
                 <Divider/>
                 <Grid
                   item
@@ -182,7 +184,7 @@ function Index({
                   md={12}
                   xs={12}
                 >
-                  <UploadAttachments handleAttachments={handleAttachments}/>
+                  <UploadAttachments attachments={inputAttachments} handleAttachments={handleAttachments}/>
                 </Grid>
               </Grid>
             </CardContent>
@@ -192,7 +194,7 @@ function Index({
                 닫기
               </Button>
               <Button
-                disabled={!(inputTitle && inputContent)}
+                disabled={!(inputTitle)}
                 color="primary"
                 onClick={handleClickOpen}
                 variant="contained"
@@ -210,7 +212,7 @@ function Index({
 
 Index.propTypes = {
   className: PropTypes.string,
-  invoices: PropTypes.arrayOf(PropTypes.shape(invoices)),
+  invoices: PropTypes.arrayOf(PropTypes.shape(voucher)),
   onClose: PropTypes.func,
   onComplete: PropTypes.func,
   open: PropTypes.bool

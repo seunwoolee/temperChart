@@ -10,7 +10,7 @@ const useStyles = makeStyles(() => ({
   root: {}
 }));
 
-function UploadAttachments({ handleAttachments, className, ...rest }) {
+function UploadAttachments({ attachments, handleAttachments, className, ...rest }) {
   const classes = useStyles();
 
   return (
@@ -20,16 +20,14 @@ function UploadAttachments({ handleAttachments, className, ...rest }) {
     >
       <CardHeader title="첨부파일" />
       <CardContent>
-        <FilesDropzone handleAttachments={handleAttachments}/>
+        <FilesDropzone attachments={attachments} handleAttachments={handleAttachments}/>
       </CardContent>
-      {/*<CardContent>*/}
-      {/*  <MyDropzone />*/}
-      {/*</CardContent>*/}
     </Card>
   );
 }
 
 UploadAttachments.propTypes = {
+  attachments: PropTypes.array,
   handleAttachments: PropTypes.func.isRequired,
   className: PropTypes.string
 };

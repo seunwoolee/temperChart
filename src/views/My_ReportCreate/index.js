@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/styles';
 import { Container } from '@material-ui/core';
-import axios from 'src/utils/axios';
+// import axios from 'src/utils/axios';
+import axios from "../../utils/my_axios";
 import Page from 'src/components/Page';
 import SearchBar from 'src/components/SearchBar';
 import Header from './Header';
@@ -28,15 +29,15 @@ function ReportCreate() {
   useEffect(() => {
     let mounted = true;
 
-    const fetchCustomers = () => {
-      axios.get('/api/invoices').then((response) => {
+    const fetchInvoices = () => {
+      axios.get('erp/voucher_list/').then((response) => {
         if (mounted) {
-          setInvoices(response.data.invoices);
+          setInvoices(response.data);
         }
       });
     };
 
-    fetchCustomers();
+    fetchInvoices();
 
     return () => {
       mounted = false;
