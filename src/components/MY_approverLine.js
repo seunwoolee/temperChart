@@ -34,37 +34,38 @@ const useStyles = makeStyles(theme=> ({
 }));
 
 
-export default function ApproverTable({approvers}) {
+export default function ApproverTable({signs}) {
   const classes = useStyles();
-
   return (
 
     <TableContainer component={Paper}>
       <Table size="small" aria-label="a dense table">
         <TableHead className={classes.header}>
           <TableRow>
-            {approvers.map(approver => (
-              <TableCell key={approver.id} align="center" className={clsx(classes.gridCell, classes.root)}>{approver.position}</TableCell>
+            {signs.map(sign => (
+              <TableCell key={sign.user.id} align="center" className={clsx(classes.gridCell, classes.root)}>{sign.user.position}</TableCell>
               )
             )}
           </TableRow>
         </TableHead>
         <TableBody>
           <TableRow >
-            {approvers.map(approver => (
-                <TableCell key={approver.id} align="center" className={clsx(classes.gridCell, classes.root)}>{approver.name}</TableCell>
+            {signs.map(sign => (
+                <TableCell key={sign.user.id} align="center" className={clsx(classes.gridCell, classes.root)}>
+                  {sign.user.name}
+                </TableCell>
               )
             )}
           </TableRow>
         </TableBody>
         <TableBody>
           <TableRow>
-            {approvers.map(approver => (
+            {signs.map(sign => (
                 <TableCell
-                    key={approver.id}
+                    key={sign.user.id}
                     align="center"
                     className={clsx(clsx(classes.gridCell, classes.signDateCell, classes.root))}>
-                  {approver.sign_date.substring(0, 10)}
+                  {sign.sign_date ? sign.sign_date.substring(0, 10): <br />}
                 </TableCell>
               )
             )}
@@ -76,6 +77,6 @@ export default function ApproverTable({approvers}) {
 }
 
 ApproverTable.propTypes = {
-  approvers: PropTypes.arrayOf(PropTypes.shape(signs))
+  signs: PropTypes.arrayOf(PropTypes.shape(signs))
 };
 

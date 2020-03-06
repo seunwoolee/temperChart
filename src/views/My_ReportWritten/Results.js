@@ -28,6 +28,8 @@ import Index from "./Modal";
 import MySnackbars from "../../components/MY_snackbar";
 import {documents} from '../../mock/my_documentsMock'
 import getPerfectScrollbarHeight from "../../utils/getPerfectScrollbarHeight";
+import {useSelector} from "react-redux";
+import axios from "../../utils/my_axios";
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -70,27 +72,32 @@ const useStyles = makeStyles((theme) => ({
 function Results({className, documents, ...rest}) {
   const [page, setPage] = useState(0);
   const [selectedDocument, setSelectedDocument] = useState({});
+  const [invoices, setInvoices] = useState([]);
   const [rowsPerPage, setRowsPerPage] = useState(25);
   const [openModal, setOpenModal] = useState(false);
   const {height, width} = useWindowDimensions();
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [isSuccess, setIsSuccess] = useState(true);
+  const session = useSelector((state) => state.session);
+
 
   const props = { mobileInnerHeight: getPerfectScrollbarHeight(rowsPerPage, documents.length, 60)};
   const classes = useStyles(props);
 
-  const handleChangePage = (event, page) => {
-    setPage(page);
-  };
+  const handleChangePage = (event, page) => setPage(page);
 
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(event.target.value);
-  };
+  const handleChangeRowsPerPage = (event) => setRowsPerPage(event.target.value);
 
   const handleTableClick = (id) => {
     const newDocument = documents.find(document => document.id === id);
-    setSelectedDocument(newDocument);
-    setOpenModal(true);
+    const headers = {'Authorization': 'Token ' + session.token}
+    axios.get('erp/voucher_list/'+newDocument.batch_number, {headers: headers})
+      .then((response) => {
+        setInvoices(response.data);
+        setSelectedDocument(newDocument);
+        setOpenModal(true);
+    });
+
   };
 
   const completeReportModal = () => {
@@ -156,15 +163,9 @@ function Results({className, documents, ...rest}) {
                     >
                       <TableCell align='center' className={classes.whiteSpaceNoWrap }>{i}</TableCell>
                       <TableCell className={classes.whiteSpaceNoWrap}>{document.title}</TableCell>
-                      <TableCell align='center' className={classes.whiteSpaceNoWrap}>
-                        {document.created}
-                      </TableCell>
-                      <TableCell align='center' className={classes.whiteSpaceNoWrap}>
-                        {document.group}
-                      </TableCell>
-                      <TableCell align='center' className={classes.whiteSpaceNoWrap}>
-                          {document.author}
-                      </TableCell>
+                      <TableCell align='center' className={classes.whiteSpaceNoWrap}>{document.created}</TableCell>
+                      <TableCell align='center' className={classes.whiteSpaceNoWrap}>{document.department}</TableCell>
+                      <TableCell align='center' className={classes.whiteSpaceNoWrap}>{document.author}</TableCell>
                       <TableCell align='center'>{document.doc_status}</TableCell>
                     </TableRow>
                   ))}
@@ -188,6 +189,7 @@ function Results({className, documents, ...rest}) {
       {openModal &&
       <Index
         document={selectedDocument}
+        invoices={invoices}
         onClose={closeReportModal}
         onComplete={completeReportModal}
         open={openModal}

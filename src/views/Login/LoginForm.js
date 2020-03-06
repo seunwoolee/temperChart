@@ -99,12 +99,9 @@ function LoginForm({className, ...rest}) {
     const token = localStorage.getItem('token');
 
     if(token && logging) {
-      console.log('[useEffect]', token, logging);
       history.push('/reportSign');
-      // window.location.reload();
-      // history.push('/auth/register');
     } else {
-      console.log('else')
+      console.log('[LoginForm] useEffect')
     }
   }, [logging])
 

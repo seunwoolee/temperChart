@@ -19,10 +19,12 @@ import MySnackbars from "../../../components/MY_snackbar";
 import InvoiceCard from "./InvoiceCard";
 import ChooseDialog from '../Dialog';
 import Attachments from "./attachments";
-import axios from "../../../utils/axios";
+// import axios from "../../../utils/axios";
 import {documents} from "../../../mock/my_documentsMock";
 import MY_approverLine from "../../../components/MY_approverLine";
 import getCurrency from "../../../utils/getCurrency";
+import {useSelector} from "react-redux";
+import axios from "../../../utils/my_axios";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -61,20 +63,18 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Index({
-  open, onClose, onComplete, document, className, ...rest
+  open, onClose, onComplete, document, invoices, className, ...rest
 }) {
   const classes = useStyles();
   const [openDialog, setOpenDialog] = useState(false);
+  const session = useSelector((state) => state.session);
 
-  const handleClickOpen = () => {
-    setOpenDialog(true);
-  };
 
-  const handleClose = () => {
-    setOpenDialog(false);
-  };
+  const handleClickOpen = () => setOpenDialog(true);
 
-  const getSumInvoices = () => getCurrency(document.invoices.map(invoice => invoice.총액)
+  const handleClose = () => setOpenDialog(false);
+
+  const getSumInvoices = () => getCurrency(invoices.map(invoice => invoice.price)
     .reduce((prev, curr) => prev + curr));
 
 
@@ -102,10 +102,10 @@ function Index({
               >
                 <Grid
                   item
-                  md={document.approvers.length + 2}
+                  md={document.signs.length + 2}
                   xs={12}
                 >
-                  <MY_approverLine approvers={document.approvers} />
+                  <MY_approverLine signs={document.signs} />
                 </Grid>
               </Grid>
               <Grid
@@ -132,10 +132,10 @@ function Index({
                           <TableCell className={classes.tableCellContent}>제목</TableCell>
                           <TableCell>{document.title}</TableCell>
                         </TableRow>
-                        <TableRow>
-                          <TableCell className={classes.tableCellContent}>내용</TableCell>
-                          <TableCell>{document.content}</TableCell>
-                        </TableRow>
+                        {/*<TableRow>*/}
+                        {/*  <TableCell className={classes.tableCellContent}>내용</TableCell>*/}
+                        {/*  <TableCell>{document.content}</TableCell>*/}
+                        {/*</TableRow>*/}
                       </TableBody>
                     </Table>
                   </TableContainer>
@@ -149,13 +149,13 @@ function Index({
                   <Typography variant="h5">
                     총
                     {' '}
-                    {document.invoices.length}
+                    {invoices.length}
                     건 /
                     {' '}
                     {getSumInvoices()}
                     원
                   </Typography>
-                  {document.invoices.map((invoice) => (
+                  {invoices.map((invoice) => (
                     <InvoiceCard
                       key={invoice.id}
                       invoice={invoice}
@@ -191,6 +191,7 @@ function Index({
 Index.propTypes = {
   className: PropTypes.string,
   document: PropTypes.shape(documents),
+  invoices: PropTypes.array,
   onClose: PropTypes.func,
   onComplete: PropTypes.func,
   open: PropTypes.bool

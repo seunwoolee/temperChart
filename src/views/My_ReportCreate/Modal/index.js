@@ -19,6 +19,8 @@ import UploadAttachments from "./UploadAttachments";
 import {voucher} from "../../../mock";
 import getCurrency from "../../../utils/getCurrency";
 import {useSelector} from "react-redux";
+import axios from "../../../utils/my_axios";
+import {authSuccess} from "../../../actions";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -55,17 +57,11 @@ function Index({
 
   const [openDialog, setOpenDialog] = useState(false);
   const [inputTitle, setInputTitle] = useState('');
-  const [inputAttachments,setInputAttachments]  = useState([]);
-  const [inputUsers,setInputUsers]  = useState([]);
-
+  const [inputAttachments, setInputAttachments] = useState([]);
 
   const handleChangeTitle = (event) => {
     setInputTitle(event.target.value);
   };
-
-  // const handleChangeContent = (event) => {
-  //   setInputContent(event.target.value);
-  // };
 
   const handleAttachments = (attachments: Array) => {
     setInputAttachments(attachments);
@@ -80,15 +76,22 @@ function Index({
   };
 
   const handleSubmit = (users: Array) => {
-    setInputUsers(users);
     setOpenDialog(false);
     setInputTitle('');
-    // setInputContent('');
     setInputAttachments([]);
-    console.log(invoices, inputTitle, inputAttachments, inputUsers);
     onComplete();
 
-    // axios call
+    const headers = {'Authorization': 'Token ' + session.token, 'Content-Type': 'multipart/form-data'}
+    const axiosConfig = {headers: headers};
+
+    const formData = new FormData();
+    const url = 'ea/create_document/';
+    formData.append('author', session.user.id)
+    formData.append('title', inputTitle)
+    formData.append('batch_number', invoices[0].batchNumber)
+    formData.append('approvers', JSON.stringify(users))
+    inputAttachments.map(attachment => formData.append('attachments', attachment))
+    axios.post(url, formData, axiosConfig)
   };
 
   const getSumInvoices = () => {
@@ -205,7 +208,7 @@ function Index({
           </form>
         </Card>
       </Modal>
-      <ChooseDialog open={openDialog} onClose={handleClose}  onSubmit={handleSubmit}/>
+      <ChooseDialog open={openDialog} onClose={handleClose} onSubmit={handleSubmit}/>
     </>
   );
 }

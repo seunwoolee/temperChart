@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/styles';
 import { Container } from '@material-ui/core';
-import axios from 'src/utils/axios';
+import axios from "../../utils/my_axios";
 import Page from 'src/components/Page';
 import SearchBar from 'src/components/SearchBar';
 import Header from './Header';
 import Results from './Results';
+import {useSelector} from "react-redux";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -20,6 +21,7 @@ const useStyles = makeStyles((theme) => ({
 function ReportWritten() {
   const classes = useStyles();
   const [documents, setDocuments] = useState([]);
+  const session = useSelector((state) => state.session);
 
   const handleFilter = () => {};
 
@@ -29,9 +31,10 @@ function ReportWritten() {
     let mounted = true;
 
     const fetchDocuments = () => {
-      axios.get('/api/documents').then((response) => {
+      const headers = {'Authorization': 'Token ' + localStorage.getItem('token')}
+      axios.get('ea/written_document/'+session.user.id, {headers: headers}).then((response) => {
         if (mounted) {
-          setDocuments(response.data.documents);
+          setDocuments(response.data);
         }
       });
     };

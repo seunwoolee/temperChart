@@ -152,7 +152,7 @@ function Results({className, invoices, ...rest}) {
 
   const handleSnackbarOpen = (bool) => {
     setSnackbarOpen(bool);
-  };
+  }
 
   const createColspanData = (batchNumber) => {
     prevBatchNumber = batchNumber

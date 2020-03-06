@@ -58,23 +58,23 @@ function InvoiceCard({ invoice, className, ...rest }) {
       <CardContent className={classes.content}>
         <div className={classes.stats}>
           <Typography variant="body2">공급자명</Typography>
-          <Typography variant="h6">{invoice.공급자명}</Typography>
+          <Typography variant="h6">{invoice.supplyNumber}</Typography>
         </div>
         <div className={classes.stats}>
           <Typography variant="body2">금액</Typography>
           <Typography variant="h6">
-            {invoice.통화}
-            {invoice.총액}
+            {/*{invoice.통화}*/}
+            {invoice.price}
           </Typography>
         </div>
         <div className={classes.bigo}>
           <Typography variant="body2">비고</Typography>
-          <Typography variant="h6">{getShortBigo(0, invoice.비고)}</Typography>
+          <Typography variant="h6">{getShortBigo(0, invoice.bigo)}</Typography>
         </div>
         <div className={classes.stats}>
           <Typography variant="body2">일자</Typography>
           <Typography variant="h6">
-            {invoice.일자}
+            {invoice.gl_ymd}
           </Typography>
         </div>
       </CardContent>

@@ -7,6 +7,7 @@ import Page from 'src/components/Page';
 import SearchBar from 'src/components/SearchBar';
 import Header from './Header';
 import Results from './Results';
+import {useSelector} from "react-redux";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -21,6 +22,7 @@ const useStyles = makeStyles((theme) => ({
 function ReportCreate() {
   const classes = useStyles();
   const [invoices, setInvoices] = useState([]);
+  const session = useSelector((state) => state.session);
 
   const handleFilter = () => {};
 
@@ -30,7 +32,8 @@ function ReportCreate() {
     let mounted = true;
 
     const fetchInvoices = () => {
-      axios.get('erp/voucher_list/').then((response) => {
+      const headers = {'Authorization': 'Token ' + localStorage.getItem('token')}
+      axios.get('erp/voucher_list/', {headers: headers}).then((response) => {
         if (mounted) {
           setInvoices(response.data);
         }
