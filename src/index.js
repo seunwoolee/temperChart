@@ -9,18 +9,19 @@ import {configureStore} from "./store";
 import {Provider as StoreProvider} from "react-redux";
 import {ThemeProvider} from "@material-ui/styles";
 import {theme} from "./theme";
+import registerServiceWorker from "./registerServiceWorker";
 
 
 const store = configureStore();
 const app = (
-    <StoreProvider store={store}>
-      <ThemeProvider theme={theme}>
-        <App />
-      </ThemeProvider>
-    </StoreProvider>
-)
+  <StoreProvider store={store}>
+    <ThemeProvider theme={theme}>
+      <App />
+    </ThemeProvider>
+  </StoreProvider>
+);
 
 // ReactDOM.render(<App />, document.getElementById('root'));
 ReactDOM.render(app, document.getElementById('root'));
-
-serviceWorker.unregister();
+registerServiceWorker();
+// serviceWorker.register();

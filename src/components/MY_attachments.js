@@ -17,8 +17,12 @@ import Dialog from '@material-ui/core/Dialog';
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import GetAppIcon from '@material-ui/icons/GetApp';
 import IconButton from "@material-ui/core/IconButton";
+import NavigateNextIcon from '@material-ui/icons/NavigateNext';
+import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
 import Label from 'src/components/Label';
 import {pdfjs, Document, Page} from 'react-pdf';
+import Grid from "@material-ui/core/Grid";
+import Button from "@material-ui/core/Button";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
@@ -108,7 +112,7 @@ function MY_attachments({attachments, className, ...rest}) {
                 key={uuid()}
               >
                 <ListItemIcon>
-                  <FileCopyIcon/>
+                  <FileCopyIcon />
                 </ListItemIcon>
                 <ListItemText
                   primary={file.title}
@@ -123,7 +127,7 @@ function MY_attachments({attachments, className, ...rest}) {
                       DownLoad
                     </Label>
                     <IconButton>
-                      <GetAppIcon/>
+                      <GetAppIcon />
                     </IconButton>
                   </a>
                 </ListItemSecondaryAction>
@@ -150,16 +154,40 @@ function MY_attachments({attachments, className, ...rest}) {
               >
                 <Page pageNumber={pageNumber} />
               </Document>
-              <button onClick={() => setPageNumber(prevPageNumber => prevPageNumber + 1) }>
-              Next page
-              </button>
-              <p>
-                Page
-                {pageNumber}
-                {' '}
-                of
-                {numPages}
-              </p>
+              <Grid
+                container
+                direction="row"
+                justify="space-between"
+                alignItems="center"
+              >
+                <Grid>
+                  <Button onClick={() => setPageNumber(prevPageNumber => prevPageNumber - 1)}>
+                    <NavigateBeforeIcon />
+                  </Button>
+                </Grid>
+                <Grid>
+                  <Button onClick={() => setPageNumber(prevPageNumber => prevPageNumber + 1)}>
+                    <NavigateNextIcon />
+                  </Button>
+                </Grid>
+              </Grid>
+              <Grid
+                container
+                direction="row"
+                justify="center"
+                alignItems="center"
+              >
+                <Grid>
+                  <p>
+                    페이지
+                    {' '}
+                    {pageNumber}
+                    {' '}
+                    /
+                    {numPages}
+                  </p>
+                </Grid>
+              </Grid>
             </div>
           )}
       </Dialog>
