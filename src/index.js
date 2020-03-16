@@ -15,7 +15,7 @@ const store = configureStore();
 const app = (
     <StoreProvider store={store}>
       <ThemeProvider theme={theme}>
-        <App/>
+        <App />
       </ThemeProvider>
     </StoreProvider>
 )

@@ -80,7 +80,7 @@ function MY_attachments({ attachments, className, ...rest }) {
 
   const handleClickOpen = (imgPath) => {
     setOpen(true);
-    setSelectedImgPath(imgPath);
+    setSelectedImgPath('http://localhost:8000' + imgPath); // TODO URL 변경
   };
 
   const handleClose = () => {
@@ -99,7 +99,7 @@ function MY_attachments({ attachments, className, ...rest }) {
             {attachments.map((file, i) => (
               <ListItem
                 button={file.isImg}
-                onClick={file.isImg ? () =>handleClickOpen(file.path) : null}
+                onClick={file.isImg ? () => handleClickOpen(file.path) : null}
                 divider={i < attachments.length - 1}
                 key={uuid()}
               >
@@ -112,13 +112,13 @@ function MY_attachments({ attachments, className, ...rest }) {
                   secondary={bytesToSize(file.size)}
                 />
                 <ListItemSecondaryAction>
-                  <a target="_blank" href={file.path} download="ilovecheese">
-                  <Label >
+                  <a target="_blank" href={'http://localhost:8000' + file.path}> {/* TODO URL 변경 */}
+                    <Label>
                       DownLoad
-                  </Label>
-                  <IconButton>
-                    <GetAppIcon />
-                  </IconButton>
+                    </Label>
+                    <IconButton>
+                      <GetAppIcon />
+                    </IconButton>
                   </a>
                 </ListItemSecondaryAction>
               </ListItem>
@@ -128,13 +128,13 @@ function MY_attachments({ attachments, className, ...rest }) {
       </>
       <Dialog
         classes={{paper: classes.dialogPaper}}
-        maxWidth='lg'
+        maxWidth="lg"
         open={open}
         onClose={handleClose}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <img src={selectedImgPath} className={classes.img}  alt='이미지'/>
+        <img src={selectedImgPath} className={classes.img} alt="이미지" />
       </Dialog>
     </div>
   );
