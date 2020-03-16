@@ -2,31 +2,25 @@ import React, {useState, useCallback, useEffect} from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import uuid from 'uuid/v1';
-import { useDropzone } from 'react-dropzone';
 import PerfectScrollbar from 'react-perfect-scrollbar';
-import { makeStyles } from '@material-ui/styles';
+import {makeStyles} from '@material-ui/styles';
 import {
-  Button,
   List,
   ListItem,
   ListItemIcon,
   ListItemText,
-  Typography,
   colors
 } from '@material-ui/core';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
 import bytesToSize from 'src/utils/bytesToSize';
 import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import Grid from "@material-ui/core/Grid";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import GetAppIcon from '@material-ui/icons/GetApp';
 import IconButton from "@material-ui/core/IconButton";
 import Label from 'src/components/Label';
-import moment from "moment";
+import {pdfjs, Document, Page} from 'react-pdf';
+
+pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -73,19 +67,28 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function MY_attachments({ attachments, className, ...rest }) {
+function MY_attachments({attachments, className, ...rest}) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
   const [selectedImgPath, setSelectedImgPath] = React.useState('');
+  const [contentType, setContentType] = React.useState('img');
 
-  const handleClickOpen = (imgPath) => {
+  const [numPages, setNumPages] = React.useState(null);
+  const [pageNumber, setPageNumber] = React.useState(1);
+
+  const handleClickOpen = (imgPath, isImg) => {
     setOpen(true);
-    setSelectedImgPath('http://localhost:8000' + imgPath); // TODO URL 변경
+    setSelectedImgPath(`http://localhost:8000${imgPath}`); // TODO URL 변경
+    isImg ? setContentType('img') : setContentType('pdf');
   };
 
   const handleClose = () => {
     setOpen(false);
     setSelectedImgPath('');
+  };
+
+  const onDocumentLoadSuccess = ({ numPages }) => {
+    setNumPages(numPages);
   };
 
   return (
@@ -94,30 +97,33 @@ function MY_attachments({ attachments, className, ...rest }) {
       className={clsx(classes.root, className)}
     >
       <>
-        <PerfectScrollbar options={{ suppressScrollX: true }}>
+        <PerfectScrollbar options={{suppressScrollX: true}}>
           <List className={classes.list}>
             {attachments.map((file, i) => (
               <ListItem
-                button={file.isImg}
-                onClick={file.isImg ? () => handleClickOpen(file.path) : null}
+                button={file.isImg || file.isPdf}
+                onClick={file.isImg || file.isPdf
+                  ? () => handleClickOpen(file.path, file.isImg) : null}
                 divider={i < attachments.length - 1}
                 key={uuid()}
               >
                 <ListItemIcon>
-                  <FileCopyIcon />
+                  <FileCopyIcon/>
                 </ListItemIcon>
                 <ListItemText
                   primary={file.title}
-                  primaryTypographyProps={{ variant: 'h5' }}
+                  primaryTypographyProps={{variant: 'h5'}}
                   secondary={bytesToSize(file.size)}
                 />
                 <ListItemSecondaryAction>
-                  <a target="_blank" href={'http://localhost:8000' + file.path}> {/* TODO URL 변경 */}
+                  <a target="_blank" href={`http://localhost:8000${file.path}`}>
+                    {' '}
+                    {/* TODO URL 변경 */}
                     <Label>
                       DownLoad
                     </Label>
                     <IconButton>
-                      <GetAppIcon />
+                      <GetAppIcon/>
                     </IconButton>
                   </a>
                 </ListItemSecondaryAction>
@@ -134,7 +140,28 @@ function MY_attachments({ attachments, className, ...rest }) {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <img src={selectedImgPath} className={classes.img} alt="이미지" />
+        {contentType === 'img'
+          ? (<img src={selectedImgPath} className={classes.img} alt="이미지" />)
+          : (
+            <div>
+              <Document
+                file={selectedImgPath}
+                onLoadSuccess={onDocumentLoadSuccess}
+              >
+                <Page pageNumber={pageNumber} />
+              </Document>
+              <button onClick={() => setPageNumber(prevPageNumber => prevPageNumber + 1) }>
+              Next page
+              </button>
+              <p>
+                Page
+                {pageNumber}
+                {' '}
+                of
+                {numPages}
+              </p>
+            </div>
+          )}
       </Dialog>
     </div>
   );

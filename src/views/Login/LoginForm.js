@@ -9,8 +9,8 @@ import {makeStyles} from '@material-ui/styles';
 import {Button, TextField} from '@material-ui/core';
 import {authCheckState, login} from 'src/actions';
 import {AxiosInstance, AxiosResponse} from "axios";
-import {EXPIRATIONDATE, getUserData, storeLoginData} from "../../actions";
 import {Redirect} from "react-router-dom";
+import {EXPIRATIONDATE, getUserData, storeLoginData} from "../../actions";
 
 const schema = {
   username: {
@@ -98,12 +98,12 @@ function LoginForm({className, ...rest}) {
   useEffect(() => {
     const token = localStorage.getItem('token');
 
-    if(token && logging) {
+    if (token && logging) {
       history.push('/reportSign');
     } else {
-      console.log('[LoginForm] useEffect')
+      console.log('[LoginForm] useEffect');
     }
-  }, [logging])
+  }, [history, logging]);
 
 
   useEffect(() => {
