@@ -26,7 +26,7 @@ function Topbar({ className, ...rest }) {
       color="primary"
     >
       <Toolbar>
-        <RouterLink to="/">
+        <RouterLink to="/auth/login">
           <Button
             className={classes.logos}
           >

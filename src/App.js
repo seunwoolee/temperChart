@@ -33,7 +33,7 @@ function App() {
     if(!token){
       history.push('/auth/login');
     }
-  }, [])
+  }, []);
 
   return (
     <MuiPickersUtilsProvider utils={MomentUtils}>

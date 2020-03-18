@@ -54,11 +54,12 @@ self.addEventListener('notificationclick', event => {
 
   let notification = event.notification;
   let action = event.action;
+  notification.close();
 
 
   if (action === 'confirm') {
+    clients.openWindow('http://localhost:3000/')
     console.log('confirm was chosone');
-    notification.close();
   } else {
     console.log(action);
   }
@@ -68,12 +69,17 @@ self.addEventListener('notificationclick', event => {
 self.addEventListener('push', event => {
   const data = event.data;
   console.log('New notification', data.text());
-  // const options = {
-  //   body: data.body,
-  // };
+  const options = {
+    body: '이승우짱',
+    icon: '/favicon_192.png',
+    actions: [
+      {action: 'confirm', title: '확인', icon: '/favicon_192.png'},
+      {action: 'cancel', title: '취소', icon: '/favicon_192.png'}
+    ]
+  };
   event.waitUntil(
     // eslint-disable-next-line no-restricted-globals
     // self.registration.showNotification(data.text(), options)
-    self.registration.showNotification(data.text())
+    self.registration.showNotification(data.text(), options)
   );
 });

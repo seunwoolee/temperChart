@@ -124,11 +124,10 @@ function Results({className, documents, ...rest}) {
     setSnackbarOpen(true);
     setIsSuccess(true);
     const newDocuments = selectedDocuments.slice(1);
-    if(newDocuments.length === 0){
+    if (newDocuments.length === 0) {
       setOpenModal(false);
     }
     setSelectedDocuments(newDocuments);
-
   };
 
   const closeReportModal = () => {
@@ -210,42 +209,42 @@ function Results({className, documents, ...rest}) {
                         />
                       </TableCell>
 
-                      <TableCell align='center' className={classes.whiteSpaceNoWrap }>{i}</TableCell>
+                      <TableCell align="center" className={classes.whiteSpaceNoWrap}>{i}</TableCell>
                       <TableCell className={classes.whiteSpaceNoWrap}>{document.title}</TableCell>
-                      <TableCell align='center' className={classes.whiteSpaceNoWrap}>
+                      <TableCell align="center" className={classes.whiteSpaceNoWrap}>
                         {document.created}
                       </TableCell>
-                      <TableCell align='center' className={classes.whiteSpaceNoWrap}>
+                      <TableCell align="center" className={classes.whiteSpaceNoWrap}>
                         {document.group}
                       </TableCell>
-                      <TableCell align='center' className={classes.whiteSpaceNoWrap}>
+                      <TableCell align="center" className={classes.whiteSpaceNoWrap}>
                         {document.author}
                       </TableCell>
-                      <TableCell align='center'>{document.doc_status}</TableCell>
+                      <TableCell align="center">{document.doc_status}</TableCell>
 
 
-                      {/*<TableCell align="center">*/}
-                      {/*  <div className={clsx(classes.nameCell, classes.whiteSpaceNoWrap)}>*/}
-                      {/*    {document.id}*/}
-                      {/*  </div>*/}
-                      {/*</TableCell>*/}
-                      {/*<TableCell align="center" className={classes.whiteSpaceNoWrap}>{document.title}</TableCell>*/}
-                      {/*<TableCell align="center" className={classes.whiteSpaceNoWrap}>*/}
-                      {/*  {getCurrency(document.총액)}*/}
-                      {/*</TableCell>*/}
-                      {/*<TableCell align="center" className={classes.whiteSpaceNoWrap}>*/}
-                      {/*  <div className={classes.nameCell}>*/}
-                      {/*    <Avatar*/}
-                      {/*      className={classes.avatar}*/}
-                      {/*      src={document.avatar}*/}
-                      {/*    />*/}
-                      {/*    {document.사용자}*/}
-                      {/*  </div>*/}
-                      {/*</TableCell>*/}
-                      {/*<TableCell>{getShortBigo(width, document.비고)}</TableCell>*/}
-                      {/*<TableCell align="center" className={classes.whiteSpaceNoWrap}>*/}
-                      {/*  {document.배치번호 + Math.floor(Math.random() * 70)}*/}
-                      {/*</TableCell>*/}
+                      {/* <TableCell align="center"> */}
+                      {/*  <div className={clsx(classes.nameCell, classes.whiteSpaceNoWrap)}> */}
+                      {/*    {document.id} */}
+                      {/*  </div> */}
+                      {/* </TableCell> */}
+                      {/* <TableCell align="center" className={classes.whiteSpaceNoWrap}>{document.title}</TableCell> */}
+                      {/* <TableCell align="center" className={classes.whiteSpaceNoWrap}> */}
+                      {/*  {getCurrency(document.총액)} */}
+                      {/* </TableCell> */}
+                      {/* <TableCell align="center" className={classes.whiteSpaceNoWrap}> */}
+                      {/*  <div className={classes.nameCell}> */}
+                      {/*    <Avatar */}
+                      {/*      className={classes.avatar} */}
+                      {/*      src={document.avatar} */}
+                      {/*    /> */}
+                      {/*    {document.사용자} */}
+                      {/*  </div> */}
+                      {/* </TableCell> */}
+                      {/* <TableCell>{getShortBigo(width, document.비고)}</TableCell> */}
+                      {/* <TableCell align="center" className={classes.whiteSpaceNoWrap}> */}
+                      {/*  {document.배치번호 + Math.floor(Math.random() * 70)} */}
+                      {/* </TableCell> */}
                     </TableRow>
                   ))}
                 </TableBody>
@@ -268,13 +267,13 @@ function Results({className, documents, ...rest}) {
       <BottomBar onOpenModal={openReportModal} selected={selectedDocuments} />
       {openModal && selectedDocuments.length
          && (
-        <Index
-          document={selectedDocuments[0]}
-          onClose={closeReportModal}
-          onComplete={completeReportModal}
-          open={openModal}
-        />
-        )}
+         <Index
+           document={selectedDocuments[0]}
+           onClose={closeReportModal}
+           onComplete={completeReportModal}
+           open={openModal}
+         />
+         )}
       {snackbarOpen ? <MySnackbars open={snackbarOpen} setOpen={handleSnackbarOpen} isSuccess={isSuccess} /> : null}
     </div>
   );

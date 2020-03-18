@@ -4,7 +4,7 @@ import { Link as RouterLink } from 'react-router-dom';
 import { useHistory } from 'react-router';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
-import { useDispatch } from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import { makeStyles } from '@material-ui/styles';
 import {
   AppBar,
@@ -29,12 +29,15 @@ import PeopleIcon from '@material-ui/icons/PeopleOutline';
 import InputIcon from '@material-ui/icons/Input';
 import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
-import axios from 'src/utils/axios';
+// import axios from 'src/utils/axios';
 import NotificationsPopover from 'src/components/NotificationsPopover';
 import PricingModal from 'src/components/PricingModal';
-import { logout } from 'src/actions';
+import {authSuccess, logout} from 'src/actions';
 import NoteOutlinedIcon from '@material-ui/icons/NoteOutlined';
+import axios from "../../utils/my_axios";
 import ChatBar from './ChatBar';
+import {swRegistration} from "../../registerServiceWorker";
+import {pushSave} from "../../actions";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -93,16 +96,16 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: theme.spacing(1)
   },
   notificationsButton: {
-    marginLeft: theme.spacing(1)
+    marginLeft: theme.spacing(0.5)
   },
   notificationsBadge: {
     backgroundColor: colors.orange[600]
   },
   logoutButton: {
-    marginLeft: theme.spacing(1)
+    marginLeft: theme.spacing(0.5)
   },
   logoutIcon: {
-    marginRight: theme.spacing(1)
+    marginRight: theme.spacing(0.5)
   }
 }));
 
@@ -123,6 +126,7 @@ function TopBar({
   const history = useHistory();
   const searchRef = useRef(null);
   const dispatch = useDispatch();
+  const session = useSelector((state) => state.session);
   const notificationsRef = useRef(null);
   const [openSearchPopover, setOpenSearchPopover] = useState(false);
   const [searchValue, setSearchValue] = useState('');
@@ -136,17 +140,17 @@ function TopBar({
     history.push('/auth/login');
   };
 
-  const handlePricingModalOpen = () => {
-    setPricingModalOpen(true);
-  };
+  // const handlePricingModalOpen = () => {
+  //   setPricingModalOpen(true);
+  // };
 
   const handlePricingModalClose = () => {
     setPricingModalOpen(false);
   };
 
-  const handleChatBarOpen = () => {
-    setOpenChatBar(true);
-  };
+  // const handleChatBarOpen = () => {
+  //   setOpenChatBar(true);
+  // };
 
   const handleChatBarClose = () => {
     setOpenChatBar(false);
@@ -160,39 +164,82 @@ function TopBar({
     setOpenNotifications(false);
   };
 
-  const handleSearchChange = (event) => {
-    setSearchValue(event.target.value);
+  // const handleSearchChange = (event) => {
+  //   setSearchValue(event.target.value);
+  //
+  //   if (event.target.value) {
+  //     if (!openSearchPopover) {
+  //       setOpenSearchPopover(true);
+  //     }
+  //   } else {
+  //     setOpenSearchPopover(false);
+  //   }
+  // };
 
-    if (event.target.value) {
-      if (!openSearchPopover) {
-        setOpenSearchPopover(true);
-      }
-    } else {
-      setOpenSearchPopover(false);
+  // const handleSearchPopverClose = () => {
+  //   setOpenSearchPopover(false);
+  // };
+
+  const urlB64ToUint8Array = (base64String) => {
+    const padding = '='.repeat((4 - base64String.length % 4) % 4);
+    const base64 = (base64String + padding)
+      .replace(/\-/g, '+')
+      .replace(/_/g, '/');
+
+    const rawData = window.atob(base64);
+    const outputArray = new Uint8Array(rawData.length);
+
+    for (let i = 0; i < rawData.length; ++i) {
+      outputArray[i] = rawData.charCodeAt(i);
     }
+    return outputArray;
   };
 
-  const handleSearchPopverClose = () => {
-    setOpenSearchPopover(false);
+  const updateSubscriptionOnServer = (subscription) => {
+    const headers = {Authorization: `Token ${localStorage.getItem('token')}`};
+    const axiosConfig = {headers};
+    const data = {pushInfo: subscription};
+
+    return axios.post('ea/create_push/', data, axiosConfig)
+      .then(response => {
+        if (response.status === 201) {
+          dispatch(pushSave({endpoint: subscription.endpoint}));
+        }
+      })
+      .catch(error => console.log(error)) // TODO 에러남기기
+  };
+
+  const setPushSubscribe = () => {
+    const applicationServerPublicKey = 'BBvGTYHuHHla8VcJjlLFyFpBM6iU-uaSqw5Afqgi_EkB9ctCvMRMKThD4_VJj8j9XZh8QdZf9O9HSjPcjc6jIZE';
+    const applicationServerKey = urlB64ToUint8Array(applicationServerPublicKey);
+    if (!('serviceWorker' in navigator)) { return; }
+    swRegistration.pushManager.subscribe({
+      userVisibleOnly: true,
+      applicationServerKey
+    }).then(subscription => updateSubscriptionOnServer(subscription));
   };
 
   useEffect(() => {
-    let mounted = true;
+    setTimeout(() => setPushSubscribe(), 1000);
 
-    const fetchNotifications = () => {
-      axios.get('/api/account/notifications').then((response) => {
-        if (mounted) {
-          setNotifications(response.data.notifications);
-        }
-      });
-    };
+    // let mounted = true;
+    //
+    // const fetchNotifications = () => {
+    //   axios.get('/api/account/notifications').then((response) => {
+    //     if (mounted) {
+    //       setNotifications(response.data.notifications);
+    //     }
+    //   });
+    // };
+    //
+    // fetchNotifications();
+    //
+    // return () => {
+    //   mounted = false;
+    // };
 
-    fetchNotifications();
-
-    return () => {
-      mounted = false;
-    };
   }, []);
+
 
   return (
     <AppBar
@@ -219,42 +266,43 @@ function TopBar({
           </Button>
         </RouterLink>
         <div className={classes.flexGrow} />
-        <IconButton
-          className={classes.chatButton}
+        {/* <Hidden mdDown> */}
+        {/*  <IconButton */}
+        {/*    className={classes.chatButton} */}
+        {/*  color="inherit" */}
+        {/*  onClick={handleChatBarOpen} */}
+        {/* > */}
+        {/*  <Badge */}
+        {/*    badgeContent={6} */}
+        {/*    color="secondary" */}
+        {/*  > */}
+        {/*    <PeopleIcon /> */}
+        {/*  </Badge> */}
+        {/* </IconButton> */}
+        {/* </Hidden> */}
+        {/*<IconButton*/}
+        {/*  className={classes.notificationsButton}*/}
+        {/*  color="inherit"*/}
+        {/*  // onClick={handleNotificationsOpen}*/}
+        {/*  onClick={setPushSubscribe}*/}
+        {/*  ref={notificationsRef}*/}
+        {/*>*/}
+        {/*  <Badge*/}
+        {/*    badgeContent={notifications.length}*/}
+        {/*    classes={{ badge: classes.notificationsBadge }}*/}
+        {/*    variant="dot"*/}
+        {/*  >*/}
+        {/*    <NotificationsIcon />*/}
+        {/*  </Badge>*/}
+        {/*</IconButton>*/}
+        <Button
+          className={classes.logoutButton}
           color="inherit"
-          onClick={handleChatBarOpen}
+          onClick={handleLogout}
         >
-          <Badge
-            badgeContent={6}
-            color="secondary"
-          >
-            <PeopleIcon />
-          </Badge>
-        </IconButton>
-        <Hidden mdDown>
-          <IconButton
-            className={classes.notificationsButton}
-            color="inherit"
-            onClick={handleNotificationsOpen}
-            ref={notificationsRef}
-          >
-            <Badge
-              badgeContent={notifications.length}
-              classes={{ badge: classes.notificationsBadge }}
-              variant="dot"
-            >
-              <NotificationsIcon />
-            </Badge>
-          </IconButton>
-          <Button
-            className={classes.logoutButton}
-            color="inherit"
-            onClick={handleLogout}
-          >
-            <InputIcon className={classes.logoutIcon} />
-            로그아웃
-          </Button>
-        </Hidden>
+          <InputIcon className={classes.logoutIcon} />
+          <Hidden mdDown>로그아웃</Hidden>
+        </Button>
       </Toolbar>
       <NotificationsPopover
         anchorEl={notificationsRef.current}

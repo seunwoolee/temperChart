@@ -11,7 +11,6 @@ import {ThemeProvider} from "@material-ui/styles";
 import {theme} from "./theme";
 import registerServiceWorker from "./registerServiceWorker";
 
-
 const store = configureStore();
 const app = (
   <StoreProvider store={store}>
