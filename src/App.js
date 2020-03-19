@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Redirect, Router} from 'react-router-dom';
+import {HashRouter, Redirect, Router} from 'react-router-dom';
 import {renderRoutes} from 'react-router-config';
 import {createBrowserHistory} from 'history';
 import MomentUtils from '@date-io/moment';
@@ -37,10 +37,10 @@ function App() {
 
   return (
     <MuiPickersUtilsProvider utils={MomentUtils}>
-      <Router history={history}>
+      <HashRouter>
         <ScrollReset/>
         {renderRoutes(routes)}
-      </Router>
+      </HashRouter>
     </MuiPickersUtilsProvider>
   );
 }
