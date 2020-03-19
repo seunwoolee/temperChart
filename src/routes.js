@@ -83,9 +83,17 @@ export default [
       {
         path: '/reportWrite',
         exact: true,
-        // render: (props) => (<PrivateRoute path={props.path}> <ReportCreate /> </PrivateRoute>)
         component: lazy(() => import('src/views/My_ReportCreate'))
-        // component: ReportCreate
+      },
+      {
+        path: '/reportApproved',
+        exact: true,
+        component: lazy(() => import('src/views/My_ReportWritten'))
+      },
+      {
+        path: '/reportRejected',
+        exact: true,
+        component: lazy(() => import('src/views/My_ReportWritten'))
       },
       {
         path: '/calendar',

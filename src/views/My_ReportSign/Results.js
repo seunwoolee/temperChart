@@ -20,6 +20,7 @@ import {
   Typography
 } from '@material-ui/core';
 import GenericMoreButton from 'src/components/GenericMoreButton';
+import {useSelector} from "react-redux";
 import BottomBar from "./BottomBar/BottomBar";
 import getShortBigo from "../../utils/getShortBigo";
 import useWindowDimensions from "../../components/WindowDimenstions";
@@ -28,6 +29,7 @@ import getCurrency from "../../utils/getCurrency";
 import MySnackbars from "../../components/MY_snackbar";
 import getPerfectScrollbarHeight from "../../utils/getPerfectScrollbarHeight";
 import {documents} from "../../mock";
+import axios from "../../utils/my_axios";
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -71,14 +73,16 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function Results({className, documents, ...rest}) {
+function Results({className, documents, fetchDocuments, ...rest}) {
   const [selectedDocuments, setSelectedDocuments] = useState([]);
+  const [invoices, setInvoices] = useState([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(25);
   const [openModal, setOpenModal] = useState(false);
   const {height, width} = useWindowDimensions();
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [isSuccess, setIsSuccess] = useState(true);
+  const session = useSelector((state) => state.session);
 
   const props = { mobileInnerHeight: getPerfectScrollbarHeight(rowsPerPage, documents.length, 60)};
   const classes = useStyles(props);
@@ -118,16 +122,47 @@ function Results({className, documents, ...rest}) {
     setRowsPerPage(event.target.value);
   };
 
-  const openReportModal = () => setOpenModal(true);
+  const openReportModal = () => {
+    const newDocument = selectedDocuments[0];
+    const headers = {Authorization: `Token ${session.token}`};
+    axios.get(`erp/voucher_list/${newDocument.batch_number}`, {headers})
+      .then((response) => {
+        setInvoices(response.data);
+        setOpenModal(true);
+      });
+  };
 
-  const completeReportModal = () => {
-    setSnackbarOpen(true);
-    setIsSuccess(true);
-    const newDocuments = selectedDocuments.slice(1);
-    if (newDocuments.length === 0) {
-      setOpenModal(false);
-    }
-    setSelectedDocuments(newDocuments);
+
+  const completeReportModal = (opinion: string, type: string) => {
+    const headers = {Authorization: `Token ${session.token}`};
+    const currentDocument = selectedDocuments[0];
+    const data = {
+      document_id: currentDocument.id,
+      username: session.user.id,
+      opinion,
+      sign_type: type
+    };
+
+    axios.post('ea/do_sign/', data, {headers})
+      .then(response => {
+        setSnackbarOpen(true);
+        setIsSuccess(true);
+        const newDocuments = selectedDocuments.slice(1);
+        if (newDocuments.length === 0) {
+          setOpenModal(false);
+          fetchDocuments();
+        }
+        setSelectedDocuments(newDocuments);
+      })
+      .catch(error => console.log(error)); // TODO 에러 로깅
+
+    // setSnackbarOpen(true);
+    // setIsSuccess(true);
+    // const newDocuments = selectedDocuments.slice(1);
+    // if (newDocuments.length === 0) {
+    //   setOpenModal(false);
+    // }
+    // setSelectedDocuments(newDocuments);
   };
 
   const closeReportModal = () => {
@@ -209,42 +244,18 @@ function Results({className, documents, ...rest}) {
                         />
                       </TableCell>
 
-                      <TableCell align="center" className={classes.whiteSpaceNoWrap}>{i}</TableCell>
+                      <TableCell align="center" className={classes.whiteSpaceNoWrap}>{document.id}</TableCell>
                       <TableCell className={classes.whiteSpaceNoWrap}>{document.title}</TableCell>
                       <TableCell align="center" className={classes.whiteSpaceNoWrap}>
                         {document.created}
                       </TableCell>
                       <TableCell align="center" className={classes.whiteSpaceNoWrap}>
-                        {document.group}
+                        {document.department}
                       </TableCell>
                       <TableCell align="center" className={classes.whiteSpaceNoWrap}>
                         {document.author}
                       </TableCell>
                       <TableCell align="center">{document.doc_status}</TableCell>
-
-
-                      {/* <TableCell align="center"> */}
-                      {/*  <div className={clsx(classes.nameCell, classes.whiteSpaceNoWrap)}> */}
-                      {/*    {document.id} */}
-                      {/*  </div> */}
-                      {/* </TableCell> */}
-                      {/* <TableCell align="center" className={classes.whiteSpaceNoWrap}>{document.title}</TableCell> */}
-                      {/* <TableCell align="center" className={classes.whiteSpaceNoWrap}> */}
-                      {/*  {getCurrency(document.총액)} */}
-                      {/* </TableCell> */}
-                      {/* <TableCell align="center" className={classes.whiteSpaceNoWrap}> */}
-                      {/*  <div className={classes.nameCell}> */}
-                      {/*    <Avatar */}
-                      {/*      className={classes.avatar} */}
-                      {/*      src={document.avatar} */}
-                      {/*    /> */}
-                      {/*    {document.사용자} */}
-                      {/*  </div> */}
-                      {/* </TableCell> */}
-                      {/* <TableCell>{getShortBigo(width, document.비고)}</TableCell> */}
-                      {/* <TableCell align="center" className={classes.whiteSpaceNoWrap}> */}
-                      {/*  {document.배치번호 + Math.floor(Math.random() * 70)} */}
-                      {/* </TableCell> */}
                     </TableRow>
                   ))}
                 </TableBody>
@@ -269,19 +280,23 @@ function Results({className, documents, ...rest}) {
          && (
          <Index
            document={selectedDocuments[0]}
+           invoices={invoices}
            onClose={closeReportModal}
            onComplete={completeReportModal}
            open={openModal}
          />
          )}
-      {snackbarOpen ? <MySnackbars open={snackbarOpen} setOpen={handleSnackbarOpen} isSuccess={isSuccess} /> : null}
+      {snackbarOpen
+        ? <MySnackbars open={snackbarOpen} setOpen={handleSnackbarOpen} isSuccess={isSuccess} />
+        : null}
     </div>
   );
 }
 
 Results.propTypes = {
   className: PropTypes.string,
-  documents: PropTypes.arrayOf(PropTypes.shape(documents))
+  documents: PropTypes.arrayOf(PropTypes.shape(documents)),
+  fetchDocuments: PropTypes.func
 };
 
 Results.defaultProps = {

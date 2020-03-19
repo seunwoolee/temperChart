@@ -23,12 +23,12 @@ import {
   Typography
 } from '@material-ui/core';
 import GenericMoreButton from 'src/components/GenericMoreButton';
+import {useSelector} from "react-redux";
 import useWindowDimensions from "../../components/WindowDimenstions";
 import Index from "./Modal";
 import MySnackbars from "../../components/MY_snackbar";
-import {documents} from '../../mock/my_documentsMock'
+import {documents} from '../../mock/my_documentsMock';
 import getPerfectScrollbarHeight from "../../utils/getPerfectScrollbarHeight";
-import {useSelector} from "react-redux";
 import axios from "../../utils/my_axios";
 
 const useStyles = makeStyles((theme) => ({
@@ -80,7 +80,6 @@ function Results({className, documents, ...rest}) {
   const [isSuccess, setIsSuccess] = useState(true);
   const session = useSelector((state) => state.session);
 
-
   const props = { mobileInnerHeight: getPerfectScrollbarHeight(rowsPerPage, documents.length, 60)};
   const classes = useStyles(props);
 
@@ -90,14 +89,13 @@ function Results({className, documents, ...rest}) {
 
   const handleTableClick = (id) => {
     const newDocument = documents.find(document => document.id === id);
-    const headers = {'Authorization': 'Token ' + session.token}
-    axios.get('erp/voucher_list/'+newDocument.batch_number, {headers: headers})
+    const headers = {Authorization: `Token ${session.token}`};
+    axios.get(`erp/voucher_list/${newDocument.batch_number}`, {headers})
       .then((response) => {
         setInvoices(response.data);
         setSelectedDocument(newDocument);
         setOpenModal(true);
-    });
-
+      });
   };
 
   const completeReportModal = () => {
@@ -110,7 +108,7 @@ function Results({className, documents, ...rest}) {
   const getClassName = () => width < 1024;
 
   const handleSnackbarOpen = (bool) => {
-      setSnackbarOpen(bool);
+    setSnackbarOpen(bool);
   };
 
   return (
@@ -161,12 +159,12 @@ function Results({className, documents, ...rest}) {
                       hover
                       key={document.id}
                     >
-                      <TableCell align='center' className={classes.whiteSpaceNoWrap }>{i}</TableCell>
+                      <TableCell align="center" className={classes.whiteSpaceNoWrap}>{document.id}</TableCell>
                       <TableCell className={classes.whiteSpaceNoWrap}>{document.title}</TableCell>
-                      <TableCell align='center' className={classes.whiteSpaceNoWrap}>{document.created}</TableCell>
-                      <TableCell align='center' className={classes.whiteSpaceNoWrap}>{document.department}</TableCell>
-                      <TableCell align='center' className={classes.whiteSpaceNoWrap}>{document.author}</TableCell>
-                      <TableCell align='center'>{document.doc_status}</TableCell>
+                      <TableCell align="center" className={classes.whiteSpaceNoWrap}>{document.created}</TableCell>
+                      <TableCell align="center" className={classes.whiteSpaceNoWrap}>{document.department}</TableCell>
+                      <TableCell align="center" className={classes.whiteSpaceNoWrap}>{document.author}</TableCell>
+                      <TableCell align="center">{document.doc_status}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
@@ -186,16 +184,19 @@ function Results({className, documents, ...rest}) {
           />
         </CardActions>
       </Card>
-      {openModal &&
+      {openModal
+      && (
       <Index
         document={selectedDocument}
         invoices={invoices}
         onClose={closeReportModal}
         onComplete={completeReportModal}
         open={openModal}
-      /> }
-
-      {snackbarOpen ? <MySnackbars open={snackbarOpen} setOpen={handleSnackbarOpen} isSuccess={isSuccess} /> : null}
+      />
+      ) }
+      {snackbarOpen
+        ? <MySnackbars open={snackbarOpen} setOpen={handleSnackbarOpen} isSuccess={isSuccess} />
+        : null}
     </div>
   );
 }

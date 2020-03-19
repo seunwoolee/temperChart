@@ -202,6 +202,7 @@ function TopBar({
 
     return axios.post('ea/create_push/', data, axiosConfig)
       .then(response => {
+        console.log('구독 완료');
         if (response.status === 201) {
           dispatch(pushSave({endpoint: subscription.endpoint}));
         }
@@ -220,7 +221,7 @@ function TopBar({
   };
 
   useEffect(() => {
-    setTimeout(() => setPushSubscribe(), 1000);
+    setTimeout(() => setPushSubscribe(), 3000);
 
     // let mounted = true;
     //

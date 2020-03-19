@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/styles';
 import { Container } from '@material-ui/core';
-import axios from "../../utils/my_axios";
 import Page from 'src/components/Page';
 import SearchBar from 'src/components/SearchBar';
+import {useSelector} from "react-redux";
+import { useLocation} from "react-router";
+import axios from "../../utils/my_axios";
 import Header from './Header';
 import Results from './Results';
-import {useSelector} from "react-redux";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -22,6 +23,7 @@ function ReportWritten() {
   const classes = useStyles();
   const [documents, setDocuments] = useState([]);
   const session = useSelector((state) => state.session);
+  const location = useLocation();
 
   const handleFilter = () => {};
 
@@ -29,10 +31,17 @@ function ReportWritten() {
 
   useEffect(() => {
     let mounted = true;
+    let url = `ea/written_document/${session.user.id}`;
+
+    if (location.pathname === '/reportRejected') {
+      url = `ea/rejected_document/${session.user.id}`;
+    } else if (location.pathname === '/reportApproved') {
+      url = `ea/approved_document/${session.user.id}`;
+    }
 
     const fetchDocuments = () => {
-      const headers = {'Authorization': 'Token ' + localStorage.getItem('token')}
-      axios.get('ea/written_document/'+session.user.id, {headers: headers}).then((response) => {
+      const headers = {Authorization: `Token ${localStorage.getItem('token')}`};
+      axios.get(url, {headers}).then((response) => {
         if (mounted) {
           setDocuments(response.data);
         }
@@ -44,7 +53,7 @@ function ReportWritten() {
     return () => {
       mounted = false;
     };
-  }, []);
+  }, [session.user.id]);
 
   return (
     <Page

@@ -21,6 +21,8 @@ import ReceiptRoundedIcon from '@material-ui/icons/ReceiptRounded';
 import SettingsIcon from '@material-ui/icons/SettingsOutlined';
 import ViewConfigIcon from '@material-ui/icons/ViewComfy';
 import CreateIcon from '@material-ui/icons/Create';
+import DescriptionRoundedIcon from '@material-ui/icons/DescriptionRounded';
+import DescriptionOutlinedIcon from '@material-ui/icons/DescriptionOutlined';
 import ListIcon from '@material-ui/icons/List';
 import Label from 'src/components/Label';
 
@@ -37,6 +39,16 @@ export default [
         title: '상신함',
         href: '/reportWritten',
         icon: ReceiptRoundedIcon
+      },
+      {
+        title: '기결함',
+        href: '/reportApproved',
+        icon: DescriptionOutlinedIcon
+      },
+      {
+        title: '반려함',
+        href: '/reportRejected',
+        icon: DescriptionRoundedIcon
       },
     ]
   },

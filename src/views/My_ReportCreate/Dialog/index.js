@@ -9,7 +9,9 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Dialog from '@material-ui/core/Dialog';
 import Typography from '@material-ui/core/Typography';
 import {blue} from '@material-ui/core/colors';
-import {Card, CardActions, CardContent, colors, Divider} from "@material-ui/core";
+import {
+  Card, CardActions, CardContent, colors, Divider
+} from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
 import IconButton from "@material-ui/core/IconButton";
 import PerfectScrollbar from "react-perfect-scrollbar";
@@ -21,7 +23,6 @@ import ArrowDownwardRoundedIcon from '@material-ui/icons/ArrowDownwardRounded';
 import ArrowUpwardRoundedIcon from '@material-ui/icons/ArrowUpwardRounded';
 import CancelPresentationIcon from '@material-ui/icons/CancelPresentation';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
-import axios from "../../../utils/my_axios";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import Collapse from "@material-ui/core/Collapse";
 import AddCircleOutlineOutlinedIcon from '@material-ui/icons/AddCircleOutlineOutlined';
@@ -30,8 +31,9 @@ import ExpandLessOutlinedIcon from '@material-ui/icons/ExpandLessOutlined';
 import Input from "@material-ui/core/Input";
 import SearchIcon from '@material-ui/icons/Search';
 import {useSelector} from "react-redux";
+import axios from "../../../utils/my_axios";
 
-const useStyles = makeStyles( (theme) => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     minWidth: 300,
     overflow: 'auto',
@@ -56,7 +58,7 @@ const useStyles = makeStyles( (theme) => ({
     justify: 'space-between'
   },
   search: {
-    padding: theme.spacing(1,0),
+    padding: theme.spacing(1, 0),
     display: 'flex',
     alignItems: 'center',
     justify: 'space-between'
@@ -125,8 +127,8 @@ const useStyles = makeStyles( (theme) => ({
 function ChooseDialog({ open, onClose, onSubmit }) {
   const classes = useStyles();
   const [users, setUsers] = React.useState([]);
-  const [departmentUsers,setDepartmentUsers] = React.useState([]);
-  const [allUsers,setAllUsers] = React.useState([]);
+  const [departmentUsers, setDepartmentUsers] = React.useState([]);
+  const [allUsers, setAllUsers] = React.useState([]);
   const [checked, setChecked] = React.useState(-1);
   const [expanded, setExpanded] = React.useState(false);
   const [addUserType, setAddUserType] = React.useState(10);
@@ -134,7 +136,7 @@ function ChooseDialog({ open, onClose, onSubmit }) {
 
 
   const handleChecked = (i) => {
-    if(i === checked){
+    if (i === checked) {
       return setChecked(-1);
     }
     setChecked(i);
@@ -148,14 +150,14 @@ function ChooseDialog({ open, onClose, onSubmit }) {
   const handleAddUserTypeChange = event => setAddUserType(event.target.value);
 
   const handleUserTypeChange = (event, userId) => {
-      const newUsers = users.filter(user => user.id !== userId);
-      const changedUser = users.find(user => user.id === userId);
-      setUsers([...newUsers, changedUser].sort(sortUsers));
+    const newUsers = users.filter(user => user.id !== userId);
+    const changedUser = users.find(user => user.id === userId);
+    setUsers([...newUsers, changedUser].sort(sortUsers));
   };
 
   const handleAddButton = (userId) => {
-    let newUser = typeUsers.find(user => user.id === userId);
-    if(users.find(user => user.id === userId)){
+    const newUser = typeUsers.find(user => user.id === userId);
+    if (users.find(user => user.id === userId)) {
       return alert('이미 등록되어 있습니다.');
     }
     newUser.order = users.reduce((max, n) => Math.max(max, n.order) + 1, 0);
@@ -165,9 +167,9 @@ function ChooseDialog({ open, onClose, onSubmit }) {
   const deleteUser = (index) => {
     const newUsers = users.filter(user => user.order !== index);
     const test = newUsers.map((user, i) => {
-      user.order = i
-      return user
-    })
+      user.order = i;
+      return user;
+    });
     setUsers(test.sort(sortUsers));
   };
 
@@ -182,73 +184,71 @@ function ChooseDialog({ open, onClose, onSubmit }) {
   };
 
   const setDown = () => {
-    if(checked === -1) {return;}
+    if (checked === -1) { return; }
 
-    const exceptUsers = users.filter(user => user.order !== checked && user.order !== checked+1);
-    const selectedUser = users.find( user => user.order === checked);
-    const nextSelectedUser = users.find( user => user.order === checked+1);
-    if(nextSelectedUser){
+    const exceptUsers = users.filter(user => user.order !== checked && user.order !== checked + 1);
+    const selectedUser = users.find(user => user.order === checked);
+    const nextSelectedUser = users.find(user => user.order === checked + 1);
+    if (nextSelectedUser) {
       const newUsers = [...exceptUsers,
-        {...nextSelectedUser, order: nextSelectedUser.order-1},
-        {...selectedUser, order: selectedUser.order+1}];
-      setChecked(selectedUser.order+1);
+        {...nextSelectedUser, order: nextSelectedUser.order - 1},
+        {...selectedUser, order: selectedUser.order + 1}];
+      setChecked(selectedUser.order + 1);
       setUsers(newUsers.sort(sortUsers));
     }
   };
 
   const setUp = () => {
-    if(checked === -1) {return;}
+    if (checked === -1) { return; }
 
-    const exceptUsers = users.filter(user => user.order !== checked && user.order !== checked-1);
-    const selectedUser = users.find( user => user.order === checked);
-    const prevSelectedUser = users.find( user => user.order === checked-1);
-    if(prevSelectedUser){
+    const exceptUsers = users.filter(user => user.order !== checked && user.order !== checked - 1);
+    const selectedUser = users.find(user => user.order === checked);
+    const prevSelectedUser = users.find(user => user.order === checked - 1);
+    if (prevSelectedUser) {
       const newUsers = [...exceptUsers,
-        {...prevSelectedUser, order: prevSelectedUser.order+1},
-        {...selectedUser, order: selectedUser.order-1}];
-      setChecked(selectedUser.order-1);
+        {...prevSelectedUser, order: prevSelectedUser.order + 1},
+        {...selectedUser, order: selectedUser.order - 1}];
+      setChecked(selectedUser.order - 1);
       setUsers(newUsers.sort(sortUsers));
     }
   };
 
   useEffect(() => {
     let mounted = true;
-    const headers = {'Authorization': 'Token ' + session.token}
+    const headers = {Authorization: `Token ${session.token}`};
     const fetchUsers = () => {
-      axios.get('ea/get_defaultUsers/' + session.user.id, {headers: headers}).then(response => {
-        if(mounted) {
-          console.log('default',response.data);
+      axios.get(`ea/get_defaultUsers/${session.user.id}`, {headers}).then(response => {
+        if (mounted) {
           setUsers(response.data);
         }
-      })
+      });
     };
 
     const fetchDepartmentUsers = () => {
-      axios.get('ea/get_departmentUsers/' + session.user.department, {headers: headers}).then(response => {
-        if(mounted) {
-          console.log('department',response.data);
+      axios.get(`ea/get_departmentUsers/${session.user.department}`, {headers}).then(response => {
+        if (mounted) {
           setDepartmentUsers(response.data);
         }
-      })
+      });
     };
 
-    //
-    // const fetchAllUsers = () => {
-    //   axios.get('/api/allUsers').then((response) => {
-    //     if (mounted) {
-    //       setAllUsers(response.data.users);
-    //     }
-    //   });
-    // };
+    const fetchAllUsers = () => {
+      axios.get('ea/get_allUsers/', {headers}).then((response) => {
+        // debugger;
+        if (mounted) {
+          setAllUsers(response.data);
+        }
+      });
+    };
 
     fetchUsers();
     fetchDepartmentUsers();
-    // fetchAllUsers();
+    fetchAllUsers();
 
     return () => {
       mounted = false;
     };
-  }, []);
+  }, [session.token, session.user.department, session.user.id]);
 
   const typeUsers = addUserType === 10 ? departmentUsers : allUsers;
 
@@ -265,7 +265,7 @@ function ChooseDialog({ open, onClose, onSubmit }) {
             justify="space-between"
             alignItems="center"
           >
-            <Grid item >
+            <Grid item>
               <Typography variant="h4" component="h4">
                 결재순서
               </Typography>
@@ -277,7 +277,7 @@ function ChooseDialog({ open, onClose, onSubmit }) {
               <IconButton onClick={setUp} className={classes.arrowIconButtom} aria-label="up-order">
                 <ArrowUpwardRoundedIcon className={classes.personAddIncon} color="inherit" />
               </IconButton>
-              <IconButton onClick={() => setExpanded(true)} style={{paddingRight:3}} aria-label="add-user">
+              <IconButton onClick={() => setExpanded(true)} style={{paddingRight: 3}} aria-label="add-user">
                 <PersonAddIcon className={classes.personAddIncon} color="inherit" />
               </IconButton>
             </Grid>
@@ -289,52 +289,51 @@ function ChooseDialog({ open, onClose, onSubmit }) {
             <List disablePadding>
               {users.map((user, i) => (
                 <Fragment key={user.id}>
-                <FormControl className={classes.formControl}>
-                  <Select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    defaultValue={user.type}
-                    onChange={(event) => handleUserTypeChange(event, user.id)}
+                  <FormControl className={classes.formControl}>
+                    <Select
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      defaultValue={user.type}
+                      onChange={(event) => handleUserTypeChange(event, user.id)}
+                    >
+                      <MenuItem value={0}>결재</MenuItem>
+                      <MenuItem value={1}>합의</MenuItem>
+                      <MenuItem value={2}>참조</MenuItem>
+                    </Select>
+                  </FormControl>
+                  <ListItem
+                    selected={user.order === checked}
+                    button
+                    onClick={() => handleChecked(user.order)}
+                    className={classes.listItem}
+                    disableGutters
+                    divider={user.order < users.length - 1}
+                    key={user.id}
                   >
-                    <MenuItem value={0}>결재</MenuItem>
-                    <MenuItem value={1}>합의</MenuItem>
-                    <MenuItem value={2}>참조</MenuItem>
-                  </Select>
-                </FormControl>
-                <ListItem
-                  selected={user.order === checked}
-                  button
-                  onClick={() => handleChecked(user.order)}
-                  className={classes.listItem}
-                  disableGutters
-                  divider={user.order < users.length - 1}
-                  key={user.id}
-                >
-                <Avatar
-                  alt="Profile image"
-                  className={classes.avatar}
-                  component={RouterLink}
-                  src={'http://localhost:8000'+user.avatar} // TODO URL 변경 필요
-                  to="/profile/1/timeline"
-                />
-                <ListItemText
-                  className={classes.listItemText}
-                  primary={`${user.name} ${user.position}`}
-                  secondary={user.common}
-                >
-                </ListItemText>
-                <ListItemSecondaryAction classes={{root: classes.deleteUserButton}}>
-                  <IconButton onClick={() => deleteUser(user.order)} aria-label="delete-user">
-                    <CancelPresentationIcon fontSize="large"/>
-                  </IconButton>
-                </ListItemSecondaryAction>
-                </ListItem>
+                    <Avatar
+                      alt="Profile image"
+                      className={classes.avatar}
+                      component={RouterLink}
+                      src={`http://localhost:8000${user.avatar}`} // TODO URL 변경 필요
+                      to="/profile/1/timeline"
+                    />
+                    <ListItemText
+                      className={classes.listItemText}
+                      primary={`${user.name} ${user.position}`}
+                      secondary={user.common}
+                    />
+                    <ListItemSecondaryAction classes={{root: classes.deleteUserButton}}>
+                      <IconButton onClick={() => deleteUser(user.order)} aria-label="delete-user">
+                        <CancelPresentationIcon fontSize="large" />
+                      </IconButton>
+                    </ListItemSecondaryAction>
+                  </ListItem>
                 </Fragment>
               ))}
             </List>
           </PerfectScrollbar>
         </CardContent>
-        <Divider/>
+        <Divider />
         <CardActions className={classes.actions}>
           <Button onClick={onClose}>
             취소
@@ -349,63 +348,61 @@ function ChooseDialog({ open, onClose, onSubmit }) {
         </CardActions>
         <Collapse in={expanded} timeout="auto" unmountOnExit>
           <CardHeader
-            action={
+            action={(
               <IconButton onClick={() => setExpanded(false)} aria-label="settings">
-                <ExpandLessOutlinedIcon fontSize="large"/>
+                <ExpandLessOutlinedIcon fontSize="large" />
               </IconButton>
-            }
-            title="결재자 추가" />
+            )}
+            title="결재자 추가"
+          />
           <CardContent className={classes.content}>
-              <List disablePadding>
-                <ListItem className={classes.search}>
-                  <Select
-                    onChange={handleAddUserTypeChange}
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    defaultValue={addUserType}
-                  >
-                    <MenuItem value={10}>내부서</MenuItem>
-                    <MenuItem value={20}>이름</MenuItem>
-                  </Select>
-                    <SearchIcon
-                      className={classes.searchIcon}
-                      color="inherit"
-                    />
-                    <Input
-                      className={classes.searchInput}
-                      disableUnderline
-                      placeholder="Search people &amp; places"
-                    />
+            <List disablePadding>
+              <ListItem className={classes.search}>
+                <Select
+                  onChange={handleAddUserTypeChange}
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  defaultValue={addUserType}
+                >
+                  <MenuItem value={10}>내부서</MenuItem>
+                  <MenuItem value={20}>이름</MenuItem>
+                </Select>
+                <SearchIcon
+                  className={classes.searchIcon}
+                  color="inherit"
+                />
+                <Input
+                  className={classes.searchInput}
+                  disableUnderline
+                  placeholder="Search people &amp; places"
+                />
+              </ListItem>
+              {typeUsers.map((user, i) => (
+                <ListItem
+                  button
+                  className={classes.listItem}
+                  disableGutters
+                  divider
+                  key={user.id}
+                >
+                  <Avatar
+                    alt="Profile image"
+                    className={classes.avatar}
+                    src={`http://localhost:8000${user.avatar}`} // TODO URL 변경 필요
+                  />
+                  <ListItemText
+                    className={classes.listItemText}
+                    primary={`${user.name} ${user.position}`}
+                    secondary={user.common}
+                  />
+                  <ListItemSecondaryAction classes={{root: classes.deleteUserButton}}>
+                    <IconButton onClick={() => handleAddButton(user.id)} aria-label="add-user">
+                      <AddCircleOutlineOutlinedIcon fontSize="large" />
+                    </IconButton>
+                  </ListItemSecondaryAction>
                 </ListItem>
-                {typeUsers.map((user, i) => (
-                    <ListItem
-                      button
-                      className={classes.listItem}
-                      disableGutters
-                      divider={user.order < users.length - 1}
-                      key={user.id}
-                    >
-                      <Avatar
-                        alt="Profile image"
-                        className={classes.avatar}
-                        component={RouterLink}
-                        src={user.avatar}
-                        to="/profile/1/timeline"
-                      />
-                      <ListItemText
-                        className={classes.listItemText}
-                        primary={`${user.name} ${user.position}`}
-                        secondary={user.common}
-                      >
-                      </ListItemText>
-                      <ListItemSecondaryAction classes={{root: classes.deleteUserButton}}>
-                        <IconButton onClick={() => handleAddButton(user.id)} aria-label="add-user">
-                          <AddCircleOutlineOutlinedIcon fontSize="large"/>
-                        </IconButton>
-                      </ListItemSecondaryAction>
-                    </ListItem>
-                ))}
-              </List>
+              ))}
+            </List>
           </CardContent>
         </Collapse>
       </Card>

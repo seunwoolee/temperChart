@@ -4,28 +4,24 @@ import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import {Grid} from "@material-ui/core";
 import {makeStyles} from "@material-ui/styles";
 import PropTypes from "prop-types";
-import {documents} from "../../../mock";
-import Index from "../Modal";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   rejectBtn: {
     backgroundColor: '#ff6966',
   }
 }));
 
-export default function FormDialog({open, onClose, onApprove, onReject}) {
+export default function FormDialog({
+  open, onClose, onApprove, onReject
+}) {
   const classes = useStyles();
   const [inputOpinion, setInputOpinion] = useState('');
 
   const handleChangeOpinion = (event) => {
     setInputOpinion(event.target.value);
   };
-
 
   return (
     <div>
@@ -42,10 +38,10 @@ export default function FormDialog({open, onClose, onApprove, onReject}) {
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={()=>onApprove(inputOpinion)} color="primary" variant="contained">
+          <Button onClick={() => onApprove(inputOpinion)} color="primary" variant="contained">
             결재
           </Button>
-          <Button onClick={()=>onReject(inputOpinion)} className={classes.rejectBtn} variant="contained">
+          <Button onClick={() => onReject(inputOpinion)} className={classes.rejectBtn} variant="contained">
             반려
           </Button>
           <Button onClick={onClose} color="primary" variant="outlined">

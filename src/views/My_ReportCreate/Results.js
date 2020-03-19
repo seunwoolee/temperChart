@@ -25,10 +25,10 @@ import getShortBigo from "../../utils/getShortBigo";
 import useWindowDimensions from "../../components/WindowDimenstions";
 import Index from "./Modal";
 import getCurrency from "../../utils/getCurrency";
-import {invoices} from "../../mock/";
+import {invoices, voucher} from "../../mock";
 import MySnackbars from "../../components/MY_snackbar";
 import getPerfectScrollbarHeight from "../../utils/getPerfectScrollbarHeight";
-import {voucher} from "../../mock";
+
 // import WriteReportModal from "../CustomerManagementDetails/Summary/WriteReporttModal";
 
 const useStyles = makeStyles((theme) => ({
@@ -82,8 +82,8 @@ function Results({className, invoices, ...rest}) {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [isSuccess, setIsSuccess] = useState(true);
   let prevBatchNumber = 0;
-  const startData = page*rowsPerPage;
-  const endData = (page*rowsPerPage) + rowsPerPage;
+  const startData = page * rowsPerPage;
+  const endData = (page * rowsPerPage) + rowsPerPage;
   const dispalyedInvoices = invoices.slice(startData, endData);
   const props = {mobileInnerHeight: getPerfectScrollbarHeight(rowsPerPage, invoices.length, 80)};
   const classes = useStyles(props);
@@ -92,9 +92,7 @@ function Results({className, invoices, ...rest}) {
     event.target.checked ? setSelectedInvoices(dispalyedInvoices) : setSelectedInvoices([]);
   };
 
-  const getSameBatchInvoices = (invoice) => {
-    return selectedInvoices.filter(my_invoice => my_invoice.batchNumber === invoice.batchNumber)
-  }
+  const getSameBatchInvoices = (invoice) => selectedInvoices.filter(my_invoice => my_invoice.batchNumber === invoice.batchNumber);
 
   const handleSelectOne = (event, invoice) => {
     const selectedIndex = selectedInvoices.map(invoice => invoice.batchNumber).indexOf(invoice.batchNumber);
@@ -103,7 +101,7 @@ function Results({className, invoices, ...rest}) {
     let newSelectedInvocies = [];
 
     if (selectedIndex === -1) { // check this one
-      const sameBatchInvoices = invoices.filter(my_invoice => my_invoice.batchNumber === invoice.batchNumber)
+      const sameBatchInvoices = invoices.filter(my_invoice => my_invoice.batchNumber === invoice.batchNumber);
       newSelectedInvocies = newSelectedInvocies.concat(selectedInvoices, sameBatchInvoices);
     } else if (selectedIndex === 0) { // uncheck this one
       newSelectedInvocies = newSelectedInvocies.concat(
@@ -116,7 +114,7 @@ function Results({className, invoices, ...rest}) {
     } else if (selectedIndex > 0) { // uncheck n-nth one
       newSelectedInvocies = newSelectedInvocies.concat(
         selectedInvoices.slice(0, selectedIndex), // 앞에꺼 추가
-        selectedInvoices.slice(selectedIndex+sameBatchInvoices.length) // 뒤에꺼 추가
+        selectedInvoices.slice(selectedIndex + sameBatchInvoices.length) // 뒤에꺼 추가
       );
     }
     setSelectedInvoices(newSelectedInvocies);
@@ -135,9 +133,9 @@ function Results({className, invoices, ...rest}) {
   const completeReportModal = () => {
     setSnackbarOpen(true);
     setIsSuccess(true);
-    const sameBatchInvoices = getSameBatchInvoices(selectedInvoices[0])
+    const sameBatchInvoices = getSameBatchInvoices(selectedInvoices[0]);
     const newInvoices = selectedInvoices.slice(sameBatchInvoices.length);
-    if(newInvoices.length === 0){
+    if (newInvoices.length === 0) {
       setOpenModal(false);
     }
 
@@ -152,20 +150,21 @@ function Results({className, invoices, ...rest}) {
 
   const handleSnackbarOpen = (bool) => {
     setSnackbarOpen(bool);
-  }
+  };
 
   const createColspanData = (batchNumber) => {
-    prevBatchNumber = batchNumber
-    return invoices.filter(invoice => prevBatchNumber === invoice.batchNumber)
-  }
+    prevBatchNumber = batchNumber;
+    return invoices.filter(invoice => prevBatchNumber === invoice.batchNumber);
+  };
 
   const tableRowcheckBox = (invoice) => {
-    const sameBatchInvoices = createColspanData(invoice.batchNumber)
+    const sameBatchInvoices = createColspanData(invoice.batchNumber);
     return (
       <TableCell
         // rowSpan={sameBatchInvoices.length}
         align="center"
-        padding="checkbox">
+        padding="checkbox"
+      >
         <Checkbox
           checked={
             selectedInvoices.map(invoice => invoice.id).indexOf(invoice.id) !== -1
@@ -176,8 +175,8 @@ function Results({className, invoices, ...rest}) {
           value={selectedInvoices.map(invoice => invoice.id).indexOf(invoice.id) !== -1}
         />
       </TableCell>
-    )
-  }
+    );
+  };
 
   return (
     <div
@@ -201,10 +200,10 @@ function Results({className, invoices, ...rest}) {
       </Typography>
       <Card>
         <CardHeader
-          action={<GenericMoreButton/>}
+          action={<GenericMoreButton />}
           title="전표 내역"
         />
-        <Divider/>
+        <Divider />
         <CardContent className={classes.content}>
           <PerfectScrollbar>
             <div className={getClassName() ? classes.mobileInner : classes.inner}>
@@ -246,18 +245,18 @@ function Results({className, invoices, ...rest}) {
                         {getCurrency(invoice.price)}
                       </TableCell>
                       <TableCell>{getShortBigo(width, invoice.bigo)}</TableCell>
-                      {/*<TableCell align="center" className={classes.whiteSpaceNoWrap}>*/}
-                      {/*  <div className={classes.nameCell}>*/}
-                      {/*    <Avatar*/}
-                      {/*      className={classes.avatar}*/}
-                      {/*      src={invoice.avatar}*/}
-                      {/*    />*/}
-                      {/*    {invoice.author}*/}
-                      {/*  </div>*/}
-                      {/*</TableCell>*/}
-                      {/*<TableCell align="center" className={classes.whiteSpaceNoWrap}>*/}
-                      {/*    {invoice.batchNumber}*/}
-                      {/*</TableCell>*/}
+                      {/* <TableCell align="center" className={classes.whiteSpaceNoWrap}> */}
+                      {/*  <div className={classes.nameCell}> */}
+                      {/*    <Avatar */}
+                      {/*      className={classes.avatar} */}
+                      {/*      src={invoice.avatar} */}
+                      {/*    /> */}
+                      {/*    {invoice.author} */}
+                      {/*  </div> */}
+                      {/* </TableCell> */}
+                      {/* <TableCell align="center" className={classes.whiteSpaceNoWrap}> */}
+                      {/*    {invoice.batchNumber} */}
+                      {/* </TableCell> */}
                     </TableRow>
                   ))}
                 </TableBody>
@@ -277,7 +276,7 @@ function Results({className, invoices, ...rest}) {
           />
         </CardActions>
       </Card>
-      <BottomBar onOpenModal={openReportModal} selected={selectedInvoices}/>
+      <BottomBar onOpenModal={openReportModal} selected={selectedInvoices} />
       {openModal && selectedInvoices.length
       && (
         <Index
@@ -287,7 +286,7 @@ function Results({className, invoices, ...rest}) {
           open={openModal}
         />
       )}
-      {snackbarOpen ? <MySnackbars open={snackbarOpen} setOpen={handleSnackbarOpen} isSuccess={isSuccess}/> : null}
+      {snackbarOpen ? <MySnackbars open={snackbarOpen} setOpen={handleSnackbarOpen} isSuccess={isSuccess} /> : null}
 
     </div>
   );

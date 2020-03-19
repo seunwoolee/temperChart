@@ -15,16 +15,16 @@ import {
 } from '@material-ui/core';
 import TableContainer from "@material-ui/core/TableContainer";
 import Paper from "@material-ui/core/Paper";
+import {useSelector} from "react-redux";
 import MySnackbars from "../../../components/MY_snackbar";
-import InvoiceCard from "./InvoiceCard";
 import ChooseDialog from '../Dialog';
-import Attachments from "./attachments";
 // import axios from "../../../utils/axios";
 import {documents} from "../../../mock/my_documentsMock";
 import MY_approverLine from "../../../components/MY_approverLine";
 import getCurrency from "../../../utils/getCurrency";
-import {useSelector} from "react-redux";
 import axios from "../../../utils/my_axios";
+import MY_attachmentsBase from "../../../components/MY_attachmentsBase";
+import MY_InvoiceCard from "../../../components/MY_InvoiceCard";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -132,10 +132,10 @@ function Index({
                           <TableCell className={classes.tableCellContent}>제목</TableCell>
                           <TableCell>{document.title}</TableCell>
                         </TableRow>
-                        {/*<TableRow>*/}
-                        {/*  <TableCell className={classes.tableCellContent}>내용</TableCell>*/}
-                        {/*  <TableCell>{document.content}</TableCell>*/}
-                        {/*</TableRow>*/}
+                        {/* <TableRow> */}
+                        {/*  <TableCell className={classes.tableCellContent}>내용</TableCell> */}
+                        {/*  <TableCell>{document.content}</TableCell> */}
+                        {/* </TableRow> */}
                       </TableBody>
                     </Table>
                   </TableContainer>
@@ -146,28 +146,14 @@ function Index({
                   md={12}
                   xs={12}
                 >
-                  <Typography variant="h5">
-                    총
-                    {' '}
-                    {invoices.length}
-                    건 /
-                    {' '}
-                    {getSumInvoices()}
-                    원
-                  </Typography>
-                  {invoices.map((invoice) => (
-                    <InvoiceCard
-                      key={invoice.id}
-                      invoice={invoice}
-                    />
-                  ))}
+                  <MY_InvoiceCard invoices={invoices} />
                 </Grid>
                 <Grid
                   item
                   md={12}
                   xs={12}
                 >
-                  <Attachments attachments={document.attachments}/>
+                  <MY_attachmentsBase attachments={document.attachments} />
                 </Grid>
               </Grid>
             </CardContent>

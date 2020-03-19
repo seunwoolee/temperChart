@@ -14,7 +14,7 @@ import Index from "../views/My_ReportWritten/Modal";
 import {signs} from "../mock/my_signsMock";
 
 
-const useStyles = makeStyles(theme=> ({
+const useStyles = makeStyles(theme => ({
   root: {
     padding: theme.spacing(0.5)
     // paddingLeft: theme.spacing(1),
@@ -37,38 +37,35 @@ const useStyles = makeStyles(theme=> ({
 export default function ApproverTable({signs}) {
   const classes = useStyles();
   return (
-
     <TableContainer component={Paper}>
       <Table size="small" aria-label="a dense table">
         <TableHead className={classes.header}>
           <TableRow>
             {signs.map(sign => (
               <TableCell key={sign.user.id} align="center" className={clsx(classes.gridCell, classes.root)}>{sign.user.position}</TableCell>
-              )
-            )}
+            ))}
           </TableRow>
         </TableHead>
         <TableBody>
-          <TableRow >
+          <TableRow>
             {signs.map(sign => (
-                <TableCell key={sign.user.id} align="center" className={clsx(classes.gridCell, classes.root)}>
-                  {sign.user.name}
-                </TableCell>
-              )
-            )}
+              <TableCell key={sign.user.id} align="center" className={clsx(classes.gridCell, classes.root)}>
+                {sign.user.name}
+              </TableCell>
+            ))}
           </TableRow>
         </TableBody>
         <TableBody>
           <TableRow>
             {signs.map(sign => (
-                <TableCell
-                    key={sign.user.id}
-                    align="center"
-                    className={clsx(clsx(classes.gridCell, classes.signDateCell, classes.root))}>
-                  {sign.sign_date ? sign.sign_date.substring(0, 10): <br />}
-                </TableCell>
-              )
-            )}
+              <TableCell
+                key={sign.user.id}
+                align="center"
+                className={clsx(clsx(classes.gridCell, classes.signDateCell, classes.root))}
+              >
+                {sign.sign_date ? sign.sign_date.substring(0, 10) : <br />}
+              </TableCell>
+            ))}
           </TableRow>
         </TableBody>
       </Table>
@@ -79,4 +76,3 @@ export default function ApproverTable({signs}) {
 ApproverTable.propTypes = {
   signs: PropTypes.arrayOf(PropTypes.shape(signs))
 };
-
