@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {HashRouter, Redirect, Router} from 'react-router-dom';
+import {HashRouter, Redirect, Router, Switch, Route} from 'react-router-dom';
 import {renderRoutes} from 'react-router-config';
 import {createBrowserHistory} from 'history';
 import MomentUtils from '@date-io/moment';
@@ -20,6 +20,8 @@ import './mock';
 import './assets/scss/main.scss';
 import {authCheckState} from "./actions";
 import {Dispatch} from "redux";
+import {Home} from "@material-ui/icons";
+import Login from "./views/Login";
 
 
 const history = createBrowserHistory();
@@ -27,18 +29,32 @@ const history = createBrowserHistory();
 function App() {
   const dispatch: Dispatch = useDispatch();
 
+  console.log('[APP]', history);
+
   useEffect(() => {
-    dispatch(authCheckState())
-    const token = localStorage.getItem('token');
-    if(!token){
-      history.push('/auth/login');
-    }
+    console.log('[APP] useEffect', history);
+
+    dispatch(authCheckState());
+    // history.push('/reportSign');
+    // token ? history.push('/reportSign') : history.push('/auth/login');
+  //   if(!token){
+  //     history.push('/auth/login');
+  //   }
   }, []);
+
 
   return (
     <MuiPickersUtilsProvider utils={MomentUtils}>
-      <HashRouter>
+      <HashRouter history={history}>
         <ScrollReset/>
+        <Switch>
+          {/*<Route exact path="/">*/}
+          {/*  <Login />*/}
+          {/*</Route>*/}
+          {/*<Route path="/topics">*/}
+          {/*  <Topics />*/}
+          {/*</Route>*/}
+        </Switch>
         {renderRoutes(routes)}
       </HashRouter>
     </MuiPickersUtilsProvider>

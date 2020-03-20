@@ -9,19 +9,14 @@ import DashboardAnalyticsView from './views/DashboardAnalytics';
 import DashboardDefaultView from './views/DashboardDefault';
 import OverviewView from './views/Overview';
 import PresentationView from './views/Presentation';
-import AuthEx from "./components/study/AuthEx";
+import Root from "./Root";
 import ReportCreate from "./views/My_ReportCreate";
 
 export default [
   {
-    path: '/counter',
-    exact: true,
-    component: AuthEx
-  },
-  {
     path: '/',
     exact: true,
-    component: () => <Redirect to="/reportSign" />
+    component: Root
   },
   {
     path: '/auth',
