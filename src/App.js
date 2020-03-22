@@ -28,8 +28,7 @@ const history = createBrowserHistory();
 
 function App() {
   const dispatch: Dispatch = useDispatch();
-
-  console.log('[APP]', history);
+  const [token, setToken] = useState(localStorage.getItem('token'));
 
   useEffect(() => {
     console.log('[APP] useEffect', history);
@@ -37,9 +36,9 @@ function App() {
     dispatch(authCheckState());
     // history.push('/reportSign');
     // token ? history.push('/reportSign') : history.push('/auth/login');
-  //   if(!token){
-  //     history.push('/auth/login');
-  //   }
+    if (!token) {
+      history.push('/');
+    }
   }, []);
 
 
