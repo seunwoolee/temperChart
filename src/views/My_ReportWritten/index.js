@@ -53,7 +53,7 @@ function ReportWritten() {
     return () => {
       mounted = false;
     };
-  }, [session.user.id]);
+  }, [location.pathname, session.user.id]);
 
   return (
     <Page

@@ -1,12 +1,12 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import {makeStyles} from '@material-ui/styles';
 import {Container} from '@material-ui/core';
-import axios from "../../utils/my_axios";
 import Page from 'src/components/Page';
 import SearchBar from 'src/components/SearchBar';
+import {useSelector} from "react-redux";
+import axios from "../../utils/my_axios";
 import Header from './Header';
 import Results from './Results';
-import {useSelector} from "react-redux";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -31,14 +31,15 @@ function ReportSign() {
 
   const fetchDocuments = () => {
     const headers = {Authorization: `Token ${localStorage.getItem('token')}`};
-    axios.get(`ea/sign_document/${session.user.id}`, {headers}).then((response) => {
-      setDocuments(response.data);
-    });
+    axios.get(`ea/sign_document/${session.user.id}`, {headers})
+      .then((response) => {
+        setDocuments(response.data);
+      });
   };
 
   useEffect(() => {
     fetchDocuments();
-  }, []);
+  }, [session.user.id]);
 
   return (
     <Page
@@ -49,7 +50,7 @@ function ReportSign() {
         maxWidth={false}
         className={classes.container}
       >
-        <Header/>
+        <Header />
         <SearchBar
           onFilter={handleFilter}
           onSearch={handleSearch}
