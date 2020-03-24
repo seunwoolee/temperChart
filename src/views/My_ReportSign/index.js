@@ -2,11 +2,13 @@ import React, {useState, useEffect, useCallback} from 'react';
 import {makeStyles} from '@material-ui/styles';
 import {Container} from '@material-ui/core';
 import Page from 'src/components/Page';
-import SearchBar from 'src/components/SearchBar';
+// import MY_SearchBar from 'src/components/MY_SearchBar';
 import {useSelector} from "react-redux";
+import moment from "moment";
 import axios from "../../utils/my_axios";
 import Header from './Header';
 import Results from './Results';
+import MY_SearchBar from "../../components/MY_SearchBar";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -18,23 +20,46 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
+const initialValues = {
+  name: '',
+  startDate: moment(),
+  endDate: moment().add(1, 'day')
+};
+
+
 function ReportSign() {
   const classes = useStyles();
+  const [inputDateValues, setInputDateValues] = useState({...initialValues});
+  const [inputSearchContent, setInputSearchContent] = useState('');
   const [documents, setDocuments] = useState([]);
   const session = useSelector((state) => state.session);
 
   const handleFilter = () => {
   };
 
-  const handleSearch = () => {
+  const handleSearchContent = (event) => {
+    setInputSearchContent(event.target.value);
   };
 
   const fetchDocuments = () => {
-    const headers = {Authorization: `Token ${localStorage.getItem('token')}`};
-    axios.get(`ea/sign_document/${session.user.id}`, {headers})
+    const config = {
+      headers: {Authorization: `Token ${localStorage.getItem('token')}`},
+      params: {
+        startDate: moment(inputDateValues.startDate).format('YYYY-MM-DD'),
+        endDate: moment(inputDateValues.endDate).format('YYYY-MM-DD'),
+        search: inputSearchContent
+      }
+    };
+
+    axios.get(`ea/sign_document/${session.user.id}`, config)
       .then((response) => {
         setDocuments(response.data);
       });
+  };
+
+  const handleSearch = () => {
+    console.log('[handleSearch]')
+    fetchDocuments();
   };
 
   useEffect(() => {
@@ -51,7 +76,11 @@ function ReportSign() {
         className={classes.container}
       >
         <Header />
-        <SearchBar
+        <MY_SearchBar
+          searchContent={inputSearchContent}
+          setSearchContent={handleSearchContent}
+          dateValues={inputDateValues}
+          setDateValues={setInputDateValues}
           onFilter={handleFilter}
           onSearch={handleSearch}
         />

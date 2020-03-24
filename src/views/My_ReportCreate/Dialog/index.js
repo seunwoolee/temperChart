@@ -143,7 +143,6 @@ function ChooseDialog({ open, onClose, onSubmit }) {
   };
 
   const handleSubmit = () => {
-    debugger;
     onSubmit(users);
   };
 

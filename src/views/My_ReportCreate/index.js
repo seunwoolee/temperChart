@@ -2,12 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/styles';
 import { Container } from '@material-ui/core';
 // import axios from 'src/utils/axios';
-import axios from "../../utils/my_axios";
 import Page from 'src/components/Page';
 import SearchBar from 'src/components/SearchBar';
+import {useSelector} from "react-redux";
+import axios from "../../utils/my_axios";
 import Header from './Header';
 import Results from './Results';
-import {useSelector} from "react-redux";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -32,8 +32,8 @@ function ReportCreate() {
     let mounted = true;
 
     const fetchInvoices = () => {
-      const headers = {'Authorization': 'Token ' + localStorage.getItem('token')}
-      axios.get('erp/voucher_list/', {headers: headers}).then((response) => {
+      const headers = {Authorization: `Token ${localStorage.getItem('token')}`};
+      axios.get('erp/voucher_list/', {headers}).then((response) => {
         if (mounted) {
           setInvoices(response.data);
         }
@@ -55,7 +55,7 @@ function ReportCreate() {
       <Container
         maxWidth={false}
         className={classes.container}
-        >
+      >
         <Header />
         <SearchBar
           onFilter={handleFilter}

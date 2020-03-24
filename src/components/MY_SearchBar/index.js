@@ -6,8 +6,7 @@ import { Grid, Button } from '@material-ui/core';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import Search from './Search';
 import Filter from './Filter';
-// import CustomDate from "../CustomDate";
-import CustomDate_bak from "../CustomDate_bak";
+import CustomDate from "../CustomDate";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -27,8 +26,9 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function SearchBar({
-  onFilter, onSearch, className, ...rest
+function MY_SearchBar({
+  onFilter, onSearch, className,
+  dateValues, setDateValues, searchContent, setSearchContent, ...rest
 }) {
   const classes = useStyles();
   const [openFilter, setOpenFilter] = useState(false);
@@ -49,10 +49,12 @@ function SearchBar({
       spacing={3}
     >
       <Grid item xs={12} md={4}>
-        <CustomDate_bak />
+        <CustomDate values={dateValues} setValues={setDateValues} />
       </Grid>
       <Grid item xs={12} md={4}>
         <Search
+          searchContent={searchContent}
+          setSearchContent={setSearchContent}
           className={classes.search}
           onSearch={onSearch}
         />
@@ -79,10 +81,14 @@ function SearchBar({
   );
 }
 
-SearchBar.propTypes = {
+MY_SearchBar.propTypes = {
   className: PropTypes.string,
   onFilter: PropTypes.func,
-  onSearch: PropTypes.func
+  onSearch: PropTypes.func,
+  dateValues: PropTypes.object,
+  setDateValues: PropTypes.func,
+  searchContent: PropTypes.string,
+  setSearchContent: PropTypes.func
 };
 
-export default SearchBar;
+export default MY_SearchBar;
