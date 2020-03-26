@@ -14,15 +14,15 @@ function UploadAttachments({ attachments, handleAttachments, className, ...rest 
   const classes = useStyles();
 
   return (
-    <Card
-      {...rest}
-      className={clsx(classes.root, className)}
-    >
-      <CardHeader title="첨부파일" />
-      <CardContent>
+    // <Card
+    //   {...rest}
+    //   className={clsx(classes.root, className)}
+    // >
+    //   <CardHeader title="첨부파일" />
+    //   <CardContent>
         <FilesDropzone attachments={attachments} handleAttachments={handleAttachments}/>
-      </CardContent>
-    </Card>
+      // </CardContent>
+    // </Card>
   );
 }
 

@@ -84,6 +84,9 @@ function Results({className, documents, fetchDocuments, ...rest}) {
   const [isSuccess, setIsSuccess] = useState(true);
   const session = useSelector((state) => state.session);
 
+  const startData = page * rowsPerPage;
+  const endData = (page * rowsPerPage) + rowsPerPage;
+
   const props = { mobileInnerHeight: getPerfectScrollbarHeight(rowsPerPage, documents.length, 60)};
   const classes = useStyles(props);
 
@@ -150,9 +153,20 @@ function Results({className, documents, fetchDocuments, ...rest}) {
         const newDocuments = selectedDocuments.slice(1);
         if (newDocuments.length === 0) {
           setOpenModal(false);
+          setSelectedDocuments(newDocuments);
           fetchDocuments();
+          return;
         }
-        setSelectedDocuments(newDocuments);
+
+        const headers = {Authorization: `Token ${session.token}`};
+        axios.get(`erp/voucher_list/${newDocuments[0].batch_number}`, {headers})
+          .then((response) => {
+            setInvoices(response.data);
+            // setOpenModal(true);
+            setSelectedDocuments(newDocuments);
+          });
+
+        // setSelectedDocuments(newDocuments);
       })
       .catch(error => console.log(error)); // TODO 에러 로깅
 
@@ -227,7 +241,8 @@ function Results({className, documents, fetchDocuments, ...rest}) {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {documents.slice(0, rowsPerPage).map((document, i) => (
+                  {/*{documents.slice(0, rowsPerPage).map((document, i) => (*/}
+                  {documents.slice(startData, endData).map((document, i) => (
                     <TableRow
                       hover
                       key={document.id}

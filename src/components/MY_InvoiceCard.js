@@ -13,15 +13,17 @@ import getCurrency from "../utils/getCurrency";
 import TableCell from "@material-ui/core/TableCell";
 import TableRow from "@material-ui/core/TableRow";
 import Button from "@material-ui/core/Button";
+import FilesDropzone from "./FilesDropzone";
+import uuid from 'uuid/v1';
 // import getShortBigo from "../../../utils/getShortBigo";
 // import {invoices} from "../../../mock";
 
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    display: 'flex',
-    alignItems: 'center',
-    flexWrap: 'wrap',
+    // display: 'flex',
+    // alignItems: 'center',
+    // flexWrap: 'wrap',
     marginBottom: theme.spacing(2)
   },
   content: {
@@ -38,8 +40,15 @@ const useStyles = makeStyles((theme) => ({
       paddingBottom: theme.spacing(2)
     }
   },
+  supplyName: {
+    width: 180,
+    padding: theme.spacing(1),
+    [theme.breakpoints.down('sm')]: {
+      flexBasis: '50%'
+    }
+  },
   stats: {
-    width: 150,
+    width: 120,
     padding: theme.spacing(1),
     [theme.breakpoints.down('sm')]: {
       flexBasis: '50%'
@@ -54,7 +63,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function MY_InvoiceCard({ invoices, className, ...rest }) {
+function MY_InvoiceCard({ invoices, className, attachments, handleAttachments, ...rest }) {
   const classes = useStyles();
 
   const getSumInvoices = () => getCurrency(invoices.map(invoice => invoice.price)
@@ -71,13 +80,14 @@ function MY_InvoiceCard({ invoices, className, ...rest }) {
         {getSumInvoices()}
         원
       </Typography>
-        {invoices.map(invoice => (
+        {invoices.map((invoice, i) => (
           <Card
+            key={i}
             {...rest}
             className={clsx(classes.root, className)}
           >
           <CardContent className={classes.content}>
-            <div className={classes.stats}>
+            <div className={classes.supplyName}>
               <Typography variant="body2">공급자명</Typography>
               <Typography variant="h6">{invoice.supplyNumber}</Typography>
             </div>
@@ -94,6 +104,10 @@ function MY_InvoiceCard({ invoices, className, ...rest }) {
               <Typography variant="h6">{invoice.gl_ymd}</Typography>
             </div>
           </CardContent>
+          <FilesDropzone
+            invoiceId={invoice.id}
+            attachments={attachments}
+            handleAttachments={handleAttachments}/>
           </Card>
         ))}
     </>
@@ -102,7 +116,10 @@ function MY_InvoiceCard({ invoices, className, ...rest }) {
 
 MY_InvoiceCard.propTypes = {
   className: PropTypes.string,
-  invoices: PropTypes.array.isRequired
+  invoices: PropTypes.array.isRequired,
+  attachments: PropTypes.array,
+  handleAttachments: PropTypes.func.isRequired,
+
 };
 
 export default MY_InvoiceCard;

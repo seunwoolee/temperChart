@@ -51,8 +51,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Index({
-  open, onClose, onComplete, invoices, className, ...rest
-}) {
+                 open, onClose, onComplete, invoices, className, ...rest
+               }) {
   const classes = useStyles();
   const session = useSelector((state) => state.session);
 
@@ -84,14 +84,29 @@ function Index({
 
     const headers = {Authorization: `Token ${session.token}`, 'Content-Type': 'multipart/form-data'};
     const axiosConfig = {headers};
+    const url = 'ea/create_document/';
+    const invoiceArray: Array = []
+    const filesArray: Array = []
+
+
+    for (let inputAttachment in inputAttachments) {
+      let invoiceFile: object = inputAttachments[inputAttachment]
+      for (let invoice in invoiceFile) {
+        invoiceArray.push(invoice)
+        filesArray.push(invoiceFile[invoice])
+        // console.log(invoice, invoiceFile[invoice])
+      }
+    }
 
     const formData = new FormData();
-    const url = 'ea/create_document/';
+    formData.append('batch_number', invoices[0].batchNumber);
     formData.append('author', session.user.id);
     formData.append('title', inputTitle);
-    formData.append('batch_number', invoices[0].batchNumber);
     formData.append('approvers', JSON.stringify(users));
-    inputAttachments.map(attachment => formData.append('attachments', attachment));
+    formData.append('invoices', invoiceArray);
+    formData.append('files', filesArray);
+
+    // inputAttachments.map(attachment => formData.append('attachments', attachment));
     axios.post(url, formData, axiosConfig);
   };
 
@@ -109,8 +124,8 @@ function Index({
           className={clsx(classes.root, className)}
         >
           <form>
-            <CardHeader classes={{root: classes.cardHeaderRoot, title: classes.cardHeaderTitle}} title="기안 작성" />
-            <Divider />
+            <CardHeader classes={{root: classes.cardHeaderRoot, title: classes.cardHeaderTitle}} title="기안 작성"/>
+            <Divider/>
             <CardContent>
               <Grid
                 container
@@ -148,43 +163,29 @@ function Index({
                     variant="outlined"
                   />
                 </Grid>
-                {/* <Grid */}
-                {/*  item */}
-                {/*  md={12} */}
-                {/*  xs={12} */}
-                {/* > */}
-                {/*  <TextField */}
-                {/*    multiline */}
-                {/*    rows="3" */}
-                {/*    rowsMax="50" */}
-                {/*    fullWidth */}
-                {/*    label="내용" */}
-                {/*    name="title" */}
-                {/*    onChange={handleChangeContent} */}
-                {/*    value={inputContent} */}
-                {/*    variant="outlined" */}
-                {/*  /> */}
-                {/* </Grid> */}
-                <Divider />
+                <Divider/>
                 <Grid
                   item
                   md={12}
                   xs={12}
                 >
-                  <MY_InvoiceCard invoices={invoices} />
-                </Grid>
-                <Grid
-                  item
-                  md={12}
-                  xs={12}
-                >
-                  <UploadAttachments
+                  <MY_InvoiceCard
+                    invoices={invoices}
                     attachments={inputAttachments}
-                    handleAttachments={handleAttachments} />
+                    handleAttachments={handleAttachments}/>
                 </Grid>
+                {/*<Grid*/}
+                {/*  item*/}
+                {/*  md={12}*/}
+                {/*  xs={12}*/}
+                {/*>*/}
+                {/*  <UploadAttachments*/}
+                {/*    attachments={inputAttachments}*/}
+                {/*    handleAttachments={handleAttachments} />*/}
+                {/*</Grid>*/}
               </Grid>
             </CardContent>
-            <Divider />
+            <Divider/>
             <CardActions className={classes.actions}>
               <Button onClick={onClose}>
                 닫기
@@ -201,7 +202,7 @@ function Index({
           </form>
         </Card>
       </Modal>
-      <ChooseDialog open={openDialog} onClose={handleClose} onSubmit={handleSubmit} />
+      <ChooseDialog open={openDialog} onClose={handleClose} onSubmit={handleSubmit}/>
     </>
   );
 }

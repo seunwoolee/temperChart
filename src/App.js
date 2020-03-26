@@ -31,8 +31,6 @@ function App() {
   const [token, setToken] = useState(localStorage.getItem('token'));
 
   useEffect(() => {
-    console.log('[APP] useEffect', history);
-
     dispatch(authCheckState());
     // history.push('/reportSign');
     // token ? history.push('/reportSign') : history.push('/auth/login');
@@ -44,18 +42,11 @@ function App() {
 
   return (
     <MuiPickersUtilsProvider utils={MomentUtils}>
-      <HashRouter history={history}>
+      {/*<HashRouter history={history}>*/}
+      <Router history={history}>
         <ScrollReset/>
-        <Switch>
-          {/*<Route exact path="/">*/}
-          {/*  <Login />*/}
-          {/*</Route>*/}
-          {/*<Route path="/topics">*/}
-          {/*  <Topics />*/}
-          {/*</Route>*/}
-        </Switch>
         {renderRoutes(routes)}
-      </HashRouter>
+      </Router >
     </MuiPickersUtilsProvider>
   );
 }

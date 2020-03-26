@@ -245,18 +245,6 @@ function Results({className, invoices, ...rest}) {
                         {getCurrency(invoice.price)}
                       </TableCell>
                       <TableCell>{getShortBigo(width, invoice.bigo)}</TableCell>
-                      {/* <TableCell align="center" className={classes.whiteSpaceNoWrap}> */}
-                      {/*  <div className={classes.nameCell}> */}
-                      {/*    <Avatar */}
-                      {/*      className={classes.avatar} */}
-                      {/*      src={invoice.avatar} */}
-                      {/*    /> */}
-                      {/*    {invoice.author} */}
-                      {/*  </div> */}
-                      {/* </TableCell> */}
-                      {/* <TableCell align="center" className={classes.whiteSpaceNoWrap}> */}
-                      {/*    {invoice.batchNumber} */}
-                      {/* </TableCell> */}
                     </TableRow>
                   ))}
                 </TableBody>

@@ -7,7 +7,7 @@ import {
 } from '@material-ui/core';
 import CheckIcon from '@material-ui/icons/Check';
 import DoneAllIcon from '@material-ui/icons/DoneAll';
-import MyDialog from './Dialog/'
+import MyDialog from "./Dialog";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -41,11 +41,11 @@ function BottomBar({
   const open = selected.length > 0;
 
   const handleCloseDialog = () => {
-    setOpenDialog(false)
+    setOpenDialog(false);
   };
 
   const handleOpenDialog = () => {
-    setOpenDialog(true)
+    setOpenDialog(true);
   };
 
   return (
@@ -97,7 +97,7 @@ function BottomBar({
           </Grid>
         </Grid>
       </div>
-      <MyDialog open={openDialog} onCloseDialog={handleCloseDialog}/>
+      <MyDialog open={openDialog} onCloseDialog={handleCloseDialog} />
     </Drawer>
   );
 }

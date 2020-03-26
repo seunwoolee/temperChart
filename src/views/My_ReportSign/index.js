@@ -58,7 +58,6 @@ function ReportSign() {
   };
 
   const handleSearch = () => {
-    console.log('[handleSearch]')
     fetchDocuments();
   };
 

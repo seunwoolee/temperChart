@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
   root: {},
   dropZone: {
     border: `1px dashed ${theme.palette.divider}`,
-    padding: theme.spacing(3),
+    padding: theme.spacing(1),
     outline: 'none',
     display: 'flex',
     justifyContent: 'center',
@@ -38,13 +38,13 @@ const useStyles = makeStyles((theme) => ({
     opacity: 0.5
   },
   image: {
-    width: 130
+    width: 70
   },
   info: {
     marginTop: theme.spacing(1)
   },
   list: {
-    maxHeight: 280
+    maxHeight: 140
   },
   actions: {
     marginTop: theme.spacing(2),
@@ -56,17 +56,41 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function FilesDropzone({ attachments, handleAttachments, className, ...rest }) {
+function FilesDropzone({ invoiceId, attachments, handleAttachments, className, ...rest }) {
   const classes = useStyles();
-  const handleDrop = useCallback((acceptedFiles) => {
-    handleAttachments((prevFiles) => [...prevFiles].concat(acceptedFiles));
-  }, []);
+  const [invoiceAttachments, setInvoiceAttachments] = useState([]);
+  const handleDrop = (acceptedFiles) => {
+    const newAttachments ={};
+    newAttachments[invoiceId] = acceptedFiles;
 
-  const handleRemoveAll = () => handleAttachments([]);
+    handleAttachments((prevFiles) => {
+      const prevInvoiceAttachments: Array = prevFiles.filter(file => invoiceId in file)
+      const prevOthersAttachments: Array = prevFiles.filter(file => !(invoiceId in file))
+      if(prevInvoiceAttachments.length > 0) {
+        newAttachments[invoiceId] = [...prevInvoiceAttachments[0][invoiceId], ...newAttachments[invoiceId]]
+      }
+      return [...prevOthersAttachments, newAttachments]
+    });
+  };
+
+  useEffect(() => {
+    const newAttachments: Array = attachments.filter(attachment => invoiceId in attachment)
+    if(newAttachments.length > 0) {
+      return setInvoiceAttachments(newAttachments[0][invoiceId])
+    }
+    setInvoiceAttachments(newAttachments)
+  }, [attachments])
+
+  const handleRemoveAll = (invoiceId) => {
+    const othersAttachments: Array = attachments.filter(attachment => !(invoiceId in attachment))
+    handleAttachments([...othersAttachments])
+  };
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop: handleDrop
   });
+
+  console.log(attachments);
 
   return (
     <div
@@ -91,7 +115,7 @@ function FilesDropzone({ attachments, handleAttachments, className, ...rest }) {
         <div>
           <Typography
             gutterBottom
-            variant="h3"
+            variant="h4"
           >
             파일 선택
           </Typography>
@@ -104,13 +128,13 @@ function FilesDropzone({ attachments, handleAttachments, className, ...rest }) {
           </Typography>
         </div>
       </div>
-      {attachments.length > 0 && (
+      {invoiceAttachments.length > 0 && (
         <>
           <PerfectScrollbar options={{ suppressScrollX: true }}>
             <List className={classes.list}>
-              {attachments.map((file, i) => (
+              {invoiceAttachments.map((file, i) => (
                 <ListItem
-                  divider={i < attachments.length - 1}
+                  divider={i < invoiceAttachments.length - 1}
                   key={uuid()}
                 >
                   <ListItemIcon>
@@ -129,7 +153,7 @@ function FilesDropzone({ attachments, handleAttachments, className, ...rest }) {
             <Button
               color="secondary"
               variant="contained"
-              onClick={handleRemoveAll}
+              onClick={()=>handleRemoveAll(invoiceId)}
               size="small"
             >
               모두 삭제
@@ -142,6 +166,7 @@ function FilesDropzone({ attachments, handleAttachments, className, ...rest }) {
 }
 
 FilesDropzone.propTypes = {
+  invoiceId: PropTypes.number,
   attachments: PropTypes.array,
   handleAttachments: PropTypes.func,
   className: PropTypes.string
