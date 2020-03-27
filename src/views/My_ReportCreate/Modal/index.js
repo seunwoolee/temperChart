@@ -87,26 +87,34 @@ function Index({
     const url = 'ea/create_document/';
     const invoiceArray: Array = []
     const filesArray: Array = []
+    const filesCountArray: Array = []
 
 
     for (let inputAttachment in inputAttachments) {
       let invoiceFile: object = inputAttachments[inputAttachment]
       for (let invoice in invoiceFile) {
         invoiceArray.push(invoice)
-        filesArray.push(invoiceFile[invoice])
-        // console.log(invoice, invoiceFile[invoice])
+        filesArray.push(...invoiceFile[invoice])
+        filesCountArray.push(invoiceFile[invoice].length)
       }
     }
+
+    // debugger;
 
     const formData = new FormData();
     formData.append('batch_number', invoices[0].batchNumber);
     formData.append('author', session.user.id);
     formData.append('title', inputTitle);
     formData.append('approvers', JSON.stringify(users));
-    formData.append('invoices', invoiceArray);
-    formData.append('files', filesArray);
 
-    // inputAttachments.map(attachment => formData.append('attachments', attachment));
+    invoiceArray.map(invoiceId => formData.append('invoices', invoiceId));
+    filesCountArray.map(fileCount => formData.append('counts', fileCount));
+    filesArray.map(file => formData.append('files', file));
+
+    // formData.append('invoices', invoiceArray);
+    // formData.append('counts', filesCountArray);
+
+    // formData.append('files', filesArray);
     axios.post(url, formData, axiosConfig);
   };
 
@@ -170,6 +178,7 @@ function Index({
                   xs={12}
                 >
                   <MY_InvoiceCard
+                    type={'write'}
                     invoices={invoices}
                     attachments={inputAttachments}
                     handleAttachments={handleAttachments}/>

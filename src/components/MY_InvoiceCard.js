@@ -15,6 +15,7 @@ import TableRow from "@material-ui/core/TableRow";
 import Button from "@material-ui/core/Button";
 import FilesDropzone from "./FilesDropzone";
 import uuid from 'uuid/v1';
+import MY_attachmentsBase from "./MY_attachmentsBase";
 // import getShortBigo from "../../../utils/getShortBigo";
 // import {invoices} from "../../../mock";
 
@@ -63,7 +64,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function MY_InvoiceCard({ invoices, className, attachments, handleAttachments, ...rest }) {
+function MY_InvoiceCard({ invoices, className, attachments, handleAttachments, type, ...rest }) {
   const classes = useStyles();
 
   const getSumInvoices = () => getCurrency(invoices.map(invoice => invoice.price)
@@ -104,11 +105,21 @@ function MY_InvoiceCard({ invoices, className, attachments, handleAttachments, .
               <Typography variant="h6">{invoice.gl_ymd}</Typography>
             </div>
           </CardContent>
-          <FilesDropzone
+
+          {type === 'write'
+            ? (<FilesDropzone
             invoiceId={invoice.id}
             attachments={attachments}
-            handleAttachments={handleAttachments}/>
+            handleAttachments={handleAttachments}/>)
+            : <MY_attachmentsBase attachments={attachments} />}
+          {/*<FilesDropzone*/}
+          {/*  invoiceId={invoice.id}*/}
+          {/*  attachments={attachments}*/}
+          {/*  handleAttachments={handleAttachments}/>*/}
+
           </Card>
+
+
         ))}
     </>
   )
@@ -118,8 +129,8 @@ MY_InvoiceCard.propTypes = {
   className: PropTypes.string,
   invoices: PropTypes.array.isRequired,
   attachments: PropTypes.array,
-  handleAttachments: PropTypes.func.isRequired,
-
+  handleAttachments: PropTypes.func,
+  type: PropTypes.string.isRequired,
 };
 
 export default MY_InvoiceCard;
