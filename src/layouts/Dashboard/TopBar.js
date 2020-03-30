@@ -220,26 +220,26 @@ function TopBar({
     }).then(subscription => updateSubscriptionOnServer(subscription));
   };
 
-  useEffect(() => {
-    setTimeout(() => setPushSubscribe(), 3000);
-
-    // let mounted = true;
-    //
-    // const fetchNotifications = () => {
-    //   axios.get('/api/account/notifications').then((response) => {
-    //     if (mounted) {
-    //       setNotifications(response.data.notifications);
-    //     }
-    //   });
-    // };
-    //
-    // fetchNotifications();
-    //
-    // return () => {
-    //   mounted = false;
-    // };
-
-  }, []);
+  // useEffect(() => {
+  //   setTimeout(() => setPushSubscribe(), 3000);
+  //
+  //   // let mounted = true;
+  //   //
+  //   // const fetchNotifications = () => {
+  //   //   axios.get('/api/account/notifications').then((response) => {
+  //   //     if (mounted) {
+  //   //       setNotifications(response.data.notifications);
+  //   //     }
+  //   //   });
+  //   // };
+  //   //
+  //   // fetchNotifications();
+  //   //
+  //   // return () => {
+  //   //   mounted = false;
+  //   // };
+  //
+  // }, []);
 
 
   return (

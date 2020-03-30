@@ -82,8 +82,6 @@ function Index({
     handleClose();
   };
 
-  debugger;
-
   return (
     <>
       <Modal

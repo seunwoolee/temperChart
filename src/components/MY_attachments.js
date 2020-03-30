@@ -23,6 +23,9 @@ import Label from 'src/components/Label';
 import {pdfjs, Document, Page} from 'react-pdf';
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
+import Paper from '@material-ui/core/Paper';
+import Draggable from 'react-draggable';
+import DialogTitle from "@material-ui/core/DialogTitle";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
@@ -61,6 +64,18 @@ const useStyles = makeStyles((theme) => ({
   dialogPaper: {
     margin: theme.spacing(1)
   },
+  dialogRoot: {
+    '& .MuiBackdrop-root': {
+      backgroundColor: 'rgba(0, 0, 0, 0.1)'
+    }
+  },
+  dialogTitle: {
+    cursor: 'move',
+    backgroundColor: theme.palette.primary.main,
+    '& h2': {
+      color: theme.palette.primary.contrastText
+    }
+  },
   actions: {
     marginTop: theme.spacing(2),
     display: 'flex',
@@ -70,6 +85,14 @@ const useStyles = makeStyles((theme) => ({
     }
   }
 }));
+
+function PaperComponent(props) {
+  return (
+    <Draggable handle="#draggable-dialog-title" cancel={'[class*="MuiDialogContent-root"]'}>
+      <Paper {...props} />
+    </Draggable>
+  );
+}
 
 function MY_attachments({attachments, className, ...rest}) {
   const classes = useStyles();
@@ -137,13 +160,18 @@ function MY_attachments({attachments, className, ...rest}) {
         </PerfectScrollbar>
       </>
       <Dialog
-        classes={{paper: classes.dialogPaper}}
+        classes={{root: classes.dialogRoot,paper: classes.dialogPaper}}
         maxWidth="lg"
         open={open}
         onClose={handleClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
+        PaperComponent={PaperComponent}
+        aria-labelledby="draggable-dialog-title"
+        // aria-describedby="alert-dialog-description"
       >
+        {/*<DialogTitle style={{ cursor: 'move',  }} id="draggable-dialog-title">*/}
+        <DialogTitle  className={classes.dialogTitle} id="draggable-dialog-title">
+          첨부파일
+        </DialogTitle>
         {contentType === 'img'
           ? (<img src={selectedImgPath} className={classes.img} alt="이미지" />)
           : (

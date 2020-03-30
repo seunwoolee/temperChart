@@ -98,14 +98,13 @@ function MY_InvoiceCard({ invoices, className, attachments, handleAttachments, t
             </div>
             <div className={classes.bigo}>
               <Typography variant="body2">비고</Typography>
-              <Typography variant="h6">{getShortBigo(0, invoice.RPRMK)}</Typography>
+              <Typography variant="h6">{invoice.RPRMK? getShortBigo(0, invoice.RPRMK): <br />}</Typography>
             </div>
             <div className={classes.stats}>
               <Typography variant="body2">일자</Typography>
               <Typography variant="h6">{invoice.RPDGJ}</Typography>
             </div>
           </CardContent>
-
           {type === 'write'
             ? (<FilesDropzone
             invoiceId={invoice.id}
@@ -113,14 +112,7 @@ function MY_InvoiceCard({ invoices, className, attachments, handleAttachments, t
             handleAttachments={handleAttachments}/>)
             : <MY_attachmentsBase
               attachments={attachments.filter(attachment => attachment.invoice === invoice.id)} />}
-          {/*<FilesDropzone*/}
-          {/*  invoiceId={invoice.id}*/}
-          {/*  attachments={attachments}*/}
-          {/*  handleAttachments={handleAttachments}/>*/}
-
           </Card>
-
-
         ))}
     </>
   )
