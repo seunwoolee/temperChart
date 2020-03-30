@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import PropTypes from 'prop-types';
+import PropTypes, {array} from 'prop-types';
 import clsx from 'clsx';
 import {makeStyles} from '@material-ui/styles';
 import {
@@ -90,26 +90,54 @@ function Index({
     const filesCountArray: Array = []
 
 
-    for (let inputAttachment in inputAttachments) {
-      let invoiceFile: object = inputAttachments[inputAttachment]
-      for (let invoice in invoiceFile) {
-        invoiceArray.push(invoice)
-        filesArray.push(...invoiceFile[invoice])
-        filesCountArray.push(invoiceFile[invoice].length)
+
+    for (let invoice in invoices) {
+      const invoice_id: string = invoices[invoice].id;
+      invoiceArray.push(invoice_id);
+      let invoiceFiles: Array = null;
+
+      const invoiceAttachments = inputAttachments.filter(inputAttachment => invoice_id in inputAttachment);
+
+      if(invoiceAttachments.length > 0) {
+        invoiceFiles = invoiceAttachments[0][invoice_id];
       }
+
+      if(invoiceFiles) {
+        filesArray.push(...invoiceFiles)
+        filesCountArray.push(invoiceFiles.length)
+        // for (let invoice in invoiceFile) {
+        //   invoiceArray.push(invoice)
+        //   filesArray.push(...invoiceFile[invoice])
+        //   filesCountArray.push(invoiceFile[invoice].length)
+        // }
+      } else {
+        filesArray.push([])
+        filesCountArray.push(0)
+      }
+
     }
 
-    // debugger;
+    // for (let inputAttachment in inputAttachments) {
+    //   let invoiceFile: object = inputAttachments[inputAttachment];
+    //   debugger
+    //   for (let invoice in invoiceFile) {
+    //     invoiceArray.push(invoice)
+    //     filesArray.push(...invoiceFile[invoice])
+    //     filesCountArray.push(invoiceFile[invoice].length)
+    //   }
+    // }
+
+    debugger;
 
     const formData = new FormData();
-    formData.append('batch_number', invoices[0].batchNumber);
+    formData.append('batch_number', invoices[0].RPICU);
     formData.append('author', session.user.id);
     formData.append('title', inputTitle);
     formData.append('approvers', JSON.stringify(users));
 
+    filesArray.map(file => formData.append('files', file));
     invoiceArray.map(invoiceId => formData.append('invoices', invoiceId));
     filesCountArray.map(fileCount => formData.append('counts', fileCount));
-    filesArray.map(file => formData.append('files', file));
 
     // formData.append('invoices', invoiceArray);
     // formData.append('counts', filesCountArray);

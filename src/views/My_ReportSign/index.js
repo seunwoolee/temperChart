@@ -53,7 +53,6 @@ function ReportSign() {
 
     axios.get(`ea/sign_document/${session.user.id}`, config)
       .then((response) => {
-        debugger
         setDocuments(response.data);
       });
   };

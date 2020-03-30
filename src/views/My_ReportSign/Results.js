@@ -126,13 +126,16 @@ function Results({className, documents, fetchDocuments, ...rest}) {
   };
 
   const openReportModal = () => {
-    const newDocument = selectedDocuments[0];
-    const headers = {Authorization: `Token ${session.token}`};
-    axios.get(`erp/voucher_list/${newDocument.batch_number}`, {headers})
-      .then((response) => {
-        setInvoices(response.data);
-        setOpenModal(true);
-      });
+    // const newDocument = selectedDocuments[0];
+    // setInvoices(selectedDocuments[0].invoices)
+    // debugger;
+    setOpenModal(true);
+    // const headers = {Authorization: `Token ${session.token}`};
+    // axios.get(`erp/voucher_list/${newDocument.batch_number}`, {headers})
+    //   .then((response) => {
+    //     setInvoices(response.data);
+    //   });
+
   };
 
 
@@ -295,7 +298,7 @@ function Results({className, documents, fetchDocuments, ...rest}) {
          && (
          <Index
            document={selectedDocuments[0]}
-           invoices={invoices}
+           invoices={selectedDocuments[0].invoices}
            onClose={closeReportModal}
            onComplete={completeReportModal}
            open={openModal}

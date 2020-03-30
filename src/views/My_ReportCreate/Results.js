@@ -92,16 +92,15 @@ function Results({className, invoices, ...rest}) {
     event.target.checked ? setSelectedInvoices(dispalyedInvoices) : setSelectedInvoices([]);
   };
 
-  const getSameBatchInvoices = (invoice) => selectedInvoices.filter(my_invoice => my_invoice.batchNumber === invoice.batchNumber);
+  const getSameBatchInvoices = (invoice) => selectedInvoices.filter(my_invoice => my_invoice.RPICU === invoice.RPICU);
 
   const handleSelectOne = (event, invoice) => {
-    const selectedIndex = selectedInvoices.map(invoice => invoice.batchNumber).indexOf(invoice.batchNumber);
-    // const sameBatchInvoices = selectedInvoices.filter(my_invoice => my_invoice.batchNumber === invoice.batchNumber)
+    const selectedIndex = selectedInvoices.map(invoice => invoice.RPICU).indexOf(invoice.RPICU);
     const sameBatchInvoices = getSameBatchInvoices(invoice);
     let newSelectedInvocies = [];
 
     if (selectedIndex === -1) { // check this one
-      const sameBatchInvoices = invoices.filter(my_invoice => my_invoice.batchNumber === invoice.batchNumber);
+      const sameBatchInvoices = invoices.filter(my_invoice => my_invoice.RPICU === invoice.RPICU);
       newSelectedInvocies = newSelectedInvocies.concat(selectedInvoices, sameBatchInvoices);
     } else if (selectedIndex === 0) { // uncheck this one
       newSelectedInvocies = newSelectedInvocies.concat(
@@ -154,11 +153,11 @@ function Results({className, invoices, ...rest}) {
 
   const createColspanData = (batchNumber) => {
     prevBatchNumber = batchNumber;
-    return invoices.filter(invoice => prevBatchNumber === invoice.batchNumber);
+    return invoices.filter(invoice => prevBatchNumber === invoice.RPICU);
   };
 
   const tableRowcheckBox = (invoice) => {
-    const sameBatchInvoices = createColspanData(invoice.batchNumber);
+    const sameBatchInvoices = createColspanData(invoice.RPICU);
     return (
       <TableCell
         // rowSpan={sameBatchInvoices.length}
@@ -235,16 +234,16 @@ function Results({className, invoices, ...rest}) {
                       key={invoice.id}
                       selected={selectedInvoices.map(invoice => invoice.id).indexOf(invoice.id) !== -1}
                     >
-                      {invoice.batchNumber !== prevBatchNumber ? tableRowcheckBox(invoice) : (
+                      {invoice.RPICU !== prevBatchNumber ? tableRowcheckBox(invoice) : (
                         <TableCell />
                       )}
-                      <TableCell align="center" className={classes.whiteSpaceNoWrap}>{invoice.batchNumber}</TableCell>
-                      <TableCell align="center" className={classes.whiteSpaceNoWrap}>{invoice.supplyNumber}</TableCell>
-                      <TableCell align="center" className={classes.whiteSpaceNoWrap}>{invoice.gl_ymd}</TableCell>
+                      <TableCell align="center" className={classes.whiteSpaceNoWrap}>{invoice.RPICU}</TableCell>
+                      <TableCell align="center" className={classes.whiteSpaceNoWrap}>{invoice.RPALPH}</TableCell>
+                      <TableCell align="center" className={classes.whiteSpaceNoWrap}>{invoice.RPDGJ}</TableCell>
                       <TableCell align="center" className={classes.whiteSpaceNoWrap}>
-                        {getCurrency(invoice.price)}
+                        {getCurrency(invoice.RPAMT)}
                       </TableCell>
-                      <TableCell>{getShortBigo(width, invoice.bigo)}</TableCell>
+                      <TableCell>{getShortBigo(width, invoice.RPRMK)}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
@@ -268,7 +267,7 @@ function Results({className, invoices, ...rest}) {
       {openModal && selectedInvoices.length
       && (
         <Index
-          invoices={selectedInvoices.filter(invoice => invoice.batchNumber === selectedInvoices[0].batchNumber)} // 0, 같은 배치번호까지
+          invoices={selectedInvoices.filter(invoice => invoice.RPICU === selectedInvoices[0].RPICU)} // 0, 같은 배치번호까지
           onClose={closeReportModal}
           onComplete={completeReportModal}
           open={openModal}

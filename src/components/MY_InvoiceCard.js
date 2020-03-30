@@ -67,8 +67,9 @@ const useStyles = makeStyles((theme) => ({
 function MY_InvoiceCard({ invoices, className, attachments, handleAttachments, type, ...rest }) {
   const classes = useStyles();
 
-  const getSumInvoices = () => getCurrency(invoices.map(invoice => invoice.price)
+  const getSumInvoices = () => getCurrency(invoices.map(invoice => invoice.RPAMT)
     .reduce((prev, curr) => prev + curr));
+
 
   return (
     <>
@@ -90,19 +91,19 @@ function MY_InvoiceCard({ invoices, className, attachments, handleAttachments, t
           <CardContent className={classes.content}>
             <div className={classes.supplyName}>
               <Typography variant="body2">공급자명</Typography>
-              <Typography variant="h6">{invoice.supplyNumber}</Typography>
+              <Typography variant="h6">{invoice.RPALPH}</Typography>
             </div>
             <div className={classes.stats}>
               <Typography variant="body2">금액</Typography>
-              <Typography variant="h6">{getCurrency(invoice.price)}</Typography>
+              <Typography variant="h6">{getCurrency(invoice.RPAMT)}</Typography>
             </div>
             <div className={classes.bigo}>
               <Typography variant="body2">비고</Typography>
-              <Typography variant="h6">{getShortBigo(0, invoice.bigo)}</Typography>
+              <Typography variant="h6">{getShortBigo(0, invoice.RPRMK)}</Typography>
             </div>
             <div className={classes.stats}>
               <Typography variant="body2">일자</Typography>
-              <Typography variant="h6">{invoice.gl_ymd}</Typography>
+              <Typography variant="h6">{invoice.RPDGJ}</Typography>
             </div>
           </CardContent>
 
