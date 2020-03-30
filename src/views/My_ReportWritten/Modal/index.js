@@ -132,10 +132,6 @@ function Index({
                           <TableCell className={classes.tableCellContent}>제목</TableCell>
                           <TableCell>{document.title}</TableCell>
                         </TableRow>
-                        {/* <TableRow> */}
-                        {/*  <TableCell className={classes.tableCellContent}>내용</TableCell> */}
-                        {/*  <TableCell>{document.content}</TableCell> */}
-                        {/* </TableRow> */}
                       </TableBody>
                     </Table>
                   </TableContainer>
@@ -146,15 +142,19 @@ function Index({
                   md={12}
                   xs={12}
                 >
-                  <MY_InvoiceCard invoices={invoices} />
+                  <MY_InvoiceCard
+                    invoices={invoices}
+                    attachments={document.attachments}
+                    type={'read'}
+                  />
                 </Grid>
-                <Grid
-                  item
-                  md={12}
-                  xs={12}
-                >
-                  <MY_attachmentsBase attachments={document.attachments} />
-                </Grid>
+                {/*<Grid*/}
+                {/*  item*/}
+                {/*  md={12}*/}
+                {/*  xs={12}*/}
+                {/*>*/}
+                {/*  <MY_attachmentsBase attachments={document.attachments} />*/}
+                {/*</Grid>*/}
               </Grid>
             </CardContent>
             <Divider />

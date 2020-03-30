@@ -160,14 +160,15 @@ function Results({className, documents, fetchDocuments, ...rest}) {
           fetchDocuments();
           return;
         }
+        setSelectedDocuments(newDocuments);
 
-        const headers = {Authorization: `Token ${session.token}`};
-        axios.get(`erp/voucher_list/${newDocuments[0].batch_number}`, {headers})
-          .then((response) => {
-            setInvoices(response.data);
-            // setOpenModal(true);
-            setSelectedDocuments(newDocuments);
-          });
+        // const headers = {Authorization: `Token ${session.token}`};
+        // axios.get(`erp/voucher_list/${newDocuments[0].batch_number}`, {headers})
+        //   .then((response) => {
+        //     setInvoices(response.data);
+        //     // setOpenModal(true);
+        //     setSelectedDocuments(newDocuments);
+        //   });
 
         // setSelectedDocuments(newDocuments);
       })

@@ -70,7 +70,6 @@ function MY_InvoiceCard({ invoices, className, attachments, handleAttachments, t
   const getSumInvoices = () => getCurrency(invoices.map(invoice => invoice.RPAMT)
     .reduce((prev, curr) => prev + curr));
 
-
   return (
     <>
       <Typography variant="h5">
@@ -112,7 +111,8 @@ function MY_InvoiceCard({ invoices, className, attachments, handleAttachments, t
             invoiceId={invoice.id}
             attachments={attachments}
             handleAttachments={handleAttachments}/>)
-            : <MY_attachmentsBase attachments={attachments} />}
+            : <MY_attachmentsBase
+              attachments={attachments.filter(attachment => attachment.invoice === invoice.id)} />}
           {/*<FilesDropzone*/}
           {/*  invoiceId={invoice.id}*/}
           {/*  attachments={attachments}*/}

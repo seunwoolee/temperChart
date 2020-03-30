@@ -17,10 +17,15 @@ function MY_attachmentsBase({ attachments, className, ...rest }) {
       {...rest}
       className={clsx(classes.root, className)}
     >
-      {/*<CardHeader title="첨부파일" />*/}
-      <CardContent>
-        <MY_attachments attachments={attachments} />
-      </CardContent>
+      {attachments.length > 0
+        ? (
+       <CardContent>
+         <MY_attachments attachments={attachments} />
+       </CardContent>
+      ): null}
+       {/*<CardContent>*/}
+       {/*  <MY_attachments attachments={attachments} />*/}
+       {/*</CardContent>*/}
     </Card>
   );
 }

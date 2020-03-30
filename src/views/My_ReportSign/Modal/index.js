@@ -167,13 +167,6 @@ function Index({
                     type={'read'}
                   />
                 </Grid>
-                {/*<Grid*/}
-                {/*  item*/}
-                {/*  md={12}*/}
-                {/*  xs={12}*/}
-                {/*>*/}
-                {/*  <MY_attachmentsBase attachments={document.attachments} />*/}
-                {/*</Grid>*/}
               </Grid>
             </CardContent>
             <Divider />

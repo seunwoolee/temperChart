@@ -89,13 +89,8 @@ function Results({className, documents, ...rest}) {
 
   const handleTableClick = (id) => {
     const newDocument = documents.find(document => document.id === id);
-    const headers = {Authorization: `Token ${session.token}`};
-    axios.get(`erp/voucher_list/${newDocument.batch_number}`, {headers})
-      .then((response) => {
-        setInvoices(response.data);
-        setSelectedDocument(newDocument);
-        setOpenModal(true);
-      });
+    setSelectedDocument(newDocument);
+    setOpenModal(true);
   };
 
   const completeReportModal = () => {
@@ -188,7 +183,7 @@ function Results({className, documents, ...rest}) {
       && (
       <Index
         document={selectedDocument}
-        invoices={invoices}
+        invoices={selectedDocument.invoices}
         onClose={closeReportModal}
         onComplete={completeReportModal}
         open={openModal}

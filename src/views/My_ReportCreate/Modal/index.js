@@ -89,8 +89,6 @@ function Index({
     const filesArray: Array = []
     const filesCountArray: Array = []
 
-
-
     for (let invoice in invoices) {
       const invoice_id: string = invoices[invoice].id;
       invoiceArray.push(invoice_id);
@@ -111,7 +109,7 @@ function Index({
         //   filesCountArray.push(invoiceFile[invoice].length)
         // }
       } else {
-        filesArray.push([])
+        // filesArray.push({})
         filesCountArray.push(0)
       }
 
