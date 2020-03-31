@@ -22,6 +22,7 @@ import getCurrency from "../../../utils/getCurrency";
 import axios from "../../../utils/my_axios";
 import {authSuccess} from "../../../actions";
 import MY_InvoiceCard from "../../../components/MY_InvoiceCard";
+import MY_InvoiceDetailCard from "../../../components/MY_InvoiceDetailCard";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -103,29 +104,10 @@ function Index({
       if(invoiceFiles) {
         filesArray.push(...invoiceFiles)
         filesCountArray.push(invoiceFiles.length)
-        // for (let invoice in invoiceFile) {
-        //   invoiceArray.push(invoice)
-        //   filesArray.push(...invoiceFile[invoice])
-        //   filesCountArray.push(invoiceFile[invoice].length)
-        // }
       } else {
-        // filesArray.push({})
         filesCountArray.push(0)
       }
-
     }
-
-    // for (let inputAttachment in inputAttachments) {
-    //   let invoiceFile: object = inputAttachments[inputAttachment];
-    //   debugger
-    //   for (let invoice in invoiceFile) {
-    //     invoiceArray.push(invoice)
-    //     filesArray.push(...invoiceFile[invoice])
-    //     filesCountArray.push(invoiceFile[invoice].length)
-    //   }
-    // }
-
-    debugger;
 
     const formData = new FormData();
     formData.append('batch_number', invoices[0].RPICU);
@@ -203,21 +185,17 @@ function Index({
                   md={12}
                   xs={12}
                 >
-                  <MY_InvoiceCard
+                  <MY_InvoiceDetailCard
                     type={'write'}
                     invoices={invoices}
                     attachments={inputAttachments}
                     handleAttachments={handleAttachments}/>
+                  {/*<MY_InvoiceCard*/}
+                  {/*  type={'write'}*/}
+                  {/*  invoices={invoices}*/}
+                  {/*  attachments={inputAttachments}*/}
+                  {/*  handleAttachments={handleAttachments}/>*/}
                 </Grid>
-                {/*<Grid*/}
-                {/*  item*/}
-                {/*  md={12}*/}
-                {/*  xs={12}*/}
-                {/*>*/}
-                {/*  <UploadAttachments*/}
-                {/*    attachments={inputAttachments}*/}
-                {/*    handleAttachments={handleAttachments} />*/}
-                {/*</Grid>*/}
               </Grid>
             </CardContent>
             <Divider/>

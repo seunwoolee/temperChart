@@ -90,8 +90,6 @@ function FilesDropzone({ invoiceId, attachments, handleAttachments, className, .
     onDrop: handleDrop
   });
 
-  console.log(attachments);
-
   return (
     <div
       {...rest}

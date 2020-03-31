@@ -64,7 +64,8 @@ function ReportCreate() {
         {invoices && (
           <Results
             className={classes.results}
-            invoices={invoices}
+            invoices={invoices.filter(invoice => invoice.RPSEQ === 1)}
+            totalInvoices={invoices}
           />
         )}
       </Container>

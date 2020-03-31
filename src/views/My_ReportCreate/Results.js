@@ -73,7 +73,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function Results({className, invoices, ...rest}) {
+function Results({className, invoices, totalInvoices, ...rest}) {
   const [selectedInvoices, setSelectedInvoices] = useState([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(25);
@@ -267,7 +267,8 @@ function Results({className, invoices, ...rest}) {
       {openModal && selectedInvoices.length
       && (
         <Index
-          invoices={selectedInvoices.filter(invoice => invoice.RPICU === selectedInvoices[0].RPICU)} // 0, 같은 배치번호까지
+          // invoices={selectedInvoices.filter(invoice => invoice.RPICU === selectedInvoices[0].RPICU)} // 0, 같은 배치번호까지
+          invoices={totalInvoices.filter(invoice => invoice.RPICU === selectedInvoices[0].RPICU)} // 0, 같은 배치번호까지
           onClose={closeReportModal}
           onComplete={completeReportModal}
           open={openModal}
@@ -281,7 +282,8 @@ function Results({className, invoices, ...rest}) {
 
 Results.propTypes = {
   className: PropTypes.string,
-  invoices: PropTypes.arrayOf(PropTypes.shape(voucher))
+  invoices: PropTypes.arrayOf(PropTypes.shape(voucher)),
+  totalInvoices: PropTypes.arrayOf(PropTypes.shape(voucher))
 };
 
 Results.defaultProps = {
