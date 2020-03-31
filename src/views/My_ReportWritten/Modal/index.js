@@ -25,6 +25,7 @@ import getCurrency from "../../../utils/getCurrency";
 import axios from "../../../utils/my_axios";
 import MY_attachmentsBase from "../../../components/MY_attachmentsBase";
 import MY_InvoiceCard from "../../../components/MY_InvoiceCard";
+import MY_opinion from "../../../components/MY_opinion";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -76,7 +77,6 @@ function Index({
 
   const getSumInvoices = () => getCurrency(invoices.map(invoice => invoice.price)
     .reduce((prev, curr) => prev + curr));
-
 
   return (
     <>
@@ -148,13 +148,13 @@ function Index({
                     type={'read'}
                   />
                 </Grid>
-                {/*<Grid*/}
-                {/*  item*/}
-                {/*  md={12}*/}
-                {/*  xs={12}*/}
-                {/*>*/}
-                {/*  <MY_attachmentsBase attachments={document.attachments} />*/}
-                {/*</Grid>*/}
+                <Grid
+                  item
+                  md={12}
+                  xs={12}
+                >
+                  <MY_opinion signs={document.signs.filter(sign => sign.comment !== null)}/>
+                </Grid>
               </Grid>
             </CardContent>
             <Divider />

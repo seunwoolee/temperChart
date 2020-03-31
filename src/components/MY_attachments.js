@@ -146,9 +146,9 @@ function MY_attachments({attachments, className, ...rest}) {
                   <a target="_blank" href={`http://localhost:8000${file.path}`}>
                     {' '}
                     {/* TODO URL 변경 */}
-                    <Label>
-                      DownLoad
-                    </Label>
+                    {/*<Label>*/}
+                    {/*  DownLoad*/}
+                    {/*</Label>*/}
                     <IconButton>
                       <GetAppIcon />
                     </IconButton>

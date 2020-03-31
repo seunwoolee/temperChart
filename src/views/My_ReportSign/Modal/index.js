@@ -21,12 +21,16 @@ import getCurrency from "../../../utils/getCurrency";
 import MY_attachmentsBase from "../../../components/MY_attachmentsBase";
 import FormDialog from "../Dialog";
 import MY_InvoiceCard from "../../../components/MY_InvoiceCard";
+import MY_opinion from "../../../components/MY_opinion";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     position: 'absolute',
     top: '50%',
     left: '50%',
+    [theme.breakpoints.down('lg')]: {
+      left: '50%'
+    },
     transform: 'translate(-50%, -50%)',
     outline: 'none',
     boxShadow: theme.shadows[20],
@@ -164,6 +168,13 @@ function Index({
                     attachments={document.attachments}
                     type={'read'}
                   />
+                </Grid>
+                <Grid
+                  item
+                  md={12}
+                  xs={12}
+                >
+                  <MY_opinion signs={document.signs.filter(sign => sign.comment !== null)}/>
                 </Grid>
               </Grid>
             </CardContent>
