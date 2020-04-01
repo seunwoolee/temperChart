@@ -75,15 +75,11 @@ const useStyles = makeStyles((theme) => ({
 function MY_InvoiceCard({ invoices, className, attachments, handleAttachments, type, ...rest }) {
   const classes = useStyles();
 
-  const getSumInvoices = () => getCurrency(invoices.map(invoice => invoice.RPAMT)
-    .reduce((prev, curr) => prev + curr));
-
   console.log(invoices);
 
   return (
     <>
-      {/*<MY_erpDetailTable />*/}
-      {invoices.filter(invoice => invoice.RPSEQ === 1).map((invoice, i) => (
+      {invoices.filter(invoice => invoice.RPSFX === '001' && invoice.RPSEQ === 1).map((invoice, i) => (
         <Card
           key={i}
           {...rest}
@@ -108,7 +104,7 @@ function MY_InvoiceCard({ invoices, className, attachments, handleAttachments, t
           </div>
         </CardContent>
         <CardContent className={classes.erpDetailTable}>
-          <MY_erpDetailTable invoices={invoices.filter(my_invoice =>  my_invoice.RPAN8 === invoice.RPAN8)} />
+          <MY_erpDetailTable invoices={invoices.filter(my_invoice =>  my_invoice.RPDOC === invoice.RPDOC)} />
         </CardContent>
         {type === 'write'
           ? (<FilesDropzone

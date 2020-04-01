@@ -21,7 +21,7 @@ const useStyles = makeStyles({
 function MY_erpDetailTable({invoices}) {
   const classes = useStyles();
 
-  const getSumRPZ5CREDITAT = () => getThousand(invoices.map(invoice => invoice.RPZ5CREDITAT)
+  const getSumRPZ5CREDITAT = () => getThousand(invoices.map(invoice => invoice.RPZ5CREDITAT / 100)
     .reduce((prev, curr) => prev + curr));
 
   return (
@@ -39,8 +39,8 @@ function MY_erpDetailTable({invoices}) {
           {invoices.map(invoice => (
             <TableRow key={invoice.id}>
               <TableCell component="th" scope="row">{invoice.RPDL02}</TableCell>
-              <TableCell align="right">{invoice.RPZ5DEBITAT === 0 ? <br /> : getThousand(invoice.RPZ5DEBITAT)}</TableCell>
-              <TableCell align="right">{invoice.RPZ5CREDITAT === 0 ? <br /> : getThousand(invoice.RPZ5CREDITAT)}</TableCell>
+              <TableCell align="right">{invoice.RPZ5DEBITAT === 0 ? <br /> : getThousand(invoice.RPZ5DEBITAT / 100)}</TableCell>
+              <TableCell align="right">{invoice.RPZ5CREDITAT === 0 ? <br /> : getThousand(invoice.RPZ5CREDITAT / 100)}</TableCell>
               <TableCell>{invoice.RPRMK}</TableCell>
             </TableRow>
           ))}

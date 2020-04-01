@@ -64,7 +64,7 @@ function ReportCreate() {
         {invoices && (
           <Results
             className={classes.results}
-            invoices={invoices.filter(invoice => invoice.RPSEQ === 1)}
+            invoices={invoices.filter(invoice => invoice.RPSFX === '001' && invoice.RPSEQ === 1)}
             totalInvoices={invoices}
           />
         )}
