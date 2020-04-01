@@ -83,7 +83,7 @@ function MY_InvoiceCard({ invoices, className, attachments, handleAttachments, t
   return (
     <>
       {/*<MY_erpDetailTable />*/}
-      {invoices.map((invoice, i) => (
+      {invoices.filter(invoice => invoice.RPSEQ === 1).map((invoice, i) => (
         <Card
           key={i}
           {...rest}
@@ -108,7 +108,7 @@ function MY_InvoiceCard({ invoices, className, attachments, handleAttachments, t
           </div>
         </CardContent>
         <CardContent className={classes.erpDetailTable}>
-          <MY_erpDetailTable />
+          <MY_erpDetailTable invoices={invoices.filter(my_invoice =>  my_invoice.RPAN8 === invoice.RPAN8)} />
         </CardContent>
         {type === 'write'
           ? (<FilesDropzone

@@ -7,6 +7,10 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import PropTypes from "prop-types";
+import MY_InvoiceCard from "./MY_InvoiceDetailCard";
+import getCurrency from "../utils/getCurrency";
+import getThousand from "../utils/getThousand";
 
 const useStyles = makeStyles({
   table: {
@@ -14,47 +18,46 @@ const useStyles = makeStyles({
   },
 });
 
-function createData(name, calories, fat, carbs, protein) {
-  return { name, calories, fat, carbs, protein };
-}
-
-const rows = [
-  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-  createData('Eclair', 262, 16.0, 24, 6.0),
-  createData('Cupcake', 305, 3.7, 67, 4.3),
-  createData('Gingerbread', 356, 16.0, 49, 3.9),
-];
-
-export default function MY_erpDetailTable() {
+function MY_erpDetailTable({invoices}) {
   const classes = useStyles();
+
+  const getSumRPZ5CREDITAT = () => getThousand(invoices.map(invoice => invoice.RPZ5CREDITAT)
+    .reduce((prev, curr) => prev + curr));
 
   return (
     <TableContainer component={Paper}>
       <Table className={classes.table} size="small" aria-label="a dense table">
         <TableHead>
           <TableRow>
-            <TableCell>G/L일자</TableCell>
-            <TableCell align="right">전표유형</TableCell>
-            <TableCell align="right">계정과목</TableCell>
-            <TableCell align="right">거래처코드</TableCell>
-            <TableCell align="right">Protein&nbsp;(g)</TableCell>
+            <TableCell align="center">계정명</TableCell>
+            <TableCell align="center">차변</TableCell>
+            <TableCell align="center">대변</TableCell>
+            <TableCell align="center">비고</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map(row => (
-            <TableRow key={row.name}>
-              <TableCell component="th" scope="row">
-                {row.name}
-              </TableCell>
-              <TableCell align="right">{row.calories}</TableCell>
-              <TableCell align="right">{row.fat}</TableCell>
-              <TableCell align="right">{row.carbs}</TableCell>
-              <TableCell align="right">{row.protein}</TableCell>
+          {invoices.map(invoice => (
+            <TableRow key={invoice.id}>
+              <TableCell component="th" scope="row">{invoice.RPDL02}</TableCell>
+              <TableCell align="right">{invoice.RPZ5DEBITAT === 0 ? <br /> : getThousand(invoice.RPZ5DEBITAT)}</TableCell>
+              <TableCell align="right">{invoice.RPZ5CREDITAT === 0 ? <br /> : getThousand(invoice.RPZ5CREDITAT)}</TableCell>
+              <TableCell>{invoice.RPRMK}</TableCell>
             </TableRow>
           ))}
+            <TableRow>
+              <TableCell component="th" scope="row" style={{fontWeight: 600}}>문서별합계</TableCell>
+              <TableCell align="right"><br /></TableCell>
+              <TableCell align="right" style={{fontWeight: 600}}>{getSumRPZ5CREDITAT()}</TableCell>
+              <TableCell><br /></TableCell>
+            </TableRow>
         </TableBody>
       </Table>
     </TableContainer>
   );
 }
+
+MY_erpDetailTable.propTypes = {
+  invoices: PropTypes.array.isRequired,
+};
+
+export default MY_erpDetailTable;
