@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
     transform: 'translate(-50%, -50%)',
     outline: 'none',
     boxShadow: theme.shadows[20],
-    width: 800,
+    // width: 800,
     maxHeight: '95%',
     overflowY: 'auto',
     maxWidth: '100%'
@@ -164,7 +164,7 @@ function Index({
                   xs={12}
                 >
                   <MY_InvoiceCard
-                    invoices={invoices}
+                    invoices={invoices.filter(invoice => invoice.RPSEQ === 1)}
                     attachments={document.attachments}
                     type={'read'}
                   />

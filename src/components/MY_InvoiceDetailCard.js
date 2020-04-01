@@ -75,8 +75,6 @@ const useStyles = makeStyles((theme) => ({
 function MY_InvoiceCard({ invoices, className, attachments, handleAttachments, type, ...rest }) {
   const classes = useStyles();
 
-  console.log(invoices);
-
   return (
     <>
       {invoices.filter(invoice => invoice.RPSFX === '001' && invoice.RPSEQ === 1).map((invoice, i) => (

@@ -1,4 +1,4 @@
-import React, {useState, useCallback, useEffect} from 'react';
+import React, {useState, useCallback, useEffect, ReactHTML as styled} from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import uuid from 'uuid/v1';
@@ -65,6 +65,7 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(1)
   },
   dialogRoot: {
+    width: '100%',
     '& .MuiBackdrop-root': {
       backgroundColor: 'rgba(0, 0, 0, 0.1)'
     }
@@ -144,11 +145,7 @@ function MY_attachments({attachments, className, ...rest}) {
                 />
                 <ListItemSecondaryAction>
                   <a target="_blank" href={`http://localhost:8000${file.path}`}>
-                    {' '}
                     {/* TODO URL 변경 */}
-                    {/*<Label>*/}
-                    {/*  DownLoad*/}
-                    {/*</Label>*/}
                     <IconButton>
                       <GetAppIcon />
                     </IconButton>
@@ -161,26 +158,24 @@ function MY_attachments({attachments, className, ...rest}) {
       </>
       <Dialog
         classes={{root: classes.dialogRoot,paper: classes.dialogPaper}}
-        maxWidth="lg"
+        maxWidth="xl"
         open={open}
         onClose={handleClose}
         PaperComponent={PaperComponent}
         aria-labelledby="draggable-dialog-title"
-        // aria-describedby="alert-dialog-description"
       >
-        {/*<DialogTitle style={{ cursor: 'move',  }} id="draggable-dialog-title">*/}
         <DialogTitle  className={classes.dialogTitle} id="draggable-dialog-title">
           첨부파일
         </DialogTitle>
         {contentType === 'img'
           ? (<img src={selectedImgPath} className={classes.img} alt="이미지" />)
           : (
-            <div>
+            <>
               <Document
                 file={selectedImgPath}
                 onLoadSuccess={onDocumentLoadSuccess}
               >
-                <Page pageNumber={pageNumber} />
+                <Page width={1000}  pageNumber={pageNumber} />
               </Document>
               <Grid
                 container
@@ -216,7 +211,7 @@ function MY_attachments({attachments, className, ...rest}) {
                   </p>
                 </Grid>
               </Grid>
-            </div>
+            </>
           )}
       </Dialog>
     </div>

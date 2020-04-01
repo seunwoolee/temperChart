@@ -24,6 +24,9 @@ function MY_erpDetailTable({invoices}) {
   const getSumRPZ5CREDITAT = () => getThousand(invoices.map(invoice => invoice.RPZ5CREDITAT / 100)
     .reduce((prev, curr) => prev + curr));
 
+  const getSumRPZ5DEBITAT = () => getThousand(invoices.map(invoice => invoice.RPZ5DEBITAT / 100)
+    .reduce((prev, curr) => prev + curr));
+
   return (
     <TableContainer component={Paper}>
       <Table className={classes.table} size="small" aria-label="a dense table">
@@ -46,7 +49,7 @@ function MY_erpDetailTable({invoices}) {
           ))}
             <TableRow>
               <TableCell component="th" scope="row" style={{fontWeight: 600}}>문서별합계</TableCell>
-              <TableCell align="right"><br /></TableCell>
+              <TableCell align="right" style={{fontWeight: 600}}>{getSumRPZ5DEBITAT()}</TableCell>
               <TableCell align="right" style={{fontWeight: 600}}>{getSumRPZ5CREDITAT()}</TableCell>
               <TableCell><br /></TableCell>
             </TableRow>
