@@ -72,7 +72,7 @@ function MY_opinion({ signs, className, ...rest }) {
               <ListItemAvatar>
                 <Avatar
                   alt="사진"
-                  src={`http://localhost:8000${sign.user.avatar}`} // TODO URL 변경 필요
+                  src={`http://155.1.39.223:8000${sign.user.avatar}`} // TODO URL 변경 필요
                 >
                   {getInitials(sign.user.name)}
                 </Avatar>

@@ -126,16 +126,7 @@ function Results({className, documents, fetchDocuments, ...rest}) {
   };
 
   const openReportModal = () => {
-    // const newDocument = selectedDocuments[0];
-    // setInvoices(selectedDocuments[0].invoices)
-    // debugger;
     setOpenModal(true);
-    // const headers = {Authorization: `Token ${session.token}`};
-    // axios.get(`erp/voucher_list/${newDocument.batch_number}`, {headers})
-    //   .then((response) => {
-    //     setInvoices(response.data);
-    //   });
-
   };
 
 
@@ -161,29 +152,12 @@ function Results({className, documents, fetchDocuments, ...rest}) {
           return;
         }
         setSelectedDocuments(newDocuments);
-
-        // const headers = {Authorization: `Token ${session.token}`};
-        // axios.get(`erp/voucher_list/${newDocuments[0].batch_number}`, {headers})
-        //   .then((response) => {
-        //     setInvoices(response.data);
-        //     // setOpenModal(true);
-        //     setSelectedDocuments(newDocuments);
-        //   });
-
-        // setSelectedDocuments(newDocuments);
       })
       .catch(error => console.log(error)); // TODO 에러 로깅
-
-    // setSnackbarOpen(true);
-    // setIsSuccess(true);
-    // const newDocuments = selectedDocuments.slice(1);
-    // if (newDocuments.length === 0) {
-    //   setOpenModal(false);
-    // }
-    // setSelectedDocuments(newDocuments);
   };
 
   const closeReportModal = () => {
+    fetchDocuments();
     setOpenModal(false);
   };
 

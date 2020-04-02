@@ -12,11 +12,17 @@ import MY_InvoiceCard from "./MY_InvoiceDetailCard";
 import getCurrency from "../utils/getCurrency";
 import getThousand from "../utils/getThousand";
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   table: {
     minWidth: 650,
+    '& .MuiTableCell-root': {
+      borderBottom: '1px solid #000000'
+    },
+    '& .MuiTableRow-head': {
+      backgroundColor: '#e0e0e0'
+    }
   },
-});
+}));
 
 function MY_erpDetailTable({invoices}) {
   const classes = useStyles();

@@ -4,7 +4,7 @@ import clsx from 'clsx';
 import { makeStyles } from '@material-ui/styles';
 import {
   Card,
-  CardContent, Grid,
+  CardContent, Divider, Grid,
   Typography,
 } from '@material-ui/core';
 import getShortBigo from "../utils/getShortBigo";
@@ -29,18 +29,16 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(2)
   },
   content: {
-    padding: theme.spacing(2),
+    padding: theme.spacing(1),
     flexGrow: 1,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
+    borderBottom: '1px solid #000000',
     [theme.breakpoints.down('sm')]: {
       width: '100%',
       flexWrap: 'wrap'
     },
-    '&:last-child': {
-      paddingBottom: theme.spacing(2)
-    }
   },
   erpDetailTable: {
     padding: 0,
@@ -75,8 +73,22 @@ const useStyles = makeStyles((theme) => ({
 function MY_InvoiceCard({ invoices, className, attachments, handleAttachments, type, ...rest }) {
   const classes = useStyles();
 
+  const getSumInvoices = () => getCurrency(invoices.filter(invoice => invoice.RPSEQ === 1)
+                                                    .map(invoice => invoice.RPAMT)
+                                                    .reduce((prev, curr) => prev + curr));
+
   return (
     <>
+      <Typography variant="h5">
+        총
+        {' '}
+        {invoices.filter(invoice => invoice.RPSEQ === 1).length}
+        건 /
+        {' '}
+        {getSumInvoices()}
+        원
+      </Typography>
+
       {invoices.filter(invoice => invoice.RPSFX === '001' && invoice.RPSEQ === 1).map((invoice, i) => (
         <Card
           key={i}
@@ -104,6 +116,8 @@ function MY_InvoiceCard({ invoices, className, attachments, handleAttachments, t
         <CardContent className={classes.erpDetailTable}>
           <MY_erpDetailTable invoices={invoices.filter(my_invoice =>  my_invoice.RPDOC === invoice.RPDOC)} />
         </CardContent>
+        <Divider />
+
         {type === 'write'
           ? (<FilesDropzone
           invoiceId={invoice.id}

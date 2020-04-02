@@ -85,7 +85,7 @@ function Results({className, invoices, totalInvoices, ...rest}) {
   const startData = page * rowsPerPage;
   const endData = (page * rowsPerPage) + rowsPerPage;
   const dispalyedInvoices = invoices.slice(startData, endData);
-  const props = {mobileInnerHeight: getPerfectScrollbarHeight(rowsPerPage, invoices.length, 80)};
+  const props = {mobileInnerHeight: getPerfectScrollbarHeight(rowsPerPage, invoices.length, 50)};
   const classes = useStyles(props);
 
   const handleSelectAll = (event) => {
@@ -225,6 +225,7 @@ function Results({className, invoices, totalInvoices, ...rest}) {
                     <TableCell className={classes.header}>G/L일자</TableCell>
                     <TableCell className={classes.header}>금액</TableCell>
                     <TableCell className={classes.header}>비고</TableCell>
+                    <TableCell className={classes.header}>작성자</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -244,6 +245,7 @@ function Results({className, invoices, totalInvoices, ...rest}) {
                         {getCurrency(invoice.RPAMT)}
                       </TableCell>
                       <TableCell>{getShortBigo(width, invoice.RPRMK)}</TableCell>
+                      <TableCell align="center" className={classes.whiteSpaceNoWrap}>{invoice.RPNAME}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>

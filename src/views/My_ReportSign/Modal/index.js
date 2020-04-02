@@ -22,6 +22,7 @@ import MY_attachmentsBase from "../../../components/MY_attachmentsBase";
 import FormDialog from "../Dialog";
 import MY_InvoiceCard from "../../../components/MY_InvoiceCard";
 import MY_opinion from "../../../components/MY_opinion";
+import MY_InvoiceDetailCard from "../../../components/MY_InvoiceDetailCard";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -163,11 +164,15 @@ function Index({
                   md={12}
                   xs={12}
                 >
-                  <MY_InvoiceCard
-                    invoices={invoices.filter(invoice => invoice.RPSEQ === 1)}
-                    attachments={document.attachments}
+                  {/*<MY_InvoiceCard*/}
+                  {/*  invoices={invoices.filter(invoice => invoice.RPSEQ === 1)}*/}
+                  {/*  attachments={document.attachments}*/}
+                  {/*  type={'read'}*/}
+                  {/*/>*/}
+                  <MY_InvoiceDetailCard
                     type={'read'}
-                  />
+                    invoices={invoices}
+                    attachments={document.attachments} />
                 </Grid>
                 <Grid
                   item

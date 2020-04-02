@@ -9,7 +9,7 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
-  colors
+  colors, CardContent
 } from '@material-ui/core';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
 import bytesToSize from 'src/utils/bytesToSize';
@@ -26,6 +26,7 @@ import Button from "@material-ui/core/Button";
 import Paper from '@material-ui/core/Paper';
 import Draggable from 'react-draggable';
 import DialogTitle from "@material-ui/core/DialogTitle";
+import useWindowDimensions from "./WindowDimenstions";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
@@ -100,13 +101,12 @@ function MY_attachments({attachments, className, ...rest}) {
   const [open, setOpen] = React.useState(false);
   const [selectedImgPath, setSelectedImgPath] = React.useState('');
   const [contentType, setContentType] = React.useState('img');
-
   const [numPages, setNumPages] = React.useState(null);
   const [pageNumber, setPageNumber] = React.useState(1);
 
   const handleClickOpen = (imgPath, isImg) => {
     setOpen(true);
-    setSelectedImgPath(`http://localhost:8000${imgPath}`); // TODO URL 변경
+    setSelectedImgPath(`http://155.1.39.223:8000${imgPath}`); // TODO URL 변경
     isImg ? setContentType('img') : setContentType('pdf');
   };
 
@@ -144,7 +144,7 @@ function MY_attachments({attachments, className, ...rest}) {
                   secondary={bytesToSize(file.size)}
                 />
                 <ListItemSecondaryAction>
-                  <a target="_blank" href={`http://localhost:8000${file.path}`}>
+                  <a target="_blank" href={`http://155.1.39.223:8000${file.path}`}>
                     {/* TODO URL 변경 */}
                     <IconButton>
                       <GetAppIcon />
@@ -171,11 +171,12 @@ function MY_attachments({attachments, className, ...rest}) {
           ? (<img src={selectedImgPath} className={classes.img} alt="이미지" />)
           : (
             <>
+            <PerfectScrollbar>
               <Document
                 file={selectedImgPath}
                 onLoadSuccess={onDocumentLoadSuccess}
               >
-                <Page width={1000}  pageNumber={pageNumber} />
+                <Page width={1000} pageNumber={pageNumber} />
               </Document>
               <Grid
                 container
@@ -211,6 +212,7 @@ function MY_attachments({attachments, className, ...rest}) {
                   </p>
                 </Grid>
               </Grid>
+            </PerfectScrollbar>
             </>
           )}
       </Dialog>

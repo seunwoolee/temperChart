@@ -124,16 +124,19 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function ChooseDialog({ open, onClose, onSubmit }) {
+function ChooseDialog({open, onClose, onSubmit}) {
   const classes = useStyles();
   const [users, setUsers] = React.useState([]);
   const [departmentUsers, setDepartmentUsers] = React.useState([]);
   const [allUsers, setAllUsers] = React.useState([]);
+  const [typeUsers, setTypeUsers] = React.useState([]);
+  const [inputSearch, setInputSearch] = React.useState('');
   const [checked, setChecked] = React.useState(-1);
   const [expanded, setExpanded] = React.useState(false);
   const [addUserType, setAddUserType] = React.useState(10);
   const session = useSelector((state) => state.session);
-
+  // let typeUsers = addUserType === 10 ? departmentUsers : allUsers;
+  console.log(typeUsers);
 
   const handleChecked = (i) => {
     if (i === checked) {
@@ -183,7 +186,9 @@ function ChooseDialog({ open, onClose, onSubmit }) {
   };
 
   const setDown = () => {
-    if (checked === -1) { return; }
+    if (checked === -1) {
+      return;
+    }
 
     const exceptUsers = users.filter(user => user.order !== checked && user.order !== checked + 1);
     const selectedUser = users.find(user => user.order === checked);
@@ -198,7 +203,9 @@ function ChooseDialog({ open, onClose, onSubmit }) {
   };
 
   const setUp = () => {
-    if (checked === -1) { return; }
+    if (checked === -1) {
+      return;
+    }
 
     const exceptUsers = users.filter(user => user.order !== checked && user.order !== checked - 1);
     const selectedUser = users.find(user => user.order === checked);
@@ -211,6 +218,18 @@ function ChooseDialog({ open, onClose, onSubmit }) {
       setUsers(newUsers.sort(sortUsers));
     }
   };
+
+  useEffect(() => {
+    const searchUsers = addUserType === 10 ? departmentUsers : allUsers
+    if(inputSearch.length > 0){
+      return setTypeUsers(searchUsers.filter(user => user.name.includes(inputSearch)))
+    }
+    setTypeUsers(searchUsers)
+  }, [inputSearch])
+
+  useEffect(() => {
+    setTypeUsers(addUserType === 10 ? departmentUsers : allUsers)
+  }, [addUserType])
 
   useEffect(() => {
     let mounted = true;
@@ -227,6 +246,7 @@ function ChooseDialog({ open, onClose, onSubmit }) {
       axios.get(`ea/get_departmentUsers/${session.user.department}`, {headers}).then(response => {
         if (mounted) {
           setDepartmentUsers(response.data);
+          setTypeUsers(response.data);
         }
       });
     };
@@ -249,14 +269,13 @@ function ChooseDialog({ open, onClose, onSubmit }) {
     };
   }, [session.token, session.user.department, session.user.id]);
 
-  const typeUsers = addUserType === 10 ? departmentUsers : allUsers;
 
   return (
     <Dialog onClose={onClose} aria-labelledby="simple-dialog-title" open={open}>
       <Card
         className={classes.root}
       >
-        <Divider />
+        <Divider/>
         <div className={classes.main}>
           <Grid
             container
@@ -271,18 +290,18 @@ function ChooseDialog({ open, onClose, onSubmit }) {
             </Grid>
             <Grid item>
               <IconButton onClick={setDown} className={classes.arrowIconButtom} aria-label="down-order">
-                <ArrowDownwardRoundedIcon className={classes.personAddIncon} color="inherit" />
+                <ArrowDownwardRoundedIcon className={classes.personAddIncon} color="inherit"/>
               </IconButton>
               <IconButton onClick={setUp} className={classes.arrowIconButtom} aria-label="up-order">
-                <ArrowUpwardRoundedIcon className={classes.personAddIncon} color="inherit" />
+                <ArrowUpwardRoundedIcon className={classes.personAddIncon} color="inherit"/>
               </IconButton>
               <IconButton onClick={() => setExpanded(true)} style={{paddingRight: 3}} aria-label="add-user">
-                <PersonAddIcon className={classes.personAddIncon} color="inherit" />
+                <PersonAddIcon className={classes.personAddIncon} color="inherit"/>
               </IconButton>
             </Grid>
           </Grid>
         </div>
-        <Divider />
+        <Divider/>
         <CardContent className={classes.content}>
           <PerfectScrollbar>
             <List disablePadding>
@@ -313,7 +332,7 @@ function ChooseDialog({ open, onClose, onSubmit }) {
                       alt="Profile image"
                       className={classes.avatar}
                       component={RouterLink}
-                      src={`http://localhost:8000${user.avatar}`} // TODO URL 변경 필요
+                      src={`http://155.1.39.223:8000${user.avatar}`} // TODO URL 변경 필요
                       to="/profile/1/timeline"
                     />
                     <ListItemText
@@ -323,7 +342,7 @@ function ChooseDialog({ open, onClose, onSubmit }) {
                     />
                     <ListItemSecondaryAction classes={{root: classes.deleteUserButton}}>
                       <IconButton onClick={() => deleteUser(user.order)} aria-label="delete-user">
-                        <CancelPresentationIcon fontSize="large" />
+                        <CancelPresentationIcon fontSize="large"/>
                       </IconButton>
                     </ListItemSecondaryAction>
                   </ListItem>
@@ -332,7 +351,7 @@ function ChooseDialog({ open, onClose, onSubmit }) {
             </List>
           </PerfectScrollbar>
         </CardContent>
-        <Divider />
+        <Divider/>
         <CardActions className={classes.actions}>
           <Button onClick={onClose}>
             취소
@@ -349,7 +368,7 @@ function ChooseDialog({ open, onClose, onSubmit }) {
           <CardHeader
             action={(
               <IconButton onClick={() => setExpanded(false)} aria-label="settings">
-                <ExpandLessOutlinedIcon fontSize="large" />
+                <ExpandLessOutlinedIcon fontSize="large"/>
               </IconButton>
             )}
             title="결재자 추가"
@@ -361,7 +380,7 @@ function ChooseDialog({ open, onClose, onSubmit }) {
                   onChange={handleAddUserTypeChange}
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"
-                  defaultValue={addUserType}
+                  value={addUserType}
                 >
                   <MenuItem value={10}>내부서</MenuItem>
                   <MenuItem value={20}>이름</MenuItem>
@@ -371,9 +390,11 @@ function ChooseDialog({ open, onClose, onSubmit }) {
                   color="inherit"
                 />
                 <Input
+                  onChange={(e) => setInputSearch(e.target.value)}
+                  value={inputSearch}
                   className={classes.searchInput}
                   disableUnderline
-                  placeholder="Search people &amp; places"
+                  placeholder="이름 검색"
                 />
               </ListItem>
               {typeUsers.map((user, i) => (
@@ -387,7 +408,7 @@ function ChooseDialog({ open, onClose, onSubmit }) {
                   <Avatar
                     alt="Profile image"
                     className={classes.avatar}
-                    src={`http://localhost:8000${user.avatar}`} // TODO URL 변경 필요
+                    src={`http://155.1.39.223:8000${user.avatar}`} // TODO URL 변경 필요
                   />
                   <ListItemText
                     className={classes.listItemText}
@@ -396,7 +417,7 @@ function ChooseDialog({ open, onClose, onSubmit }) {
                   />
                   <ListItemSecondaryAction classes={{root: classes.deleteUserButton}}>
                     <IconButton onClick={() => handleAddButton(user.id)} aria-label="add-user">
-                      <AddCircleOutlineOutlinedIcon fontSize="large" />
+                      <AddCircleOutlineOutlinedIcon fontSize="large"/>
                     </IconButton>
                   </ListItemSecondaryAction>
                 </ListItem>

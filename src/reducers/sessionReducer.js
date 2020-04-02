@@ -29,7 +29,7 @@ const sessionLogin = (state, action) => {
       name: data.user.first_name,
       department: data.department.name,
       position: data.position.name,
-      avatar: `http://localhost:8000${data.avatar}`, // TODO URL 변경 필요
+      avatar: `http://155.1.39.223:8000${data.avatar}`, // TODO URL 변경 필요
     }
   };
 };
