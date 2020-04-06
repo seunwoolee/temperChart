@@ -8,6 +8,8 @@ import {useSelector} from "react-redux";
 import axios from "../../utils/my_axios";
 import Header from './Header';
 import Results from './Results';
+import moment from "moment";
+import MY_SearchBar from "../../components/MY_SearchBar";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -19,32 +21,48 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
+
+const initialValues = {
+  name: '',
+  startDate: moment().add(-3, 'month'),
+  endDate: moment()
+};
+
 function ReportCreate() {
   const classes = useStyles();
   const [invoices, setInvoices] = useState([]);
+  const [inputDateValues, setInputDateValues] = useState({...initialValues});
+  const [inputSearchContent, setInputSearchContent] = useState('');
+
   const session = useSelector((state) => state.session);
+
+  const handleSearchContent = (event) => {
+    setInputSearchContent(event.target.value);
+  };
 
   const handleFilter = () => {};
 
-  const handleSearch = () => {};
+  const handleSearch = () => {
+    fetchInvoices();
+  };
+
+  const fetchInvoices = () => {
+    const config = {
+      headers: {Authorization: `Token ${localStorage.getItem('token')}`},
+      params: {
+        startDate: moment(inputDateValues.startDate).format('YYYY-MM-DD'),
+        endDate: moment(inputDateValues.endDate).format('YYYY-MM-DD'),
+        search: inputSearchContent
+      }
+    };
+
+    axios.get('erp/voucher_list/', config).then((response) => {
+      setInvoices(response.data);
+    });
+  };
 
   useEffect(() => {
-    let mounted = true;
-
-    const fetchInvoices = () => {
-      const headers = {Authorization: `Token ${localStorage.getItem('token')}`};
-      axios.get('erp/voucher_list/', {headers}).then((response) => {
-        if (mounted) {
-          setInvoices(response.data);
-        }
-      });
-    };
-
     fetchInvoices();
-
-    return () => {
-      mounted = false;
-    };
   }, []);
 
   return (
@@ -57,10 +75,18 @@ function ReportCreate() {
         className={classes.container}
       >
         <Header />
-        <SearchBar
+        <MY_SearchBar
+          searchContent={inputSearchContent}
+          setSearchContent={handleSearchContent}
+          dateValues={inputDateValues}
+          setDateValues={setInputDateValues}
           onFilter={handleFilter}
           onSearch={handleSearch}
         />
+        {/*<SearchBar*/}
+        {/*  onFilter={handleFilter}*/}
+        {/*  onSearch={handleSearch}*/}
+        {/*/>*/}
         {invoices && (
           <Results
             className={classes.results}

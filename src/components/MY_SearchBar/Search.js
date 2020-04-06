@@ -46,7 +46,7 @@ function Search({ onSearch, className, searchContent, setSearchContent, ...rest 
         <Input
           className={classes.searchInput}
           disableUnderline
-          placeholder="Search"
+          placeholder="비고, 제목 검색"
           value={searchContent}
           onChange={setSearchContent}
           onKeyDown={(event) => (event.key === 'Enter' ? onSearch() : null) }

@@ -8,6 +8,8 @@ import { useLocation} from "react-router";
 import axios from "../../utils/my_axios";
 import Header from './Header';
 import Results from './Results';
+import moment from "moment";
+import MY_SearchBar from "../../components/MY_SearchBar";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -19,18 +21,32 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
+const initialValues = {
+  name: '',
+  startDate: moment().add(-3, 'month'),
+  endDate: moment()
+};
+
+
 function ReportWritten() {
   const classes = useStyles();
   const [documents, setDocuments] = useState([]);
+  const [inputDateValues, setInputDateValues] = useState({...initialValues});
+  const [inputSearchContent, setInputSearchContent] = useState('');
   const session = useSelector((state) => state.session);
   const location = useLocation();
 
+  const handleSearchContent = (event) => {
+    setInputSearchContent(event.target.value);
+  };
+
   const handleFilter = () => {};
 
-  const handleSearch = () => {};
+  const handleSearch = () => {
+    fetchDocuments();
+  };
 
-  useEffect(() => {
-    let mounted = true;
+  const fetchDocuments = () => {
     let url = `ea/written_document/${session.user.id}`;
 
     if (location.pathname === '/reportRejected') {
@@ -39,20 +55,28 @@ function ReportWritten() {
       url = `ea/approved_document/${session.user.id}`;
     }
 
-    const fetchDocuments = () => {
-      const headers = {Authorization: `Token ${localStorage.getItem('token')}`};
-      axios.get(url, {headers}).then((response) => {
-        if (mounted) {
-          setDocuments(response.data);
-        }
-      });
+    const config = {
+      headers: {Authorization: `Token ${localStorage.getItem('token')}`},
+      params: {
+        startDate: moment(inputDateValues.startDate).format('YYYY-MM-DD'),
+        endDate: moment(inputDateValues.endDate).format('YYYY-MM-DD'),
+        search: inputSearchContent
+      }
     };
 
+    // const headers = {Authorization: `Token ${localStorage.getItem('token')}`};
+
+    axios.get(url, config).then((response) => {
+      setDocuments(response.data);
+
+    });
+    // axios.get(url, {headers}).then((response) => {
+    //   setDocuments(response.data);
+    // });
+  };
+
+  useEffect(() => {
     fetchDocuments();
-
-    return () => {
-      mounted = false;
-    };
   }, [location.pathname, session.user.id]);
 
   return (
@@ -62,10 +86,18 @@ function ReportWritten() {
     >
       <Container maxWidth={false}>
         <Header />
-        <SearchBar
+        <MY_SearchBar
+          searchContent={inputSearchContent}
+          setSearchContent={handleSearchContent}
+          dateValues={inputDateValues}
+          setDateValues={setInputDateValues}
           onFilter={handleFilter}
           onSearch={handleSearch}
         />
+        {/*<SearchBar*/}
+        {/*  onFilter={handleFilter}*/}
+        {/*  onSearch={handleSearch}*/}
+        {/*/>*/}
         {documents && (
           <Results
             className={classes.results}
