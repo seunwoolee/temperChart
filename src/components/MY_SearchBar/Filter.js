@@ -99,7 +99,7 @@ const initialValues = {
   tags: ['Full-Time'],
   amount: [1, 7],
   projectStatus: 'ended',
-  customerName: '',
+  batchNumber: '',
   customerType: 'freelancer',
   customerEmail: '',
   customerPhone: '',
@@ -115,7 +115,7 @@ function Filter({
 }) {
   const classes = useStyles();
   const [expandProject, setExpandProject] = useState(true);
-  const [expandCustomer, setExpandCustomer] = useState(false);
+  const [expandCustomer, setExpandCustomer] = useState(true);
   const [values, setValues] = useState({ ...initialValues });
 
   const handleClear = () => {
@@ -193,169 +193,169 @@ function Filter({
             size="small"
           >
             <CloseIcon className={classes.buttonIcon} />
-            Close
+            닫기
           </Button>
         </div>
         <div className={classes.content}>
-          <div className={classes.contentSection}>
-            <div
-              className={classes.contentSectionHeader}
-              onClick={handleToggleProject}
-            >
-              <Typography variant="h5">Project</Typography>
-              {expandProject ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-            </div>
-            <Divider />
-            <Collapse in={expandProject}>
-              <div className={classes.contentSectionContent}>
-                <div className={classes.formGroup}>
-                  <TextField
-                    className={classes.field}
-                    fullWidth
-                    label="Payment status"
-                    margin="dense"
-                    name="paymentStatus"
-                    onChange={(event) => handleFieldChange(
-                      event,
-                      'paymentStatus',
-                      event.target.value
-                    )}
-                    select
-                    SelectProps={{ native: true }}
-                    value={values.paymentStatus}
-                    variant="outlined"
-                  >
-                    <option
-                      disabled
-                      value=""
-                    />
-                    {paymentStatusOptions.map((option) => (
-                      <option
-                        key={option}
-                        value={option}
-                      >
-                        {option}
-                      </option>
-                    ))}
-                  </TextField>
-                </div>
-                <div className={classes.formGroup}>
-                  <div className={classes.fieldGroup}>
-                    <TextField
-                      className={clsx(classes.field, classes.flexGrow)}
-                      label="Filter Tags"
-                      margin="dense"
-                      name="tag"
-                      onChange={(event) => handleFieldChange(event, 'tag', event.target.value)}
-                      value={values.tag}
-                      variant="outlined"
-                    />
-                    <Button
-                      className={classes.addButton}
-                      onClick={handleTagAdd}
-                      size="small"
-                    >
-                      <AddIcon className={classes.addIcon} />
-                      Add
-                    </Button>
-                  </div>
-                  <div className={classes.tags}>
-                    {values.tags.map((tag) => (
-                      <Chip
-                        deleteIcon={<CloseIcon />}
-                        key={tag}
-                        label={tag}
-                        onDelete={() => handleTagDelete(tag)}
-                      />
-                    ))}
-                  </div>
-                </div>
-                <div className={classes.formGroup}>
-                  <Typography
-                    component="p"
-                    gutterBottom
-                    variant="overline"
-                  >
-                    Project amount
-                  </Typography>
-                  <div className={classes.fieldGroup}>
-                    <Typography
-                      className={classes.minAmount}
-                      variant="body1"
-                    >
-                      $
-                      {values.amount[0]}
-                      K
-                    </Typography>
-                    <Slider
-                      className={classes.flexGrow}
-                      max={20}
-                      min={1}
-                      onChange={(event, value) => handleFieldChange(event, 'amount', value)}
-                      value={values.amount}
-                      valueLabelDisplay="auto"
-                    />
-                    <Typography
-                      className={classes.maxAmount}
-                      variant="body1"
-                    >
-                      $
-                      {values.amount[1]}
-                      K
-                    </Typography>
-                  </div>
-                </div>
-                <div className={classes.formGroup}>
-                  <Typography
-                    component="p"
-                    gutterBottom
-                    variant="overline"
-                  >
-                    Project status
-                  </Typography>
-                  <div className={classes.fieldGroup}>
-                    <RadioGroup
-                      className={classes.radioGroup}
-                      name="projectStatus"
-                      onChange={(event) => handleFieldChange(
-                        event,
-                        'projectStatus',
-                        event.target.value
-                      )}
-                      value={values.projectStatus}
-                    >
-                      <FormControlLabel
-                        control={<Radio color="primary" />}
-                        label="Ended"
-                        value="ended"
-                      />
-                      <FormControlLabel
-                        control={<Radio color="primary" />}
-                        label="On-Going"
-                        value="onGoing"
-                      />
-                      <FormControlLabel
-                        control={<Radio color="primary" />}
-                        label="In Review"
-                        value="inReview"
-                      />
-                      <FormControlLabel
-                        control={<Radio color="primary" />}
-                        label="Competed"
-                        value="completed"
-                      />
-                    </RadioGroup>
-                  </div>
-                </div>
-              </div>
-            </Collapse>
-          </div>
+          {/*<div className={classes.contentSection}>*/}
+          {/*  <div*/}
+          {/*    className={classes.contentSectionHeader}*/}
+          {/*    onClick={handleToggleProject}*/}
+          {/*  >*/}
+          {/*    <Typography variant="h5">Project</Typography>*/}
+          {/*    {expandProject ? <ExpandLessIcon /> : <ExpandMoreIcon />}*/}
+          {/*  </div>*/}
+          {/*  <Divider />*/}
+          {/*  <Collapse in={expandProject}>*/}
+          {/*    <div className={classes.contentSectionContent}>*/}
+          {/*      <div className={classes.formGroup}>*/}
+          {/*        <TextField*/}
+          {/*          className={classes.field}*/}
+          {/*          fullWidth*/}
+          {/*          label="Payment status"*/}
+          {/*          margin="dense"*/}
+          {/*          name="paymentStatus"*/}
+          {/*          onChange={(event) => handleFieldChange(*/}
+          {/*            event,*/}
+          {/*            'paymentStatus',*/}
+          {/*            event.target.value*/}
+          {/*          )}*/}
+          {/*          select*/}
+          {/*          SelectProps={{ native: true }}*/}
+          {/*          value={values.paymentStatus}*/}
+          {/*          variant="outlined"*/}
+          {/*        >*/}
+          {/*          <option*/}
+          {/*            disabled*/}
+          {/*            value=""*/}
+          {/*          />*/}
+          {/*          {paymentStatusOptions.map((option) => (*/}
+          {/*            <option*/}
+          {/*              key={option}*/}
+          {/*              value={option}*/}
+          {/*            >*/}
+          {/*              {option}*/}
+          {/*            </option>*/}
+          {/*          ))}*/}
+          {/*        </TextField>*/}
+          {/*      </div>*/}
+          {/*      <div className={classes.formGroup}>*/}
+          {/*        <div className={classes.fieldGroup}>*/}
+          {/*          <TextField*/}
+          {/*            className={clsx(classes.field, classes.flexGrow)}*/}
+          {/*            label="Filter Tags"*/}
+          {/*            margin="dense"*/}
+          {/*            name="tag"*/}
+          {/*            onChange={(event) => handleFieldChange(event, 'tag', event.target.value)}*/}
+          {/*            value={values.tag}*/}
+          {/*            variant="outlined"*/}
+          {/*          />*/}
+          {/*          <Button*/}
+          {/*            className={classes.addButton}*/}
+          {/*            onClick={handleTagAdd}*/}
+          {/*            size="small"*/}
+          {/*          >*/}
+          {/*            <AddIcon className={classes.addIcon} />*/}
+          {/*            Add*/}
+          {/*          </Button>*/}
+          {/*        </div>*/}
+          {/*        <div className={classes.tags}>*/}
+          {/*          {values.tags.map((tag) => (*/}
+          {/*            <Chip*/}
+          {/*              deleteIcon={<CloseIcon />}*/}
+          {/*              key={tag}*/}
+          {/*              label={tag}*/}
+          {/*              onDelete={() => handleTagDelete(tag)}*/}
+          {/*            />*/}
+          {/*          ))}*/}
+          {/*        </div>*/}
+          {/*      </div>*/}
+          {/*      <div className={classes.formGroup}>*/}
+          {/*        <Typography*/}
+          {/*          component="p"*/}
+          {/*          gutterBottom*/}
+          {/*          variant="overline"*/}
+          {/*        >*/}
+          {/*          Project amount*/}
+          {/*        </Typography>*/}
+          {/*        <div className={classes.fieldGroup}>*/}
+          {/*          <Typography*/}
+          {/*            className={classes.minAmount}*/}
+          {/*            variant="body1"*/}
+          {/*          >*/}
+          {/*            $*/}
+          {/*            {values.amount[0]}*/}
+          {/*            K*/}
+          {/*          </Typography>*/}
+          {/*          <Slider*/}
+          {/*            className={classes.flexGrow}*/}
+          {/*            max={20}*/}
+          {/*            min={1}*/}
+          {/*            onChange={(event, value) => handleFieldChange(event, 'amount', value)}*/}
+          {/*            value={values.amount}*/}
+          {/*            valueLabelDisplay="auto"*/}
+          {/*          />*/}
+          {/*          <Typography*/}
+          {/*            className={classes.maxAmount}*/}
+          {/*            variant="body1"*/}
+          {/*          >*/}
+          {/*            $*/}
+          {/*            {values.amount[1]}*/}
+          {/*            K*/}
+          {/*          </Typography>*/}
+          {/*        </div>*/}
+          {/*      </div>*/}
+          {/*      <div className={classes.formGroup}>*/}
+          {/*        <Typography*/}
+          {/*          component="p"*/}
+          {/*          gutterBottom*/}
+          {/*          variant="overline"*/}
+          {/*        >*/}
+          {/*          Project status*/}
+          {/*        </Typography>*/}
+          {/*        <div className={classes.fieldGroup}>*/}
+          {/*          <RadioGroup*/}
+          {/*            className={classes.radioGroup}*/}
+          {/*            name="projectStatus"*/}
+          {/*            onChange={(event) => handleFieldChange(*/}
+          {/*              event,*/}
+          {/*              'projectStatus',*/}
+          {/*              event.target.value*/}
+          {/*            )}*/}
+          {/*            value={values.projectStatus}*/}
+          {/*          >*/}
+          {/*            <FormControlLabel*/}
+          {/*              control={<Radio color="primary" />}*/}
+          {/*              label="Ended"*/}
+          {/*              value="ended"*/}
+          {/*            />*/}
+          {/*            <FormControlLabel*/}
+          {/*              control={<Radio color="primary" />}*/}
+          {/*              label="On-Going"*/}
+          {/*              value="onGoing"*/}
+          {/*            />*/}
+          {/*            <FormControlLabel*/}
+          {/*              control={<Radio color="primary" />}*/}
+          {/*              label="In Review"*/}
+          {/*              value="inReview"*/}
+          {/*            />*/}
+          {/*            <FormControlLabel*/}
+          {/*              control={<Radio color="primary" />}*/}
+          {/*              label="Competed"*/}
+          {/*              value="completed"*/}
+          {/*            />*/}
+          {/*          </RadioGroup>*/}
+          {/*        </div>*/}
+          {/*      </div>*/}
+          {/*    </div>*/}
+          {/*  </Collapse>*/}
+          {/*</div>*/}
           <div className={classes.contentSection}>
             <div
               className={classes.contentSectionHeader}
               onClick={handleToggleCustomer}
             >
-              <Typography variant="h5">Customer</Typography>
+              <Typography variant="h5">상세검색</Typography>
               {expandCustomer ? <ExpandLessIcon /> : <ExpandMoreIcon />}
             </div>
             <Divider />
@@ -366,15 +366,15 @@ function Filter({
                     <TextField
                       className={classes.field}
                       fullWidth
-                      label="Customer name"
+                      label="배치번호"
                       margin="dense"
-                      name="customerName"
+                      name="batchNumber"
                       onChange={(event) => handleFieldChange(
                         event,
-                        'customerName',
+                        'batchNumber',
                         event.target.value
                       )}
-                      value={values.customerName}
+                      value={values.batchNumber}
                       variant="outlined"
                     />
                   </div>
@@ -471,7 +471,7 @@ function Filter({
             variant="contained"
           >
             <DeleteIcon className={classes.buttonIcon} />
-            Clear
+            초기화
           </Button>
           <Button
             color="primary"
@@ -480,7 +480,7 @@ function Filter({
             variant="contained"
             onClick={onClose}
           >
-            Apply filters
+            확인
           </Button>
         </div>
       </form>

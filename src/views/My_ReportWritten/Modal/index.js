@@ -33,10 +33,16 @@ const useStyles = makeStyles((theme) => ({
     position: 'absolute',
     top: '50%',
     left: '50%',
+    [theme.breakpoints.up('md')]: {
+      left: '35%'
+    },
+    [theme.breakpoints.up('lg')]: {
+      left: '25%'
+    },
     transform: 'translate(-50%, -50%)',
     outline: 'none',
     boxShadow: theme.shadows[20],
-    width: 800,
+    width: 900,
     maxHeight: '95%',
     overflowY: 'auto',
     maxWidth: '100%'

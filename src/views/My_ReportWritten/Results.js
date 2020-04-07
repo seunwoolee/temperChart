@@ -80,6 +80,9 @@ function Results({className, documents, ...rest}) {
   const [isSuccess, setIsSuccess] = useState(true);
   const session = useSelector((state) => state.session);
 
+  const startData = page * rowsPerPage;
+  const endData = (page * rowsPerPage) + rowsPerPage;
+
   const props = { mobileInnerHeight: getPerfectScrollbarHeight(rowsPerPage, documents.length, 60)};
   const classes = useStyles(props);
 
@@ -147,7 +150,8 @@ function Results({className, documents, ...rest}) {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {documents.slice(0, rowsPerPage).map((document, i) => (
+                  {/*{documents.slice(0, rowsPerPage).map((document, i) => (*/}
+                  {documents.slice(startData, endData).map((document, i) => (
                     <TableRow
                       className={classes.tableRows}
                       onClick={() => handleTableClick(document.id)}

@@ -38,25 +38,32 @@ function MY_erpDetailTable({invoices}) {
       <Table className={classes.table} size="small" aria-label="a dense table">
         <TableHead>
           <TableRow>
+            <TableCell align="center">코드</TableCell>
             <TableCell align="center">계정명</TableCell>
             <TableCell align="center">차변</TableCell>
             <TableCell align="center">대변</TableCell>
             <TableCell align="center">비고</TableCell>
+            <TableCell align="center">관리</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {invoices.map(invoice => (
             <TableRow key={invoice.id}>
-              <TableCell component="th" scope="row">{invoice.RPDL02}</TableCell>
+              <TableCell component="th" scope="row">{invoice.RPCODE}</TableCell>
+              <TableCell style={{whiteSpace: 'nowrap'}} component="th" scope="row">{invoice.RPDL02}</TableCell>
               <TableCell align="right">{invoice.RPZ5DEBITAT === 0 ? <br /> : getThousand(invoice.RPZ5DEBITAT / 100)}</TableCell>
               <TableCell align="right">{invoice.RPZ5CREDITAT === 0 ? <br /> : getThousand(invoice.RPZ5CREDITAT / 100)}</TableCell>
               <TableCell>{invoice.RPRMK}</TableCell>
+              <TableCell>{invoice.RPSEQ === 3 ? (invoice.RPALPH) : <br />}</TableCell>
+              {/*<TableCell>{invoice.RPSEQ === 3 ? (invoice.RPALPH + '('+invoice.RPSBLT+')') : <br />}</TableCell>*/}
             </TableRow>
           ))}
             <TableRow>
+              <TableCell><br /></TableCell>
               <TableCell component="th" scope="row" style={{fontWeight: 600}}>문서별합계</TableCell>
               <TableCell align="right" style={{fontWeight: 600}}>{getSumRPZ5DEBITAT()}</TableCell>
               <TableCell align="right" style={{fontWeight: 600}}>{getSumRPZ5CREDITAT()}</TableCell>
+              <TableCell><br /></TableCell>
               <TableCell><br /></TableCell>
             </TableRow>
         </TableBody>

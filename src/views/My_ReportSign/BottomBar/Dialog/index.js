@@ -2,14 +2,11 @@ import React from 'react';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import PropTypes from "prop-types";
-import BottomBar from "../BottomBar";
-import {documents} from "../../../../mock";
-import {Typography} from "@material-ui/core";
 import {makeStyles} from "@material-ui/styles";
+import axios from "../../../../utils/my_axios";
+import {useSelector} from "react-redux";
 
 const useStyles = makeStyles((theme) => ({
   dialogTitle: {
@@ -19,11 +16,29 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-export default function MyDialog({open, onCloseDialog}) {
+export default function MyDialog({open, onCloseDialog, selectedDocuments, fetchDocuments}) {
   const classes = useStyles();
+  const session = useSelector((state) => state.session);
 
-  const handleClickOpen = () => {
-    // setOpen(true);
+  const handleSubmitClick = () => {
+    const headers = {Authorization: `Token ${session.token}`};
+    const data = {document_ids: selectedDocuments.map(document => document.id)};
+
+    debugger;
+    axios.post('ea/do_sign_all/', data, {headers})
+      .then(response => {
+        onCloseDialog();
+        fetchDocuments();
+      })
+      .catch(error => {
+        onCloseDialog();
+        fetchDocuments();
+        console.log(error)
+      }); // TODO 에러 로깅
+
+    // onCloseDialog();
+    // fetchDocuments();
+    // console.log(selectedDocuments);
   };
 
   const handleClose = () => {
@@ -45,7 +60,7 @@ export default function MyDialog({open, onCloseDialog}) {
           <Button onClick={onCloseDialog} color="primary">
             취소
           </Button>
-          <Button variant="contained" onClick={onCloseDialog} color="primary" autoFocus>
+          <Button variant="contained" onClick={handleSubmitClick} color="primary" autoFocus>
             확인
           </Button>
         </DialogActions>
@@ -57,5 +72,6 @@ export default function MyDialog({open, onCloseDialog}) {
 MyDialog.propTypes = {
   open: PropTypes.bool,
   onCloseDialog: PropTypes.func,
-  // documents: PropTypes.arrayOf(PropTypes.shape(documents))
+  selectedDocuments: PropTypes.array.isRequired,
+  fetchDocuments: PropTypes.func
 };

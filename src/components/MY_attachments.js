@@ -69,7 +69,10 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
     '& .MuiBackdrop-root': {
       backgroundColor: 'rgba(0, 0, 0, 0.1)'
-    }
+    },
+    '& .MuiDialog-container': {
+      justifyContent: 'flex-end'
+    },
   },
   dialogTitle: {
     cursor: 'move',
@@ -177,6 +180,7 @@ function MY_attachments({attachments, className, ...rest}) {
                 onLoadSuccess={onDocumentLoadSuccess}
               >
                 <Page width={1000} pageNumber={pageNumber} />
+                {/*<Page pageNumber={pageNumber} />*/}
               </Document>
               <Grid
                 container

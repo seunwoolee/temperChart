@@ -30,6 +30,18 @@ const useStyles = makeStyles((theme) => ({
   },
   content: {
     padding: theme.spacing(1),
+    paddingBottom: theme.spacing(0.1),
+    flexGrow: 1,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    [theme.breakpoints.down('sm')]: {
+      width: '100%',
+      flexWrap: 'wrap'
+    },
+  },
+  contentBottom: {
+    padding: theme.spacing(1),
     flexGrow: 1,
     display: 'flex',
     alignItems: 'center',
@@ -73,16 +85,15 @@ const useStyles = makeStyles((theme) => ({
 function MY_InvoiceCard({ invoices, className, attachments, handleAttachments, type, ...rest }) {
   const classes = useStyles();
 
-  const getSumInvoices = () => getCurrency(invoices.filter(invoice => invoice.RPSEQ === 1)
+  const getSumInvoices = () => getCurrency(invoices.filter(invoice => invoice.RPSFX === '001' && invoice.RPSEQ === 1)
                                                     .map(invoice => invoice.RPAMT)
                                                     .reduce((prev, curr) => prev + curr));
-
   return (
     <>
       <Typography variant="h5">
         총
         {' '}
-        {invoices.filter(invoice => invoice.RPSEQ === 1).length}
+        {invoices.filter(invoice => invoice.RPSFX === '001' && invoice.RPSEQ === 1).length}
         건 /
         {' '}
         {getSumInvoices()}
@@ -97,8 +108,8 @@ function MY_InvoiceCard({ invoices, className, attachments, handleAttachments, t
         >
         <CardContent className={classes.content}>
           <div className={classes.supplyName}>
-            <Typography variant="body2">G/L일자/전표유형</Typography>
-            <Typography variant="h6">{invoice.RPDGJ} / {invoice.RPDCT}</Typography>
+            <Typography variant="body2">배치번호/문서번호</Typography>
+            <Typography variant="h6">{invoice.RPICU}/{invoice.RPDOC}</Typography>
           </div>
           <div className={classes.stats}>
             <Typography variant="body2">거래처명</Typography>
@@ -111,6 +122,24 @@ function MY_InvoiceCard({ invoices, className, attachments, handleAttachments, t
           <div className={classes.stats}>
             <Typography variant="body2">세금유형</Typography>
             <Typography variant="h6">{invoice.RPEXR1 || invoice.RPTXA1 ? invoice.RPEXR1 + ' / ' + invoice.RPTXA1 : <br />}</Typography>
+          </div>
+        </CardContent>
+        <CardContent className={classes.contentBottom}>
+          <div className={classes.supplyName}>
+            <Typography variant="body2">G/L일자/전표유형</Typography>
+            <Typography variant="h6">{invoice.RPDGJ} / {invoice.RPDCT}</Typography>
+          </div>
+          <div className={classes.stats}>
+            <Typography variant="body2">송장일자</Typography>
+            <Typography variant="h6">{invoice.RPDSVJ}</Typography>
+          </div>
+          <div className={classes.bigo}>
+            <Typography variant="body2">지급예정일</Typography>
+            <Typography variant="h6">{invoice.RPDDJ}</Typography>
+          </div>
+          <div className={classes.bigo}>
+            <Typography variant="body2">세금정보</Typography>
+            <Typography variant="h6">{invoice.RPEXR1NM}</Typography>
           </div>
         </CardContent>
         <CardContent className={classes.erpDetailTable}>

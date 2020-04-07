@@ -69,7 +69,7 @@ function MY_SearchBar({
         >
           <FilterListIcon className={classes.filterIcon} />
           {' '}
-          Show filters
+          상세 검색
         </Button>
       </Grid>
       <Filter

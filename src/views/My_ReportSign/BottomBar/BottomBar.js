@@ -31,14 +31,15 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function BottomBar({
-  selected,
+  selectedDocuments,
   className,
   onOpenModal,
+  fetchDocuments,
   ...rest
 }) {
   const [openDialog, setOpenDialog] = useState(false);
   const classes = useStyles();
-  const open = selected.length > 0;
+  const open = selectedDocuments.length > 0;
 
   const handleCloseDialog = () => {
     setOpenDialog(false);
@@ -73,7 +74,7 @@ function BottomBar({
                 color="textSecondary"
                 variant="subtitle1"
               >
-                {selected.length}
+                {selectedDocuments.length}
                 {' '}
                 선택됨
               </Typography>
@@ -97,7 +98,11 @@ function BottomBar({
           </Grid>
         </Grid>
       </div>
-      <MyDialog open={openDialog} onCloseDialog={handleCloseDialog} />
+      <MyDialog
+        fetchDocuments={fetchDocuments}
+        selectedDocuments={selectedDocuments}
+        open={openDialog}
+        onCloseDialog={handleCloseDialog} />
     </Drawer>
   );
 }
@@ -105,7 +110,8 @@ function BottomBar({
 BottomBar.propTypes = {
   className: PropTypes.string,
   onOpenModal: PropTypes.func,
-  selected: PropTypes.array.isRequired
+  selectedDocuments: PropTypes.array.isRequired,
+  fetchDocuments: PropTypes.func.isRequired
 };
 
 export default BottomBar;
