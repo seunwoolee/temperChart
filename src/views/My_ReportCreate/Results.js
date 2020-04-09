@@ -28,6 +28,7 @@ import getCurrency from "../../utils/getCurrency";
 import {invoices, voucher} from "../../mock";
 import MySnackbars from "../../components/MY_snackbar";
 import getPerfectScrollbarHeight from "../../utils/getPerfectScrollbarHeight";
+import LoadingBar from "../../components/MY_LoadingBar";
 
 // import WriteReportModal from "../CustomerManagementDetails/Summary/WriteReporttModal";
 
@@ -73,7 +74,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function Results({className, invoices, totalInvoices, ...rest}) {
+function Results({className, invoices, totalInvoices, fetchInvoices, ...rest}) {
   const [selectedInvoices, setSelectedInvoices] = useState([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(25);
@@ -129,16 +130,16 @@ function Results({className, invoices, totalInvoices, ...rest}) {
 
   const openReportModal = () => setOpenModal(true);
 
-  const completeReportModal = () => {
-    setSnackbarOpen(true);
-    setIsSuccess(true);
+  const completeReportModal = (result: boolean = true) => {
     const sameBatchInvoices = getSameBatchInvoices(selectedInvoices[0]);
     const newInvoices = selectedInvoices.slice(sameBatchInvoices.length);
     if (newInvoices.length === 0) {
       setOpenModal(false);
+      fetchInvoices();
     }
-
     setSelectedInvoices(newInvoices);
+    setIsSuccess(result);
+    setSnackbarOpen(true);
   };
 
   const closeReportModal = () => {
@@ -182,6 +183,7 @@ function Results({className, invoices, totalInvoices, ...rest}) {
       {...rest}
       className={clsx(classes.root, className)}
     >
+      <LoadingBar />
       <Typography
         color="textSecondary"
         gutterBottom
@@ -284,8 +286,9 @@ function Results({className, invoices, totalInvoices, ...rest}) {
 
 Results.propTypes = {
   className: PropTypes.string,
-  invoices: PropTypes.arrayOf(PropTypes.shape(voucher)),
-  totalInvoices: PropTypes.arrayOf(PropTypes.shape(voucher))
+  invoices: PropTypes.arrayOf(PropTypes.shape(voucher)).isRequired,
+  fetchInvoices: PropTypes.func.isRequired,
+  totalInvoices: PropTypes.arrayOf(PropTypes.shape(voucher)).isRequired
 };
 
 Results.defaultProps = {

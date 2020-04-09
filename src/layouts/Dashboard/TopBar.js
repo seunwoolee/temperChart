@@ -38,6 +38,7 @@ import axios from "../../utils/my_axios";
 import ChatBar from './ChatBar';
 import {swRegistration} from "../../registerServiceWorker";
 import {pushSave} from "../../actions";
+import LoadingBar from "../../components/MY_LoadingBar";
 
 
 const useStyles = makeStyles((theme) => ({

@@ -1,15 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import { makeStyles } from '@material-ui/styles';
-import { Container } from '@material-ui/core';
+import React, {useState, useEffect} from 'react';
+import {makeStyles} from '@material-ui/styles';
+import {Container} from '@material-ui/core';
 // import axios from 'src/utils/axios';
 import Page from 'src/components/Page';
 import SearchBar from 'src/components/SearchBar';
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import axios from "../../utils/my_axios";
 import Header from './Header';
 import Results from './Results';
 import moment from "moment";
 import MY_SearchBar from "../../components/MY_SearchBar";
+import {useHistory} from "react-router";
+import {isloading} from "../../actions";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -20,7 +22,6 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(3)
   }
 }));
-
 
 const initialValues = {
   name: '',
@@ -33,14 +34,12 @@ function ReportCreate() {
   const [invoices, setInvoices] = useState([]);
   const [inputDateValues, setInputDateValues] = useState({...initialValues});
   const [inputSearchContent, setInputSearchContent] = useState('');
-
-  const session = useSelector((state) => state.session);
+  const history = useHistory();
+  const dispatch = useDispatch();
 
   const handleSearchContent = (event) => {
     setInputSearchContent(event.target.value);
   };
-
-  const handleFilter = () => {};
 
   const handleSearch = () => {
     fetchInvoices();
@@ -55,13 +54,19 @@ function ReportCreate() {
         search: inputSearchContent
       }
     };
-
-    axios.get('erp/voucher_list/', config).then((response) => {
-      setInvoices(response.data);
-    });
+    dispatch(isloading(true))
+    axios.get('erp/voucher_list/', config)
+      .then((response) => {
+        dispatch(isloading(false))
+        setInvoices(response.data);
+      })
+      .catch(error => dispatch(isloading(false)));
   };
 
   useEffect(() => {
+    if (!(localStorage.getItem('token'))) {
+      history.push('/auth/login');
+    }
     fetchInvoices();
   }, []);
 
@@ -74,23 +79,19 @@ function ReportCreate() {
         maxWidth={false}
         className={classes.container}
       >
-        <Header />
+        <Header/>
         <MY_SearchBar
           searchContent={inputSearchContent}
           setSearchContent={handleSearchContent}
           dateValues={inputDateValues}
           setDateValues={setInputDateValues}
-          onFilter={handleFilter}
           onSearch={handleSearch}
         />
-        {/*<SearchBar*/}
-        {/*  onFilter={handleFilter}*/}
-        {/*  onSearch={handleSearch}*/}
-        {/*/>*/}
         {invoices && (
           <Results
             className={classes.results}
             invoices={invoices.filter(invoice => invoice.RPSFX === '001' && invoice.RPSEQ === 1)}
+            fetchInvoices={fetchInvoices}
             totalInvoices={invoices}
           />
         )}

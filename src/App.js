@@ -22,6 +22,7 @@ import {authCheckState} from "./actions";
 import {Dispatch} from "redux";
 import {Home} from "@material-ui/icons";
 import Login from "./views/Login";
+import Root from "./Root";
 
 
 const history = createBrowserHistory();
@@ -32,13 +33,10 @@ function App() {
 
   useEffect(() => {
     dispatch(authCheckState());
-    // history.push('/reportSign');
-    // token ? history.push('/reportSign') : history.push('/auth/login');
     if (!token) {
-      history.push('/');
+      history.push('/auth/login');
     }
   }, []);
-
 
   return (
     <MuiPickersUtilsProvider utils={MomentUtils}>
@@ -46,7 +44,8 @@ function App() {
       <Router history={history}>
         <ScrollReset/>
         {renderRoutes(routes)}
-      </Router >
+      </Router>
+      {/*</HashRouter>*/}
     </MuiPickersUtilsProvider>
   );
 }

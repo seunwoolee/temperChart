@@ -26,6 +26,10 @@ const useStyles = makeStyles(theme => ({
   signDateCell: {
     fontSize: '10px'
   },
+  rejectedDateCell: {
+    fontSize: '10px',
+    color: 'red'
+  },
   gridCell: {
     fontWeight: 600,
     width: '160px',
@@ -36,6 +40,9 @@ const useStyles = makeStyles(theme => ({
 
 export default function ApproverTable({signs}) {
   const classes = useStyles();
+
+  debugger;
+
   return (
     <TableContainer component={Paper}>
       <Table size="small" aria-label="a dense table">
@@ -61,9 +68,13 @@ export default function ApproverTable({signs}) {
               <TableCell
                 key={sign.user.id}
                 align="center"
-                className={clsx(clsx(classes.gridCell, classes.signDateCell, classes.root))}
+                className={sign.result === '3'
+                  ? clsx(classes.gridCell, classes.rejectedDateCell, classes.root)
+                  : clsx(classes.gridCell, classes.signDateCell, classes.root)}
               >
-                {sign.sign_date ? sign.sign_date.substring(0, 10) : <br />}
+                {sign.result === '3'
+                  ? '(반려)'
+                  : null} {sign.sign_date ? sign.sign_date.substring(0, 10) : <br />}
               </TableCell>
             ))}
           </TableRow>

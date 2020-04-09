@@ -30,6 +30,7 @@ import MySnackbars from "../../components/MY_snackbar";
 import {documents} from '../../mock/my_documentsMock';
 import getPerfectScrollbarHeight from "../../utils/getPerfectScrollbarHeight";
 import axios from "../../utils/my_axios";
+import LoadingBar from "../../components/MY_LoadingBar";
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -114,6 +115,7 @@ function Results({className, documents, ...rest}) {
       {...rest}
       className={clsx(classes.root, className)}
     >
+      <LoadingBar />
       <Typography
         color="textSecondary"
         gutterBottom

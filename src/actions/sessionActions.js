@@ -3,6 +3,7 @@ import axios from "../utils/my_axios";
 export const SESSION_LOGIN = 'SESSION_LOGIN';
 export const SESSION_LOGOUT = 'SESSION_LOGOUT';
 export const PUSHSAVE = 'PUSHSAVE';
+export const ISLOADING = 'ISLOADING';
 export const EXPIRATIONDATE = 3600
 
 
@@ -44,7 +45,6 @@ export const getUserData = (token) => dispatch => {
   const url = 'employee/get_employee/';
   return axios.post(url, data, axiosConfig)
     .then(res => {
-      console.log('[getUserData]', res);
       dispatch(authSuccess(res.data));
       return res;
     })
@@ -71,5 +71,13 @@ export const logout = () => {
   localStorage.removeItem('expirationDate');
   return {
     type: SESSION_LOGOUT
+  }
+};
+
+
+export const isloading = (bool: boolean) => {
+  return {
+    type: ISLOADING,
+    bool: bool
   }
 };

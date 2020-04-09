@@ -3,12 +3,14 @@ import {makeStyles} from '@material-ui/styles';
 import {Container} from '@material-ui/core';
 import Page from 'src/components/Page';
 // import MY_SearchBar from 'src/components/MY_SearchBar';
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import moment from "moment";
 import axios from "../../utils/my_axios";
 import Header from './Header';
 import Results from './Results';
 import MY_SearchBar from "../../components/MY_SearchBar";
+import {useHistory} from "react-router";
+import {isloading} from "../../actions";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -33,6 +35,8 @@ function ReportSign() {
   const [inputSearchContent, setInputSearchContent] = useState('');
   const [documents, setDocuments] = useState([]);
   const session = useSelector((state) => state.session);
+  const history = useHistory();
+  const dispatch = useDispatch();
 
   const handleFilter = () => {
   };
@@ -51,10 +55,13 @@ function ReportSign() {
       }
     };
 
+    dispatch(isloading(true))
     axios.get(`ea/sign_document/${session.user.id}`, config)
       .then((response) => {
         setDocuments(response.data);
-      });
+        dispatch(isloading(false))
+      })
+      .catch(error => dispatch(isloading(false)));
   };
 
   const handleSearch = () => {
@@ -62,6 +69,9 @@ function ReportSign() {
   };
 
   useEffect(() => {
+    if(!(localStorage.getItem('token'))) {
+      history.push('/auth/login');
+    }
     fetchDocuments();
   }, [session.user.id]);
 

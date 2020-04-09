@@ -1,7 +1,9 @@
 import * as actionTypes from 'src/actions';
+import {ISLOADING} from "src/actions";
 
 const initialState = {
   loggedIn: false,
+  isLoading: false,
   token: '',
   endpoint: null,
   user: {
@@ -53,11 +55,18 @@ const sessionLogout = (state, action) => ({
   user: {},
 });
 
+const isloading = (state, action) => ({
+  ...state,
+  isLoading: action.bool
+  // isloading: !state.isLoading
+});
+
 const sessionReducer = (state = initialState, action) => {
   switch (action.type) {
     case actionTypes.SESSION_LOGIN: return sessionLogin(state, action);
     case actionTypes.SESSION_LOGOUT: return sessionLogout(state, action);
     case actionTypes.PUSHSAVE: return pushSave(state, action);
+    case actionTypes.ISLOADING: return isloading(state, action);
     default: return state;
   }
 };

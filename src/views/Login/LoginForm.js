@@ -71,6 +71,7 @@ function LoginForm({className, ...rest}) {
     const result: AxiosResponse = await dispatch(
       login(formState.values.username, formState.values.password)
     );
+
     if (result.status === 200) {
       const token = result.data.key;
       const expirationDate = new Date(new Date().getTime() + EXPIRATIONDATE * 1000);
@@ -92,8 +93,6 @@ function LoginForm({className, ...rest}) {
   };
 
   const hasError = (field) => (!!(formState.touched[field] && formState.errors[field]));
-
-  // console.log(loggedIn);
 
   useEffect(() => {
     const token = localStorage.getItem('token');

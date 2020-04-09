@@ -28,7 +28,6 @@ const Alert = (props) => {
 function CustomizedSnackbars({open, setOpen, isSuccess}) {
   const classes = useStyles();
   // const [open, setOpen] = React.useState(false);
-
   const handleClick = (bool: boolean) => {
     setOpen(bool);
   };

@@ -26,12 +26,19 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
+const initialValues = {
+  batchNumber: '',
+  user: '',
+  department: '',
+};
+
 function MY_SearchBar({
-  onFilter, onSearch, className,
-  dateValues, setDateValues, searchContent, setSearchContent, ...rest
+  onSearch, className,
+  dateValues, setDateValues, searchContent, setSearchContent, detail,...rest
 }) {
   const classes = useStyles();
   const [openFilter, setOpenFilter] = useState(false);
+  const [filterValues, setFilterValues] = useState({ ...initialValues });
 
   const handleFilterOpen = () => {
     setOpenFilter(true);
@@ -40,6 +47,10 @@ function MY_SearchBar({
   const handleFilterClose = () => {
     setOpenFilter(false);
   };
+
+  const handleSearch = () => {
+    onSearch(filterValues.batchNumber, filterValues.user, filterValues.department);
+  }
 
   return (
     <Grid
@@ -56,34 +67,60 @@ function MY_SearchBar({
           searchContent={searchContent}
           setSearchContent={setSearchContent}
           className={classes.search}
-          onSearch={onSearch}
+          onSearch={handleSearch}
         />
       </Grid>
-      <Grid item xs={12} md={4}>
-        <Button
-          className={classes.filterButton}
-          color="primary"
-          onClick={handleFilterOpen}
-          size="small"
-          variant="outlined"
-        >
-          <FilterListIcon className={classes.filterIcon} />
-          {' '}
-          상세 검색
-        </Button>
-      </Grid>
-      <Filter
-        onClose={handleFilterClose}
-        onFilter={onFilter}
-        open={openFilter}
-      />
+      {detail ? (
+      <>
+        <Grid item xs={12} md={4}>
+          <Button
+            className={classes.filterButton}
+            color="primary"
+            onClick={handleFilterOpen}
+            size="small"
+            variant="outlined"
+          >
+            <FilterListIcon className={classes.filterIcon} />
+            {' '}
+            상세 검색
+          </Button>
+        </Grid>
+        <Filter
+          values={filterValues}
+          setValues={setFilterValues}
+          onClose={handleFilterClose}
+          onFilter={handleSearch}
+          open={openFilter}
+        />
+      </>
+      ): null}
+      {/*<Grid item xs={12} md={4}>*/}
+      {/*  <Button*/}
+      {/*    className={classes.filterButton}*/}
+      {/*    color="primary"*/}
+      {/*    onClick={handleFilterOpen}*/}
+      {/*    size="small"*/}
+      {/*    variant="outlined"*/}
+      {/*  >*/}
+      {/*    <FilterListIcon className={classes.filterIcon} />*/}
+      {/*    {' '}*/}
+      {/*    상세 검색*/}
+      {/*  </Button>*/}
+      {/*</Grid>*/}
+      {/*<Filter*/}
+      {/*  values={filterValues}*/}
+      {/*  setValues={setFilterValues}*/}
+      {/*  onClose={handleFilterClose}*/}
+      {/*  onFilter={handleSearch}*/}
+      {/*  open={openFilter}*/}
+      {/*/>*/}
     </Grid>
   );
 }
 
 MY_SearchBar.propTypes = {
   className: PropTypes.string,
-  onFilter: PropTypes.func,
+  detail: PropTypes.bool,
   onSearch: PropTypes.func,
   dateValues: PropTypes.object,
   setDateValues: PropTypes.func,

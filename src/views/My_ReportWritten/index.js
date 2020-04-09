@@ -1,15 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import { makeStyles } from '@material-ui/styles';
-import { Container } from '@material-ui/core';
+import React, {useState, useEffect} from 'react';
+import {makeStyles} from '@material-ui/styles';
+import {Container} from '@material-ui/core';
 import Page from 'src/components/Page';
 import SearchBar from 'src/components/SearchBar';
-import {useSelector} from "react-redux";
-import { useLocation} from "react-router";
+import {useDispatch, useSelector} from "react-redux";
+import {useHistory, useLocation} from "react-router";
 import axios from "../../utils/my_axios";
 import Header from './Header';
 import Results from './Results';
 import moment from "moment";
 import MY_SearchBar from "../../components/MY_SearchBar";
+import {isloading} from "../../actions";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -34,19 +35,19 @@ function ReportWritten() {
   const [inputDateValues, setInputDateValues] = useState({...initialValues});
   const [inputSearchContent, setInputSearchContent] = useState('');
   const session = useSelector((state) => state.session);
+  const history = useHistory();
   const location = useLocation();
+  const dispatch = useDispatch();
 
   const handleSearchContent = (event) => {
     setInputSearchContent(event.target.value);
   };
 
-  const handleFilter = () => {};
-
-  const handleSearch = () => {
-    fetchDocuments();
+  const handleSearch = (batchNumber, user, department) => {
+    fetchDocuments(batchNumber, user, department);
   };
 
-  const fetchDocuments = () => {
+  const fetchDocuments = (batchNumber = '', user = '', department = '') => {
     let url = `ea/written_document/${session.user.id}`;
 
     if (location.pathname === '/reportRejected') {
@@ -55,27 +56,42 @@ function ReportWritten() {
       url = `ea/approved_document/${session.user.id}`;
     }
 
+    let params = {
+      startDate: moment(inputDateValues.startDate).format('YYYY-MM-DD'),
+      endDate: moment(inputDateValues.endDate).format('YYYY-MM-DD'),
+      search: inputSearchContent
+    }
+
+    if (batchNumber) {
+      params['batchNumber'] = batchNumber;
+    }
+
+    if (user) {
+      params['user'] = user;
+    }
+
+    if (department) {
+      params['department'] = department;
+    }
+
     const config = {
       headers: {Authorization: `Token ${localStorage.getItem('token')}`},
-      params: {
-        startDate: moment(inputDateValues.startDate).format('YYYY-MM-DD'),
-        endDate: moment(inputDateValues.endDate).format('YYYY-MM-DD'),
-        search: inputSearchContent
-      }
+      params: params
     };
 
-    // const headers = {Authorization: `Token ${localStorage.getItem('token')}`};
-
-    axios.get(url, config).then((response) => {
-      setDocuments(response.data);
-
-    });
-    // axios.get(url, {headers}).then((response) => {
-    //   setDocuments(response.data);
-    // });
+    dispatch(isloading(true))
+    axios.get(url, config)
+      .then((response) => {
+        setDocuments(response.data);
+        dispatch(isloading(false))
+      })
+      .catch(error => dispatch(isloading(false)));
   };
 
   useEffect(() => {
+    if (!(localStorage.getItem('token'))) {
+      history.push('/auth/login');
+    }
     fetchDocuments();
   }, [location.pathname, session.user.id]);
 
@@ -85,19 +101,15 @@ function ReportWritten() {
       title="상신함"
     >
       <Container maxWidth={false}>
-        <Header />
+        <Header/>
         <MY_SearchBar
           searchContent={inputSearchContent}
           setSearchContent={handleSearchContent}
           dateValues={inputDateValues}
           setDateValues={setInputDateValues}
-          onFilter={handleFilter}
           onSearch={handleSearch}
+          detail
         />
-        {/*<SearchBar*/}
-        {/*  onFilter={handleFilter}*/}
-        {/*  onSearch={handleSearch}*/}
-        {/*/>*/}
         {documents && (
           <Results
             className={classes.results}

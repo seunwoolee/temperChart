@@ -89,21 +89,10 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const paymentStatusOptions = ['Pending', 'Canceled', 'Completed', 'Rejected'];
-
-const customerAgeOption = ['18 - 30', '30 - 45', '50 - 60', '60+'];
-
 const initialValues = {
-  paymentStatus: '',
-  tag: '',
-  tags: ['Full-Time'],
-  amount: [1, 7],
-  projectStatus: 'ended',
   batchNumber: '',
-  customerType: 'freelancer',
-  customerEmail: '',
-  customerPhone: '',
-  customerAge: ''
+  user: '',
+  department: '',
 };
 
 function Filter({
@@ -111,12 +100,13 @@ function Filter({
   onClose,
   onFilter,
   className,
+  values,
+  setValues,
   ...rest
 }) {
   const classes = useStyles();
-  const [expandProject, setExpandProject] = useState(true);
   const [expandCustomer, setExpandCustomer] = useState(true);
-  const [values, setValues] = useState({ ...initialValues });
+  // const [values, setValues] = useState({ ...initialValues });
 
   const handleClear = () => {
     setValues({ ...initialValues });
@@ -133,45 +123,13 @@ function Filter({
     }));
   };
 
-  const handleTagAdd = () => {
-    setValues((prevValues) => {
-      const newValues = { ...prevValues };
-
-      if (newValues.tag && !newValues.tags.includes(newValues.tag)) {
-        newValues.tags = [...newValues.tags];
-        newValues.tags.push(newValues.tag);
-      }
-
-      newValues.tag = '';
-
-      return newValues;
-    });
-  };
-
-  const handleTagDelete = (tag) => {
-    setValues((prevValues) => {
-      const newValues = { ...prevValues };
-
-      newValues.tags = newValues.tags.filter((t) => t !== tag);
-
-      return newValues;
-    });
-  };
-
-  const handleToggleProject = () => {
-    setExpandProject((prevExpandProject) => !prevExpandProject);
-  };
-
   const handleToggleCustomer = () => {
     setExpandCustomer((prevExpandCustomer) => !prevExpandCustomer);
   };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-
-    if (onFilter) {
-      onFilter(values);
-    }
+  const handleConfirm = (event) => {
+    onClose();
+    onFilter();
   };
 
   return (
@@ -182,10 +140,10 @@ function Filter({
       open={open}
       variant="temporary"
     >
-      <form
+      <div
         {...rest}
         className={clsx(classes.root, className)}
-        onSubmit={handleSubmit}
+        // onSubmit={handleSubmit}
       >
         <div className={classes.header}>
           <Button
@@ -197,159 +155,6 @@ function Filter({
           </Button>
         </div>
         <div className={classes.content}>
-          {/*<div className={classes.contentSection}>*/}
-          {/*  <div*/}
-          {/*    className={classes.contentSectionHeader}*/}
-          {/*    onClick={handleToggleProject}*/}
-          {/*  >*/}
-          {/*    <Typography variant="h5">Project</Typography>*/}
-          {/*    {expandProject ? <ExpandLessIcon /> : <ExpandMoreIcon />}*/}
-          {/*  </div>*/}
-          {/*  <Divider />*/}
-          {/*  <Collapse in={expandProject}>*/}
-          {/*    <div className={classes.contentSectionContent}>*/}
-          {/*      <div className={classes.formGroup}>*/}
-          {/*        <TextField*/}
-          {/*          className={classes.field}*/}
-          {/*          fullWidth*/}
-          {/*          label="Payment status"*/}
-          {/*          margin="dense"*/}
-          {/*          name="paymentStatus"*/}
-          {/*          onChange={(event) => handleFieldChange(*/}
-          {/*            event,*/}
-          {/*            'paymentStatus',*/}
-          {/*            event.target.value*/}
-          {/*          )}*/}
-          {/*          select*/}
-          {/*          SelectProps={{ native: true }}*/}
-          {/*          value={values.paymentStatus}*/}
-          {/*          variant="outlined"*/}
-          {/*        >*/}
-          {/*          <option*/}
-          {/*            disabled*/}
-          {/*            value=""*/}
-          {/*          />*/}
-          {/*          {paymentStatusOptions.map((option) => (*/}
-          {/*            <option*/}
-          {/*              key={option}*/}
-          {/*              value={option}*/}
-          {/*            >*/}
-          {/*              {option}*/}
-          {/*            </option>*/}
-          {/*          ))}*/}
-          {/*        </TextField>*/}
-          {/*      </div>*/}
-          {/*      <div className={classes.formGroup}>*/}
-          {/*        <div className={classes.fieldGroup}>*/}
-          {/*          <TextField*/}
-          {/*            className={clsx(classes.field, classes.flexGrow)}*/}
-          {/*            label="Filter Tags"*/}
-          {/*            margin="dense"*/}
-          {/*            name="tag"*/}
-          {/*            onChange={(event) => handleFieldChange(event, 'tag', event.target.value)}*/}
-          {/*            value={values.tag}*/}
-          {/*            variant="outlined"*/}
-          {/*          />*/}
-          {/*          <Button*/}
-          {/*            className={classes.addButton}*/}
-          {/*            onClick={handleTagAdd}*/}
-          {/*            size="small"*/}
-          {/*          >*/}
-          {/*            <AddIcon className={classes.addIcon} />*/}
-          {/*            Add*/}
-          {/*          </Button>*/}
-          {/*        </div>*/}
-          {/*        <div className={classes.tags}>*/}
-          {/*          {values.tags.map((tag) => (*/}
-          {/*            <Chip*/}
-          {/*              deleteIcon={<CloseIcon />}*/}
-          {/*              key={tag}*/}
-          {/*              label={tag}*/}
-          {/*              onDelete={() => handleTagDelete(tag)}*/}
-          {/*            />*/}
-          {/*          ))}*/}
-          {/*        </div>*/}
-          {/*      </div>*/}
-          {/*      <div className={classes.formGroup}>*/}
-          {/*        <Typography*/}
-          {/*          component="p"*/}
-          {/*          gutterBottom*/}
-          {/*          variant="overline"*/}
-          {/*        >*/}
-          {/*          Project amount*/}
-          {/*        </Typography>*/}
-          {/*        <div className={classes.fieldGroup}>*/}
-          {/*          <Typography*/}
-          {/*            className={classes.minAmount}*/}
-          {/*            variant="body1"*/}
-          {/*          >*/}
-          {/*            $*/}
-          {/*            {values.amount[0]}*/}
-          {/*            K*/}
-          {/*          </Typography>*/}
-          {/*          <Slider*/}
-          {/*            className={classes.flexGrow}*/}
-          {/*            max={20}*/}
-          {/*            min={1}*/}
-          {/*            onChange={(event, value) => handleFieldChange(event, 'amount', value)}*/}
-          {/*            value={values.amount}*/}
-          {/*            valueLabelDisplay="auto"*/}
-          {/*          />*/}
-          {/*          <Typography*/}
-          {/*            className={classes.maxAmount}*/}
-          {/*            variant="body1"*/}
-          {/*          >*/}
-          {/*            $*/}
-          {/*            {values.amount[1]}*/}
-          {/*            K*/}
-          {/*          </Typography>*/}
-          {/*        </div>*/}
-          {/*      </div>*/}
-          {/*      <div className={classes.formGroup}>*/}
-          {/*        <Typography*/}
-          {/*          component="p"*/}
-          {/*          gutterBottom*/}
-          {/*          variant="overline"*/}
-          {/*        >*/}
-          {/*          Project status*/}
-          {/*        </Typography>*/}
-          {/*        <div className={classes.fieldGroup}>*/}
-          {/*          <RadioGroup*/}
-          {/*            className={classes.radioGroup}*/}
-          {/*            name="projectStatus"*/}
-          {/*            onChange={(event) => handleFieldChange(*/}
-          {/*              event,*/}
-          {/*              'projectStatus',*/}
-          {/*              event.target.value*/}
-          {/*            )}*/}
-          {/*            value={values.projectStatus}*/}
-          {/*          >*/}
-          {/*            <FormControlLabel*/}
-          {/*              control={<Radio color="primary" />}*/}
-          {/*              label="Ended"*/}
-          {/*              value="ended"*/}
-          {/*            />*/}
-          {/*            <FormControlLabel*/}
-          {/*              control={<Radio color="primary" />}*/}
-          {/*              label="On-Going"*/}
-          {/*              value="onGoing"*/}
-          {/*            />*/}
-          {/*            <FormControlLabel*/}
-          {/*              control={<Radio color="primary" />}*/}
-          {/*              label="In Review"*/}
-          {/*              value="inReview"*/}
-          {/*            />*/}
-          {/*            <FormControlLabel*/}
-          {/*              control={<Radio color="primary" />}*/}
-          {/*              label="Competed"*/}
-          {/*              value="completed"*/}
-          {/*            />*/}
-          {/*          </RadioGroup>*/}
-          {/*        </div>*/}
-          {/*      </div>*/}
-          {/*    </div>*/}
-          {/*  </Collapse>*/}
-          {/*</div>*/}
           <div className={classes.contentSection}>
             <div
               className={classes.contentSectionHeader}
@@ -379,35 +184,18 @@ function Filter({
                     />
                   </div>
                   <div className={classes.formGroup}>
-                    <ToggleButtonGroup
-                      exclusive
-                      onChange={(event, value) => value && handleFieldChange(event, 'customerType', value)}
-                      size="small"
-                      value={values.customerType}
-                      variant="outlined"
-                    >
-                      <ToggleButton
-                        color="primary"
-                        value="projectOwner"
-                      >
-                        Project owner
-                      </ToggleButton>
-                      <ToggleButton value="freelancer">Freelancer</ToggleButton>
-                    </ToggleButtonGroup>
-                  </div>
-                  <div className={classes.formGroup}>
                     <TextField
                       className={classes.field}
                       fullWidth
-                      label="Email address"
+                      label="기안자"
                       margin="dense"
-                      name="customerEmail"
+                      name="user"
                       onChange={(event) => handleFieldChange(
                         event,
-                        'customerEmail',
+                        'user',
                         event.target.value
                       )}
-                      value={values.customerEmail}
+                      value={values.user}
                       variant="outlined"
                     />
                   </div>
@@ -415,49 +203,17 @@ function Filter({
                     <TextField
                       className={classes.field}
                       fullWidth
-                      label="Phone number"
+                      label="기안부서"
                       margin="dense"
-                      name="customerPhone"
+                      name="department"
                       onChange={(event) => handleFieldChange(
                         event,
-                        'customerPhone',
+                        'department',
                         event.target.value
                       )}
-                      value={values.customerPhone}
+                      value={values.department}
                       variant="outlined"
                     />
-                  </div>
-                  <div className={classes.formGroup}>
-                    <TextField
-                      className={classes.field}
-                      fullWidth
-                      label="Age"
-                      margin="dense"
-                      name="customerAge"
-                      onChange={(event) => handleFieldChange(
-                        event,
-                        'customerAge',
-                        event.target.value
-                      )}
-                      select
-                      // eslint-disable-next-line react/jsx-sort-props
-                      SelectProps={{ native: true }}
-                      value={values.customerAge}
-                      variant="outlined"
-                    >
-                      <option
-                        disabled
-                        value=""
-                      />
-                      {customerAgeOption.map((option) => (
-                        <option
-                          key={option}
-                          value={option}
-                        >
-                          {option}
-                        </option>
-                      ))}
-                    </TextField>
                   </div>
                 </div>
               </div>
@@ -478,20 +234,22 @@ function Filter({
             fullWidth
             type="submit"
             variant="contained"
-            onClick={onClose}
+            onClick={handleConfirm}
           >
             확인
           </Button>
         </div>
-      </form>
+      </div>
     </Drawer>
   );
 }
 
 Filter.propTypes = {
   className: PropTypes.string,
-  onClose: PropTypes.func,
-  onFilter: PropTypes.func,
+  onClose: PropTypes.func.isRequired,
+  onFilter: PropTypes.func.isRequired,
+  values: PropTypes.object.isRequired,
+  setValues: PropTypes.func.isRequired,
   open: PropTypes.bool.isRequired
 };
 

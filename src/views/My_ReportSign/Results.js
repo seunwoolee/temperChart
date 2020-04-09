@@ -30,6 +30,7 @@ import MySnackbars from "../../components/MY_snackbar";
 import getPerfectScrollbarHeight from "../../utils/getPerfectScrollbarHeight";
 import {documents} from "../../mock";
 import axios from "../../utils/my_axios";
+import LoadingBar from "../../components/MY_LoadingBar";
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -172,6 +173,7 @@ function Results({className, documents, fetchDocuments, ...rest}) {
       {...rest}
       className={clsx(classes.root, className)}
     >
+      <LoadingBar />
       <Typography
         color="textSecondary"
         gutterBottom
@@ -219,7 +221,6 @@ function Results({className, documents, fetchDocuments, ...rest}) {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {/*{documents.slice(0, rowsPerPage).map((document, i) => (*/}
                   {documents.slice(startData, endData).map((document, i) => (
                     <TableRow
                       hover

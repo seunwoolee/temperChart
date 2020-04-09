@@ -13,16 +13,17 @@ import {
   TextField,
   Button, Table, TableBody, TableRow, TableCell, Typography
 } from '@material-ui/core';
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import InvoiceCard from "./InvoiceCard";
 import ChooseDialog from '../Dialog';
 import UploadAttachments from "./UploadAttachments";
 import {voucher} from "../../../mock";
 import getCurrency from "../../../utils/getCurrency";
 import axios from "../../../utils/my_axios";
-import {authSuccess} from "../../../actions";
+import {authSuccess, isloading} from "../../../actions";
 import MY_InvoiceCard from "../../../components/MY_InvoiceCard";
 import MY_InvoiceDetailCard from "../../../components/MY_InvoiceDetailCard";
+import LoadingBar from "../../../components/MY_LoadingBar";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -56,6 +57,7 @@ function Index({
                }) {
   const classes = useStyles();
   const session = useSelector((state) => state.session);
+  const dispatch = useDispatch();
 
   const [openDialog, setOpenDialog] = useState(false);
   const [inputTitle, setInputTitle] = useState('');
@@ -78,10 +80,6 @@ function Index({
   };
 
   const handleSubmit = (users: Array) => {
-    setOpenDialog(false);
-    setInputTitle('');
-    setInputAttachments([]);
-    onComplete();
 
     const headers = {Authorization: `Token ${session.token}`, 'Content-Type': 'multipart/form-data'};
     const axiosConfig = {headers};
@@ -97,11 +95,11 @@ function Index({
 
       const invoiceAttachments = inputAttachments.filter(inputAttachment => invoice_id in inputAttachment);
 
-      if(invoiceAttachments.length > 0) {
+      if (invoiceAttachments.length > 0) {
         invoiceFiles = invoiceAttachments[0][invoice_id];
       }
 
-      if(invoiceFiles) {
+      if (invoiceFiles) {
         filesArray.push(...invoiceFiles)
         filesCountArray.push(invoiceFiles.length)
       } else {
@@ -118,12 +116,23 @@ function Index({
     filesArray.map(file => formData.append('files', file));
     invoiceArray.map(invoiceId => formData.append('invoices', invoiceId));
     filesCountArray.map(fileCount => formData.append('counts', fileCount));
+    dispatch(isloading(true))
 
-    // formData.append('invoices', invoiceArray);
-    // formData.append('counts', filesCountArray);
-
-    // formData.append('files', filesArray);
-    axios.post(url, formData, axiosConfig);
+    axios.post(url, formData, axiosConfig)
+      .then(response => {
+        dispatch(isloading(false))
+        setOpenDialog(false);
+        setInputTitle('');
+        setInputAttachments([]);
+        response.status === 201 ? onComplete(true) : onComplete(false);
+      })
+      .catch(error => {
+        dispatch(isloading(false))
+        setOpenDialog(false);
+        setInputTitle('');
+        setInputAttachments([]);
+        onComplete(false);
+      });
   };
 
   const getSumInvoices = () => getCurrency(invoices.map(invoice => invoice.price).reduce((prev, curr) => prev + curr));
@@ -190,11 +199,6 @@ function Index({
                     invoices={invoices}
                     attachments={inputAttachments}
                     handleAttachments={handleAttachments}/>
-                  {/*<MY_InvoiceCard*/}
-                  {/*  type={'write'}*/}
-                  {/*  invoices={invoices}*/}
-                  {/*  attachments={inputAttachments}*/}
-                  {/*  handleAttachments={handleAttachments}/>*/}
                 </Grid>
               </Grid>
             </CardContent>
@@ -213,6 +217,8 @@ function Index({
               </Button>
             </CardActions>
           </form>
+
+          <LoadingBar />
         </Card>
       </Modal>
       <ChooseDialog open={openDialog} onClose={handleClose} onSubmit={handleSubmit}/>

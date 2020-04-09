@@ -55,7 +55,6 @@ function MY_erpDetailTable({invoices}) {
               <TableCell align="right">{invoice.RPZ5CREDITAT === 0 ? <br /> : getThousand(invoice.RPZ5CREDITAT / 100)}</TableCell>
               <TableCell>{invoice.RPRMK}</TableCell>
               <TableCell>{invoice.RPSEQ === 3 ? (invoice.RPALPH) : <br />}</TableCell>
-              {/*<TableCell>{invoice.RPSEQ === 3 ? (invoice.RPALPH + '('+invoice.RPSBLT+')') : <br />}</TableCell>*/}
             </TableRow>
           ))}
             <TableRow>
