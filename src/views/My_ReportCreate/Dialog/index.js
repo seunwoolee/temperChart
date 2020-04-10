@@ -135,8 +135,6 @@ function ChooseDialog({open, onClose, onSubmit}) {
   const [expanded, setExpanded] = React.useState(false);
   const [addUserType, setAddUserType] = React.useState(10);
   const session = useSelector((state) => state.session);
-  // let typeUsers = addUserType === 10 ? departmentUsers : allUsers;
-  console.log(typeUsers);
 
   const handleChecked = (i) => {
     if (i === checked) {
@@ -153,7 +151,8 @@ function ChooseDialog({open, onClose, onSubmit}) {
 
   const handleUserTypeChange = (event, userId) => {
     const newUsers = users.filter(user => user.id !== userId);
-    const changedUser = users.find(user => user.id === userId);
+    let changedUser = users.find(user => user.id === userId);
+    changedUser.type = event.target.value;
     setUsers([...newUsers, changedUser].sort(sortUsers));
   };
 
@@ -253,7 +252,6 @@ function ChooseDialog({open, onClose, onSubmit}) {
 
     const fetchAllUsers = () => {
       axios.get('ea/get_allUsers/', {headers}).then((response) => {
-        // debugger;
         if (mounted) {
           setAllUsers(response.data);
         }
@@ -316,7 +314,7 @@ function ChooseDialog({open, onClose, onSubmit}) {
                     >
                       <MenuItem value={0}>결재</MenuItem>
                       <MenuItem value={1}>합의</MenuItem>
-                      <MenuItem value={2}>참조</MenuItem>
+                      {/*<MenuItem value={2}>참조</MenuItem>*/}
                     </Select>
                   </FormControl>
                   <ListItem

@@ -33,7 +33,8 @@ const useStyles = makeStyles(theme => ({
   gridCell: {
     fontWeight: 600,
     width: '160px',
-    borderBottom: '1px solid #a9a9a9'
+    borderBottom: '1px solid #a9a9a9',
+    borderRight: '1px solid #a9a9a9'
   }
 }));
 
@@ -41,7 +42,13 @@ const useStyles = makeStyles(theme => ({
 export default function ApproverTable({signs}) {
   const classes = useStyles();
 
-  debugger;
+  const displayApproveType = (type: string) => {
+    if(type === "0") {
+      return "결재"
+    } else if(type === "1") {
+      return "합의"
+    }
+  }
 
   return (
     <TableContainer component={Paper}>
@@ -57,7 +64,7 @@ export default function ApproverTable({signs}) {
           <TableRow>
             {signs.map(sign => (
               <TableCell key={sign.user.id} align="center" className={clsx(classes.gridCell, classes.root)}>
-                {sign.user.name}
+                {sign.user.name}({displayApproveType(sign.type)})
               </TableCell>
             ))}
           </TableRow>
