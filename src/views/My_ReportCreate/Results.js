@@ -278,7 +278,12 @@ function Results({className, invoices, totalInvoices, fetchInvoices, ...rest}) {
           open={openModal}
         />
       )}
-      {snackbarOpen ? <MySnackbars open={snackbarOpen} setOpen={handleSnackbarOpen} isSuccess={isSuccess} /> : null}
+      {snackbarOpen
+        ? <MySnackbars
+            open={snackbarOpen}
+            setOpen={handleSnackbarOpen}
+            isSuccess={isSuccess}
+            info={'이미 상신된 문서입니다'}/> : null}
 
     </div>
   );

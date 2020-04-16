@@ -21,7 +21,9 @@ import {
 import NavItem from 'src/components/NavItem';
 import axios from "../../utils/my_axios";
 import navConfig from './navConfig';
-
+import IconButton from "@material-ui/core/IconButton";
+import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
+import ChangePasswordDialog from "../../components/MY_changePassword";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -72,6 +74,7 @@ const useStyles = makeStyles((theme) => ({
     height: 40
   },
   details: {
+    // cursor: 'pointer',
     marginLeft: theme.spacing(2)
   },
   moreButton: {
@@ -138,27 +141,11 @@ function reduceChildRoutes({
   return acc;
 }
 
-function NavBar({
-  openMobile,
-  onMobileClose,
-  className,
-  ...rest
-}) {
+function NavBar({ openMobile, onMobileClose, className, ...rest }) {
   const classes = useStyles();
   const location = useLocation();
   const session = useSelector((state) => state.session);
-  const [status, setStatus] = useState('online');
-
-  const handleStatusToggle = () => {
-    const statusSeq = {
-      online: 'away',
-      away: 'busy',
-      busy: 'offline',
-      offline: 'online'
-    };
-
-    setStatus((prevStatus) => statusSeq[prevStatus]);
-  };
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     if (openMobile && onMobileClose) {
@@ -183,35 +170,14 @@ function NavBar({
       </nav>
       <Divider className={classes.divider} />
       <div className={classes.profile}>
-        <Badge
-          overlap="circle"
-          anchorOrigin={{
-            vertical: 'bottom',
-            horizontal: 'right',
-          }}
-          classes={{
-            dot: classes.badgeDot,
-            badge: clsx({
-              [classes.badge]: true,
-              [classes.onlineBadge]: status === 'online',
-              [classes.awayBadge]: status === 'away',
-              [classes.busyBadge]: status === 'busy',
-              [classes.offlineBadge]: status === 'offline'
-            })
-          }}
-          variant="dot"
-        >
           <Avatar
             alt="Person"
-            onClick={handleStatusToggle}
+            onClick={() => setOpen(true)}
             className={classes.avatar}
             src={session.user.avatar}
           />
-        </Badge>
         <div className={classes.details}>
           <Link
-            component={RouterLink}
-            to="/profile/1/timeline"
             variant="h5"
             color="textPrimary"
             underline="none"
@@ -220,12 +186,6 @@ function NavBar({
           </Link>
           <Typography variant="body2">{session.user.department}</Typography>
         </div>
-        {/* <IconButton */}
-        {/*  className={classes.moreButton} */}
-        {/*  size="small" */}
-        {/* > */}
-        {/*  <MoreIcon /> */}
-        {/* </IconButton> */}
       </div>
     </div>
   );
@@ -257,6 +217,7 @@ function NavBar({
           {content}
         </Drawer>
       </Hidden>
+      <ChangePasswordDialog open={open} onClose={() => setOpen(false)}/>
     </>
   );
 }

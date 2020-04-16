@@ -219,6 +219,7 @@ function Index({
           </form>
 
           <LoadingBar />
+
         </Card>
       </Modal>
       <ChooseDialog open={openDialog} onClose={handleClose} onSubmit={handleSubmit}/>

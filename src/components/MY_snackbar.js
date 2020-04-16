@@ -25,7 +25,7 @@ const Alert = (props) => {
   return <MuiAlert classes={{root: classes.alertRoot}} elevation={6} variant="filled" {...props} />;
 };
 
-function CustomizedSnackbars({open, setOpen, isSuccess}) {
+function CustomizedSnackbars({open, setOpen, isSuccess, info='전산팀 문의 바랍니다.'}) {
   const classes = useStyles();
   // const [open, setOpen] = React.useState(false);
   const handleClick = (bool: boolean) => {
@@ -41,14 +41,14 @@ function CustomizedSnackbars({open, setOpen, isSuccess}) {
   if(!isSuccess){
     message=(
      <Alert onClose={() => handleClick(false)} severity="error">
-       실패(전산팀 문의 바랍니다)
+       실패({info})
      </Alert>
      )
    }
 
   return (
     <div className={classes.root}>
-      <Snackbar open={open} autoHideDuration={2000} onClose={() => handleClick(false)}>
+      <Snackbar open={open} autoHideDuration={3000} onClose={() => handleClick(false)}>
         {message}
       </Snackbar>
     </div>
