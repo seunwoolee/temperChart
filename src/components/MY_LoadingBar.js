@@ -21,7 +21,11 @@ export default function LoadingBar() {
 
   return (
     <div>
-      <Backdrop className={classes.backdrop} open={session.isLoading} onClick={()=>dispatch(isloading(false))}>
+      <Backdrop
+        className={classes.backdrop}
+        open={session.isLoading}
+        // onClick={()=>dispatch(isloading(false))}
+      >
         <CircularProgress color="inherit" />
       </Backdrop>
     </div>

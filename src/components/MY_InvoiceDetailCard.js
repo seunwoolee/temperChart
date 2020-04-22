@@ -23,10 +23,7 @@ import MY_erpDetailTable from "./MY_erpDetailTable";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    // display: 'flex',
-    // alignItems: 'center',
-    // flexWrap: 'wrap',
-    marginBottom: theme.spacing(2)
+    marginBottom: theme.spacing(3)
   },
   content: {
     padding: theme.spacing(1),

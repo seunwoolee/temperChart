@@ -17,31 +17,33 @@ import Paper from "@material-ui/core/Paper";
 import axios from "../../../utils/axios";
 import {documents} from "../../../mock/my_documentsMock";
 import MY_approverLine from "../../../components/MY_approverLine";
-import getCurrency from "../../../utils/getCurrency";
-import MY_attachmentsBase from "../../../components/MY_attachmentsBase";
 import FormDialog from "../Dialog";
-import MY_InvoiceCard from "../../../components/MY_InvoiceCard";
 import MY_opinion from "../../../components/MY_opinion";
 import MY_InvoiceDetailCard from "../../../components/MY_InvoiceDetailCard";
+import MY_attachments from "../../../components/MY_attachments";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     position: 'absolute',
     top: '50%',
     left: '50%',
-    [theme.breakpoints.up('md')]: {
-      left: '35%'
-    },
-    [theme.breakpoints.up('lg')]: {
-      left: '25%'
-    },
     transform: 'translate(-50%, -50%)',
     outline: 'none',
     boxShadow: theme.shadows[20],
     width: 900,
+    [theme.breakpoints.up('lg')]: {
+      width: '95%',
+      backgroundColor: 'transparent'
+    },
     maxHeight: '95%',
     overflowY: 'auto',
     maxWidth: '100%'
+  },
+  innerDiv: {
+    [theme.breakpoints.up('lg')]: {
+      width: '900px',
+      backgroundColor: 'white'
+    }
   },
   tableCellContent: {
     width: '50px',
@@ -90,24 +92,28 @@ function Index({
     handleClose();
   };
 
+  const handleKeyPress = (event) => {
+    if (event.key === '1') { // TODO 1로 임시
+      onComplete('', '승인');
+    }
+  }
   return (
     <>
       <Modal
+        onKeyPress={handleKeyPress}
         disableBackdropClick
         onClose={onClose}
         open={open}
       >
         <Card
-          {...rest}
           className={clsx(classes.root, className)}
         >
-          <div>
+          <div className={classes.innerDiv}>
             <CardHeader
               classes={{root: classes.cardHeaderRoot, title: classes.cardHeaderTitle}}
               title="미결함"
               action={(
                 <Button
-                    // onClick={onComplete}
                   onClick={handleClickOpen}
                   color="primary"
                   variant="contained"
@@ -167,11 +173,6 @@ function Index({
                   md={12}
                   xs={12}
                 >
-                  {/*<MY_InvoiceCard*/}
-                  {/*  invoices={invoices.filter(invoice => invoice.RPSEQ === 1)}*/}
-                  {/*  attachments={document.attachments}*/}
-                  {/*  type={'read'}*/}
-                  {/*/>*/}
                   <MY_InvoiceDetailCard
                     type={'read'}
                     invoices={invoices}
@@ -197,6 +198,7 @@ function Index({
               </Button>
             </CardActions>
           </div>
+
           <FormDialog
             open={openDialog}
             onClose={handleClose}

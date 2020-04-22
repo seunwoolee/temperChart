@@ -23,9 +23,6 @@ function MY_attachmentsBase({ attachments, className, ...rest }) {
          <MY_attachments attachments={attachments} />
        </CardContent>
       ): null}
-       {/*<CardContent>*/}
-       {/*  <MY_attachments attachments={attachments} />*/}
-       {/*</CardContent>*/}
     </Card>
   );
 }

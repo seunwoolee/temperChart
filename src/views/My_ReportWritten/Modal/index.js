@@ -33,19 +33,23 @@ const useStyles = makeStyles((theme) => ({
     position: 'absolute',
     top: '50%',
     left: '50%',
-    [theme.breakpoints.up('md')]: {
-      left: '35%'
-    },
-    [theme.breakpoints.up('lg')]: {
-      left: '25%'
-    },
     transform: 'translate(-50%, -50%)',
     outline: 'none',
     boxShadow: theme.shadows[20],
     width: 900,
+    [theme.breakpoints.up('lg')]: {
+      width: '95%',
+      backgroundColor: 'transparent'
+    },
     maxHeight: '95%',
     overflowY: 'auto',
     maxWidth: '100%'
+  },
+  innerDiv: {
+    [theme.breakpoints.up('lg')]: {
+      width: '900px',
+      backgroundColor: 'white'
+    }
   },
   tableCellContent: {
     width: '50px',
@@ -96,7 +100,7 @@ function Index({
           {...rest}
           className={clsx(classes.root, className)}
         >
-          <form>
+          <div className={classes.innerDiv}>
             <CardHeader classes={{root: classes.cardHeaderRoot, title: classes.cardHeaderTitle}} title="상신문서" />
             <Divider />
             <CardContent>
@@ -178,7 +182,7 @@ function Index({
                 닫기
               </Button>
             </CardActions>
-          </form>
+          </div>
         </Card>
       </Modal>
     </>

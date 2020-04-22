@@ -160,12 +160,13 @@ function MY_attachments({attachments, className, ...rest}) {
         </PerfectScrollbar>
       </>
       <Dialog
-        classes={{root: classes.dialogRoot,paper: classes.dialogPaper}}
-        maxWidth="xl"
+        disablePortal
+        hideBackdrop
+        classes={{root: classes.dialogRoot ,paper: classes.dialogPaper}}
+        maxWidth="lg"
         open={open}
         onClose={handleClose}
         PaperComponent={PaperComponent}
-        aria-labelledby="draggable-dialog-title"
       >
         <DialogTitle  className={classes.dialogTitle} id="draggable-dialog-title">
           첨부파일
@@ -179,8 +180,8 @@ function MY_attachments({attachments, className, ...rest}) {
                 file={selectedImgPath}
                 onLoadSuccess={onDocumentLoadSuccess}
               >
-                <Page width={1000} pageNumber={pageNumber} />
-                {/*<Page pageNumber={pageNumber} />*/}
+                {/*<Page width={1000} pageNumber={pageNumber} />*/}
+                <Page pageNumber={pageNumber} />
               </Document>
               <Grid
                 container
