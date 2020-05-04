@@ -81,6 +81,26 @@ export default [
         component: lazy(() => import('src/views/My_ReportCreate'))
       },
       {
+        path: '/reportWritePayment',
+        exact: true,
+        component: lazy(() => import('src/views/My_ReportCreate'))
+      },
+      {
+        path: '/reportWriteInvoice',
+        exact: true,
+        component: lazy(() => import('src/views/My_ReportCreate'))
+      },
+      {
+        path: '/reportWriteReceipt',
+        exact: true,
+        component: lazy(() => import('src/views/My_ReportCreate'))
+      },
+      {
+        path: '/reportWriteNacct',
+        exact: true,
+        component: lazy(() => import('src/views/My_ReportCreate'))
+      },
+      {
         path: '/reportApproved',
         exact: true,
         component: lazy(() => import('src/views/My_ReportWritten'))

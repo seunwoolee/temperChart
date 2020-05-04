@@ -17,6 +17,8 @@ import FilesDropzone from "./FilesDropzone";
 import uuid from 'uuid/v1';
 import MY_attachmentsBase from "./MY_attachmentsBase";
 import MY_erpDetailTable from "./MY_erpDetailTable";
+// import getShortBigo from "../../../utils/getShortBigo";
+// import {invoices} from "../../../mock";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -79,9 +81,7 @@ const useStyles = makeStyles((theme) => ({
 
 function MY_InvoiceCard({ invoices, className, attachments, handleAttachments, type, ...rest }) {
   const classes = useStyles();
-
-  const getSumInvoices = () => getCurrency(invoices.filter(invoice => invoice.RPSFX === '001' && invoice.RPSEQ === 1)
-                                                    // .map(invoice => invoice.RPAMT)
+  const getSumInvoices = () => getCurrency(invoices.filter(invoice => invoice.RPSEQ === 1)
                                                     .map(invoice => invoice.RPZ5DEBITAT + invoice.RPZ5CREDITAT)
                                                     .reduce((prev, curr) => prev + curr));
   return (
@@ -89,14 +89,14 @@ function MY_InvoiceCard({ invoices, className, attachments, handleAttachments, t
       <Typography variant="h5">
         총
         {' '}
-        {invoices.filter(invoice => invoice.RPSFX === '001' && invoice.RPSEQ === 1).length}
+        {invoices.filter(invoice => invoice.RPSEQ === 1).length}
         건 /
         {' '}
         {getSumInvoices()}
         원
       </Typography>
 
-      {invoices.filter(invoice => invoice.RPSFX === '001' && invoice.RPSEQ === 1).map((invoice, i) => (
+      {invoices.filter(invoice => invoice.RPSEQ === 1).map((invoice, i) => (
         <Card
           key={i}
           {...rest}
@@ -139,7 +139,7 @@ function MY_InvoiceCard({ invoices, className, attachments, handleAttachments, t
           </div>
         </CardContent>
         <CardContent className={classes.erpDetailTable}>
-          <MY_erpDetailTable invoices={invoices.filter(my_invoice =>  my_invoice.RPDOC === invoice.RPDOC)} />
+          <MY_erpDetailTable invoices={invoices.filter(my_invoice => my_invoice.RPPYID === invoice.RPPYID)} />
         </CardContent>
         <Divider />
 

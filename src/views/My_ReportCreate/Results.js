@@ -74,7 +74,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function Results({className, invoices, totalInvoices, fetchInvoices, ...rest}) {
+function Results({className, invoices, totalInvoices, fetchInvoices, invoiceType}) {
   const [selectedInvoices, setSelectedInvoices] = useState([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(25);
@@ -161,7 +161,6 @@ function Results({className, invoices, totalInvoices, fetchInvoices, ...rest}) {
     const sameBatchInvoices = createColspanData(invoice.RPICU);
     return (
       <TableCell
-        // rowSpan={sameBatchInvoices.length}
         align="center"
         padding="checkbox"
       >
@@ -171,7 +170,6 @@ function Results({className, invoices, totalInvoices, fetchInvoices, ...rest}) {
           }
           color="primary"
           onChange={(event) => handleSelectOne(event, invoice)}
-          // onChange={(event) => handleSelectOne(event, sameBatchInvoices)}
           value={selectedInvoices.map(invoice => invoice.id).indexOf(invoice.id) !== -1}
         />
       </TableCell>
@@ -180,7 +178,6 @@ function Results({className, invoices, totalInvoices, fetchInvoices, ...rest}) {
 
   return (
     <div
-      {...rest}
       className={clsx(classes.root, className)}
     >
       <LoadingBar />
@@ -244,7 +241,7 @@ function Results({className, invoices, totalInvoices, fetchInvoices, ...rest}) {
                       <TableCell align="center" className={classes.whiteSpaceNoWrap}>{invoice.RPALPH}</TableCell>
                       <TableCell align="center" className={classes.whiteSpaceNoWrap}>{invoice.RPDGJ}</TableCell>
                       <TableCell align="center" className={classes.whiteSpaceNoWrap}>
-                        {getCurrency(invoice.RPAMT)}
+                        {getCurrency((invoice.RPZ5DEBITAT + invoice.RPZ5CREDITAT))}
                       </TableCell>
                       <TableCell>{getShortBigo(width, invoice.RPRMK)}</TableCell>
                       <TableCell align="center" className={classes.whiteSpaceNoWrap}>{invoice.RPNAME}</TableCell>
@@ -271,6 +268,7 @@ function Results({className, invoices, totalInvoices, fetchInvoices, ...rest}) {
       {openModal && selectedInvoices.length
       && (
         <Index
+          invoiceType={invoiceType}
           // invoices={selectedInvoices.filter(invoice => invoice.RPICU === selectedInvoices[0].RPICU)} // 0, 같은 배치번호까지
           invoices={totalInvoices.filter(invoice => invoice.RPICU === selectedInvoices[0].RPICU)} // 0, 같은 배치번호까지
           onClose={closeReportModal}
@@ -291,6 +289,7 @@ function Results({className, invoices, totalInvoices, fetchInvoices, ...rest}) {
 
 Results.propTypes = {
   className: PropTypes.string,
+  invoiceType: PropTypes.string.isRequired,
   invoices: PropTypes.arrayOf(PropTypes.shape(voucher)).isRequired,
   fetchInvoices: PropTypes.func.isRequired,
   totalInvoices: PropTypes.arrayOf(PropTypes.shape(voucher)).isRequired

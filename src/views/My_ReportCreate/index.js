@@ -10,7 +10,7 @@ import Header from './Header';
 import Results from './Results';
 import moment from "moment";
 import MY_SearchBar from "../../components/MY_SearchBar";
-import {useHistory} from "react-router";
+import {useHistory, useLocation} from "react-router";
 import {isloading} from "../../actions";
 
 const useStyles = makeStyles((theme) => ({
@@ -29,13 +29,31 @@ const initialValues = {
   endDate: moment()
 };
 
+export const INVOICETYPE = Object.freeze({
+    채무발생: "채무발생",
+    채무정리: "채무정리",
+    채권발생: "채권발생",
+    채권정리: "채권정리",
+    일반전표: "일반전표"
+});
+//
+// export const INVOICETYPE = Object.freeze({
+//     채무발생:   Symbol("채무발생"),
+//     채무정리:  Symbol("채무정리"),
+//     채권발생: Symbol("채권발생"),
+//     채권정리: Symbol("채권정리"),
+//     일반전표: Symbol("일반전표")
+// });
+
 function ReportCreate() {
   const classes = useStyles();
   const [invoices, setInvoices] = useState([]);
+  const [invoiceType, setInvoiceType] = useState(INVOICETYPE.채무발생);
   const [inputDateValues, setInputDateValues] = useState({...initialValues});
   const [inputSearchContent, setInputSearchContent] = useState('');
   const history = useHistory();
   const dispatch = useDispatch();
+  const location = useLocation();
 
   const handleSearchContent = (event) => {
     setInputSearchContent(event.target.value);
@@ -46,6 +64,22 @@ function ReportCreate() {
   };
 
   const fetchInvoices = () => {
+    let url = `erp/voucher_list/`;
+
+    if (location.pathname === '/reportWritePayment') {
+      url = `erp/payment_list/`;
+      setInvoiceType(INVOICETYPE.채무정리);
+    } else if (location.pathname === '/reportWriteInvoice') {
+      url = `erp/invoice_list/`;
+      setInvoiceType(INVOICETYPE.채권발생);
+    } else if (location.pathname === '/reportWriteReceipt') {
+      url = `erp/receipt_list/`;
+      setInvoiceType(INVOICETYPE.채권정리);
+    } else if (location.pathname === '/reportWriteNacct') {
+      url = `erp/nacct_list/`;
+      setInvoiceType(INVOICETYPE.일반전표);
+    }
+
     const config = {
       headers: {Authorization: `Token ${localStorage.getItem('token')}`},
       params: {
@@ -54,8 +88,9 @@ function ReportCreate() {
         search: inputSearchContent
       }
     };
+
     dispatch(isloading(true))
-    axios.get('erp/voucher_list/', config)
+    axios.get(url, config)
       .then((response) => {
         dispatch(isloading(false))
         setInvoices(response.data);
@@ -69,6 +104,15 @@ function ReportCreate() {
     }
     fetchInvoices();
   }, []);
+
+  let headerInvoices = []
+  if(invoiceType === INVOICETYPE.채무발생 || invoiceType === INVOICETYPE.채권발생) {
+    headerInvoices = invoices.filter(invoice => invoice.RPSFX === '001' && invoice.RPSEQ === 1)
+  } else if(invoiceType === INVOICETYPE.채권정리 ||
+            invoiceType === INVOICETYPE.채무정리 ||
+            invoiceType === INVOICETYPE.일반전표) {
+    headerInvoices = invoices.filter(invoice => invoice.RPSEQ === 1)
+  }
 
   return (
     <Page
@@ -90,9 +134,10 @@ function ReportCreate() {
         {invoices && (
           <Results
             className={classes.results}
-            invoices={invoices.filter(invoice => invoice.RPSFX === '001' && invoice.RPSEQ === 1)}
+            invoices={headerInvoices}
             fetchInvoices={fetchInvoices}
             totalInvoices={invoices}
+            invoiceType={invoiceType}
           />
         )}
       </Container>

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useRef, useState} from 'react';
 import PropTypes, {array} from 'prop-types';
 import clsx from 'clsx';
 import {makeStyles} from '@material-ui/styles';
@@ -24,6 +24,9 @@ import {authSuccess, isloading} from "../../../actions";
 import MY_InvoiceCard from "../../../components/MY_InvoiceCard";
 import MY_InvoiceDetailCard from "../../../components/MY_InvoiceDetailCard";
 import LoadingBar from "../../../components/MY_LoadingBar";
+import {INVOICETYPE} from "../index";
+import MY_InvoiceDetailCard_P from "../../../components/MY_InvoiceDetailCard_P";
+import MY_InvoiceDetailCard_R from "../../../components/MY_InvoiceDetailCard_R";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -52,27 +55,25 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function Index({
-                 open, onClose, onComplete, invoices, className, ...rest
-               }) {
+function Index({open, onClose, onComplete, invoices, className, invoiceType}) {
   const classes = useStyles();
   const session = useSelector((state) => state.session);
   const dispatch = useDispatch();
 
+  const inputTitleRef = useRef(null);
   const [openDialog, setOpenDialog] = useState(false);
-  const [inputTitle, setInputTitle] = useState('');
   const [inputAttachments, setInputAttachments] = useState([]);
-
-  const handleChangeTitle = (event) => {
-    setInputTitle(event.target.value);
-  };
 
   const handleAttachments = (attachments: Array) => {
     setInputAttachments(attachments);
   };
 
   const handleClickOpen = () => {
+    if(inputTitleRef.current.value.length === 0){
+      return alert('제목을 입력해주세요');
+    }
     setOpenDialog(true);
+
   };
 
   const handleClose = () => {
@@ -80,7 +81,6 @@ function Index({
   };
 
   const handleSubmit = (users: Array) => {
-
     const headers = {Authorization: `Token ${session.token}`, 'Content-Type': 'multipart/form-data'};
     const axiosConfig = {headers};
     const url = 'ea/create_document/';
@@ -109,8 +109,9 @@ function Index({
 
     const formData = new FormData();
     formData.append('batch_number', invoices[0].RPICU);
+    formData.append('document_type', invoiceType.toString());
     formData.append('author', session.user.id);
-    formData.append('title', inputTitle);
+    formData.append('title', inputTitleRef.current.value);
     formData.append('approvers', JSON.stringify(users));
 
     filesArray.map(file => formData.append('files', file));
@@ -122,20 +123,53 @@ function Index({
       .then(response => {
         dispatch(isloading(false))
         setOpenDialog(false);
-        setInputTitle('');
+        inputTitleRef.current.value = '';
         setInputAttachments([]);
         response.status === 201 ? onComplete(true) : onComplete(false);
       })
       .catch(error => {
         dispatch(isloading(false))
         setOpenDialog(false);
-        setInputTitle('');
+        inputTitleRef.current.value = '';
         setInputAttachments([]);
         onComplete(false);
       });
   };
 
-  const getSumInvoices = () => getCurrency(invoices.map(invoice => invoice.price).reduce((prev, curr) => prev + curr));
+  let invoiceDetailCard = null;
+  if (invoiceType === INVOICETYPE.채무발생 || invoiceType === INVOICETYPE.채권발생) {
+    invoiceDetailCard = (
+      <MY_InvoiceDetailCard
+        type={'write'}
+        invoices={invoices}
+        attachments={inputAttachments}
+        handleAttachments={handleAttachments}/>
+    )
+  } else if (invoiceType === INVOICETYPE.채무정리) {
+    invoiceDetailCard = (
+      <MY_InvoiceDetailCard_P
+        type={'write'}
+        invoices={invoices}
+        attachments={inputAttachments}
+        handleAttachments={handleAttachments}/>
+    )
+  } else if (invoiceType === INVOICETYPE.채권정리) {
+    invoiceDetailCard = (
+      <MY_InvoiceDetailCard_R
+        type={'write'}
+        invoices={invoices}
+        attachments={inputAttachments}
+        handleAttachments={handleAttachments}/>
+    )
+  } else if (invoiceType === INVOICETYPE.일반전표) {
+    invoiceDetailCard = (
+      <MY_InvoiceDetailCard
+        type={'write'}
+        invoices={invoices}
+        attachments={inputAttachments}
+        handleAttachments={handleAttachments}/>
+    )
+  }
 
   return (
     <>
@@ -145,7 +179,6 @@ function Index({
         open={open}
       >
         <Card
-          {...rest}
           className={clsx(classes.root, className)}
         >
           <form>
@@ -180,11 +213,10 @@ function Index({
                   xs={12}
                 >
                   <TextField
+                    inputRef={inputTitleRef}
                     fullWidth
                     label="제목"
                     name="title"
-                    onChange={handleChangeTitle}
-                    value={inputTitle}
                     variant="outlined"
                   />
                 </Grid>
@@ -194,11 +226,7 @@ function Index({
                   md={12}
                   xs={12}
                 >
-                  <MY_InvoiceDetailCard
-                    type={'write'}
-                    invoices={invoices}
-                    attachments={inputAttachments}
-                    handleAttachments={handleAttachments}/>
+                  {invoiceDetailCard}
                 </Grid>
               </Grid>
             </CardContent>
@@ -208,7 +236,6 @@ function Index({
                 닫기
               </Button>
               <Button
-                disabled={!(inputTitle)}
                 color="primary"
                 onClick={handleClickOpen}
                 variant="contained"
@@ -218,7 +245,7 @@ function Index({
             </CardActions>
           </form>
 
-          <LoadingBar />
+          <LoadingBar/>
 
         </Card>
       </Modal>
@@ -229,6 +256,7 @@ function Index({
 
 Index.propTypes = {
   className: PropTypes.string,
+  invoiceType: PropTypes.string,
   invoices: PropTypes.arrayOf(PropTypes.shape(voucher)),
   onClose: PropTypes.func,
   onComplete: PropTypes.func,

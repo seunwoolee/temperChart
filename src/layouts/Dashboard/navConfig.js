@@ -23,8 +23,12 @@ import ViewConfigIcon from '@material-ui/icons/ViewComfy';
 import CreateIcon from '@material-ui/icons/Create';
 import DescriptionRoundedIcon from '@material-ui/icons/DescriptionRounded';
 import DescriptionOutlinedIcon from '@material-ui/icons/DescriptionOutlined';
+import BorderColorIcon from '@material-ui/icons/BorderColor';
 import ListIcon from '@material-ui/icons/List';
 import Label from 'src/components/Label';
+import CreateOutlinedIcon from '@material-ui/icons/CreateOutlined';
+import BorderColorOutlinedIcon from '@material-ui/icons/BorderColorOutlined';
+import BorderColorRoundedIcon from '@material-ui/icons/BorderColorRounded';
 
 export default [
   {
@@ -56,10 +60,30 @@ export default [
     subheader: '결재작성',
     items: [
       {
-        title: '결재작성',
+        title: '채무발생작성',
         href: '/reportWrite',
         icon: CreateIcon
-      }
+      },
+      {
+        title: '채무정리작성',
+        href: '/reportWritePayment',
+        icon: BorderColorIcon
+      },
+      {
+        title: '채권발생작성',
+        href: '/reportWriteInvoice',
+        icon: CreateOutlinedIcon
+      },
+      {
+        title: '채권정리작성',
+        href: '/reportWriteReceipt',
+        icon: BorderColorOutlinedIcon
+      },
+      {
+        title: '일반전표작성',
+        href: '/reportWriteNacct',
+        icon: CreateIcon
+      },
     ]
   },
   // {

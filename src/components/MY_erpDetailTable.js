@@ -27,10 +27,10 @@ const useStyles = makeStyles((theme) => ({
 function MY_erpDetailTable({invoices}) {
   const classes = useStyles();
 
-  const getSumRPZ5CREDITAT = () => getThousand(invoices.map(invoice => invoice.RPZ5CREDITAT / 100)
+  const getSumRPZ5CREDITAT = () => getThousand(invoices.map(invoice => invoice.RPZ5CREDITAT)
     .reduce((prev, curr) => prev + curr));
 
-  const getSumRPZ5DEBITAT = () => getThousand(invoices.map(invoice => invoice.RPZ5DEBITAT / 100)
+  const getSumRPZ5DEBITAT = () => getThousand(invoices.map(invoice => invoice.RPZ5DEBITAT)
     .reduce((prev, curr) => prev + curr));
 
   return (
@@ -49,17 +49,27 @@ function MY_erpDetailTable({invoices}) {
         <TableBody>
           {invoices.map(invoice => (
             <TableRow key={invoice.id}>
-              <TableCell component="th" scope="row">{invoice.RPCODE}</TableCell>
+              <TableCell style={{whiteSpace: 'nowrap'}} component="th" scope="row">{invoice.RPCODE}</TableCell>
               <TableCell style={{whiteSpace: 'nowrap'}} component="th" scope="row">{invoice.RPDL02}</TableCell>
-              <TableCell align="right">{invoice.RPZ5DEBITAT === 0 ? <br /> : getThousand(invoice.RPZ5DEBITAT / 100)}</TableCell>
-              <TableCell align="right">{invoice.RPZ5CREDITAT === 0 ? <br /> : getThousand(invoice.RPZ5CREDITAT / 100)}</TableCell>
-              <TableCell>{invoice.RPRMK}</TableCell>
-              <TableCell>{invoice.RPSEQ === 3 ? (invoice.RPALPH) : <br />}</TableCell>
+              <TableCell style={{whiteSpace: 'nowrap'}} align="right">{invoice.RPZ5DEBITAT === 0 ? <br /> : getThousand(invoice.RPZ5DEBITAT)}</TableCell>
+              <TableCell style={{whiteSpace: 'nowrap'}} align="right">{invoice.RPZ5CREDITAT === 0 ? <br /> : getThousand(invoice.RPZ5CREDITAT)}</TableCell>
+              <TableCell style={{whiteSpace: 'nowrap'}} >{invoice.RPRMK}</TableCell>
+              <TableCell style={{whiteSpace: 'nowrap'}} >{invoice.RPSEQ === 3 ? (invoice.RPALPH) : <br />}</TableCell>
             </TableRow>
           ))}
+          {/*{invoices.map(invoice => (*/}
+          {/*  <TableRow key={invoice.id}>*/}
+          {/*    <TableCell component="th" scope="row">{invoice.RPCODE}</TableCell>*/}
+          {/*    <TableCell style={{whiteSpace: 'nowrap'}} component="th" scope="row">{invoice.RPDL02}</TableCell>*/}
+          {/*    <TableCell style={{whiteSpace: 'nowrap'}}  align="right">{invoice.RPZ5DEBITAT === 0 ? <br /> : getThousand(invoice.RPZ5DEBITAT)}</TableCell>*/}
+          {/*    <TableCell style={{whiteSpace: 'nowrap'}}  align="right">{invoice.RPZ5CREDITAT === 0 ? <br /> : getThousand(invoice.RPZ5CREDITAT)}</TableCell>*/}
+          {/*    <TableCell style={{whiteSpace: 'nowrap'}} >{invoice.RPRMK}</TableCell>*/}
+          {/*    <TableCell style={{whiteSpace: 'nowrap'}} >{invoice.RPSEQ === 3 ? (invoice.RPALPH) : <br />}</TableCell>*/}
+          {/*  </TableRow>*/}
+          {/*))}*/}
             <TableRow>
               <TableCell><br /></TableCell>
-              <TableCell component="th" scope="row" style={{fontWeight: 600}}>문서별합계</TableCell>
+              <TableCell component="th" scope="row" style={{fontWeight: 600, whiteSpace: 'nowrap'}}>문서별합계</TableCell>
               <TableCell align="right" style={{fontWeight: 600}}>{getSumRPZ5DEBITAT()}</TableCell>
               <TableCell align="right" style={{fontWeight: 600}}>{getSumRPZ5CREDITAT()}</TableCell>
               <TableCell><br /></TableCell>

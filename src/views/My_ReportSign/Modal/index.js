@@ -14,13 +14,14 @@ import {
 } from '@material-ui/core';
 import TableContainer from "@material-ui/core/TableContainer";
 import Paper from "@material-ui/core/Paper";
-import axios from "../../../utils/axios";
-import {documents} from "../../../mock/my_documentsMock";
+import {documents} from "../../../mock";
 import MY_approverLine from "../../../components/MY_approverLine";
 import FormDialog from "../Dialog";
 import MY_opinion from "../../../components/MY_opinion";
 import MY_InvoiceDetailCard from "../../../components/MY_InvoiceDetailCard";
-import MY_attachments from "../../../components/MY_attachments";
+import {INVOICETYPE} from "../../My_ReportCreate";
+import MY_InvoiceDetailCard_P from "../../../components/MY_InvoiceDetailCard_P";
+import MY_InvoiceDetailCard_R from "../../../components/MY_InvoiceDetailCard_R";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -32,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
     boxShadow: theme.shadows[20],
     width: 900,
     [theme.breakpoints.up('lg')]: {
-      width: '95%',
+      width: '100%',
       backgroundColor: 'transparent'
     },
     maxHeight: '95%',
@@ -68,9 +69,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function Index({
-  open, onClose, onComplete, document, invoices, className, ...rest
-}) {
+function Index({ open, onClose, onComplete, document, invoices, className }) {
   const classes = useStyles();
   const [openDialog, setOpenDialog] = useState(false);
 
@@ -96,7 +95,40 @@ function Index({
     if (event.key === '1') { // TODO 1로 임시
       onComplete('', '승인');
     }
+  };
+
+  let invoiceDetailCard = null;
+  debugger;
+  if (document.document_type === INVOICETYPE.채무발생 || document.document_type === INVOICETYPE.채권발생) {
+    invoiceDetailCard = (
+      <MY_InvoiceDetailCard
+        type={'read'}
+        invoices={invoices}
+        attachments={document.attachments} />
+    )
+  } else if (document.document_type === INVOICETYPE.채무정리) {
+    invoiceDetailCard = (
+      <MY_InvoiceDetailCard_P
+        type={'read'}
+        invoices={invoices}
+        attachments={document.attachments} />
+    )
+  } else if (document.document_type === INVOICETYPE.채권정리) {
+    invoiceDetailCard = (
+      <MY_InvoiceDetailCard_R
+        type={'read'}
+        invoices={invoices}
+        attachments={document.attachments} />
+    )
+  } else if (document.document_type === INVOICETYPE.일반전표) {
+    invoiceDetailCard = (
+      <MY_InvoiceDetailCard
+        type={'read'}
+        invoices={invoices}
+        attachments={document.attachments} />
+    )
   }
+
   return (
     <>
       <Modal
@@ -173,10 +205,11 @@ function Index({
                   md={12}
                   xs={12}
                 >
-                  <MY_InvoiceDetailCard
-                    type={'read'}
-                    invoices={invoices}
-                    attachments={document.attachments} />
+                  {invoiceDetailCard}
+                  {/*<MY_InvoiceDetailCard*/}
+                  {/*  type={'read'}*/}
+                  {/*  invoices={invoices}*/}
+                  {/*  attachments={document.attachments} />*/}
                 </Grid>
                 <Grid
                   item
