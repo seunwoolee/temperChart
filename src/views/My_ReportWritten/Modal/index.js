@@ -27,6 +27,10 @@ import MY_attachmentsBase from "../../../components/MY_attachmentsBase";
 import MY_InvoiceCard from "../../../components/MY_InvoiceCard";
 import MY_opinion from "../../../components/MY_opinion";
 import MY_InvoiceDetailCard from "../../../components/MY_InvoiceDetailCard";
+import {INVOICETYPE} from "../../My_ReportCreate";
+import MY_InvoiceDetailCard_P from "../../../components/MY_InvoiceDetailCard_P";
+import MY_InvoiceDetailCard_R from "../../../components/MY_InvoiceDetailCard_R";
+import MY_InvoiceDetailCard_G from "../../../components/MY_InvoiceDetailCard_G";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -38,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
     boxShadow: theme.shadows[20],
     width: 900,
     [theme.breakpoints.up('lg')]: {
-      width: '95%',
+      width: '100%',
       backgroundColor: 'transparent'
     },
     maxHeight: '95%',
@@ -78,16 +82,47 @@ function Index({
   open, onClose, onComplete, document, invoices, className, ...rest
 }) {
   const classes = useStyles();
-  const [openDialog, setOpenDialog] = useState(false);
-  const session = useSelector((state) => state.session);
+  // const [openDialog, setOpenDialog] = useState(false);
+  // const session = useSelector((state) => state.session);
 
 
-  const handleClickOpen = () => setOpenDialog(true);
+  // const handleClickOpen = () => setOpenDialog(true);
+  //
+  // const handleClose = () => setOpenDialog(false);
+  //
+  // const getSumInvoices = () => getCurrency(invoices.map(invoice => invoice.price)
+  //   .reduce((prev, curr) => prev + curr));
 
-  const handleClose = () => setOpenDialog(false);
-
-  const getSumInvoices = () => getCurrency(invoices.map(invoice => invoice.price)
-    .reduce((prev, curr) => prev + curr));
+  let invoiceDetailCard = null;
+  if (document.document_type === INVOICETYPE.채무발생 || document.document_type === INVOICETYPE.채권발생) {
+    invoiceDetailCard = (
+      <MY_InvoiceDetailCard
+        type={'read'}
+        invoices={invoices}
+        attachments={document.attachments} />
+    )
+  } else if (document.document_type === INVOICETYPE.채무정리) {
+    invoiceDetailCard = (
+      <MY_InvoiceDetailCard_P
+        type={'read'}
+        invoices={invoices}
+        attachments={document.attachments} />
+    )
+  } else if (document.document_type === INVOICETYPE.채권정리) {
+    invoiceDetailCard = (
+      <MY_InvoiceDetailCard_R
+        type={'read'}
+        invoices={invoices}
+        attachments={document.attachments} />
+    )
+  } else if (document.document_type === INVOICETYPE.일반전표) {
+    invoiceDetailCard = (
+      <MY_InvoiceDetailCard_G
+        type={'read'}
+        invoices={invoices}
+        attachments={document.attachments} />
+    )
+  }
 
   return (
     <>
@@ -153,15 +188,11 @@ function Index({
                   md={12}
                   xs={12}
                 >
-                  {/*<MY_InvoiceCard*/}
-                  {/*  invoices={invoices.filter(invoice => invoice.RPSEQ === 1)}*/}
-                  {/*  attachments={document.attachments}*/}
+                  {invoiceDetailCard}
+                  {/*<MY_InvoiceDetailCard*/}
                   {/*  type={'read'}*/}
-                  {/*/>*/}
-                  <MY_InvoiceDetailCard
-                    type={'read'}
-                    invoices={invoices}
-                    attachments={document.attachments} />
+                  {/*  invoices={invoices}*/}
+                  {/*  attachments={document.attachments} />*/}
                 </Grid>
                 <Grid
                   item

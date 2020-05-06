@@ -77,10 +77,10 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function MY_InvoiceCard({ invoices, className, attachments, handleAttachments, type, ...rest }) {
+function MY_InvoiceCard({ invoices, className, attachments, handleAttachments, type }) {
   const classes = useStyles();
 
-  const getSumInvoices = () => getCurrency(invoices.filter(invoice => invoice.RPSFX === '001' && invoice.RPSEQ === 1)
+  const getSumInvoices = () => getCurrency(invoices.filter(invoice => invoice.RPSEQ === 1)
                                                     .map(invoice => invoice.RPZ5DEBITAT + invoice.RPZ5CREDITAT)
                                                     .reduce((prev, curr) => prev + curr));
   return (
@@ -88,53 +88,36 @@ function MY_InvoiceCard({ invoices, className, attachments, handleAttachments, t
       <Typography variant="h5">
         총
         {' '}
-        {invoices.filter(invoice => invoice.RPSFX === '001' && invoice.RPSEQ === 1).length}
+        {invoices.filter(invoice => invoice.RPSEQ === 1).length}
         건 /
         {' '}
         {getSumInvoices()}
         원
       </Typography>
 
-      {invoices.filter(invoice => invoice.RPSFX === '001' && invoice.RPSEQ === 1).map((invoice, i) => (
+      {invoices.filter(invoice => invoice.RPSEQ === 1).map((invoice, i) => (
         <Card
           key={i}
-          {...rest}
           className={clsx(classes.root, className)}
         >
         <CardContent className={classes.content}>
-          <div className={classes.supplyName}>
-            <Typography variant="body2">배치번호/문서번호</Typography>
-            <Typography variant="h6">{invoice.RPICU}/{invoice.RPDOC}</Typography>
-          </div>
-          <div className={classes.stats}>
-            <Typography variant="body2">거래처명</Typography>
-            <Typography variant="h6">{invoice.RPALPH}</Typography>
-          </div>
-          <div className={classes.bigo}>
-            <Typography variant="body2">거래처코드/사업자번호</Typography>
-            <Typography variant="h6">{invoice.RPAN8} / {invoice.RPTAX}</Typography>
-          </div>
-          <div className={classes.stats}>
-            <Typography variant="body2">세금유형</Typography>
-            <Typography variant="h6">{invoice.RPEXR1 || invoice.RPTXA1 ? invoice.RPEXR1 + ' / ' + invoice.RPTXA1 : <br />}</Typography>
-          </div>
         </CardContent>
         <CardContent className={classes.contentBottom}>
+          <div className={classes.bigo}>
+            <Typography variant="body2">배치번호</Typography>
+            <Typography variant="h6">{invoice.RPICU}</Typography>
+          </div>
+          <div className={classes.bigo}>
+            <Typography variant="body2">문서번호</Typography>
+            <Typography variant="h6">{invoice.RPDOC}</Typography>
+          </div>
           <div className={classes.supplyName}>
-            <Typography variant="body2">G/L일자/전표유형</Typography>
-            <Typography variant="h6">{invoice.RPDGJ} / {invoice.RPDCT}</Typography>
+            <Typography variant="body2">G/L일자</Typography>
+            <Typography variant="h6">{invoice.RPDGJ}</Typography>
           </div>
           <div className={classes.stats}>
-            <Typography variant="body2">송장일자</Typography>
-            <Typography variant="h6">{invoice.RPDSVJ}</Typography>
-          </div>
-          <div className={classes.bigo}>
-            <Typography variant="body2">지급예정일</Typography>
-            <Typography variant="h6">{invoice.RPDDJ}</Typography>
-          </div>
-          <div className={classes.bigo}>
-            <Typography variant="body2">세금정보</Typography>
-            <Typography variant="h6">{invoice.RPEXR1NM}</Typography>
+            <Typography variant="body2">전표유형</Typography>
+            <Typography variant="h6">{invoice.RPDCT}</Typography>
           </div>
         </CardContent>
         <CardContent className={classes.erpDetailTable}>

@@ -22,6 +22,7 @@ import MY_InvoiceDetailCard from "../../../components/MY_InvoiceDetailCard";
 import {INVOICETYPE} from "../../My_ReportCreate";
 import MY_InvoiceDetailCard_P from "../../../components/MY_InvoiceDetailCard_P";
 import MY_InvoiceDetailCard_R from "../../../components/MY_InvoiceDetailCard_R";
+import MY_InvoiceDetailCard_G from "../../../components/MY_InvoiceDetailCard_G";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -98,7 +99,6 @@ function Index({ open, onClose, onComplete, document, invoices, className }) {
   };
 
   let invoiceDetailCard = null;
-  debugger;
   if (document.document_type === INVOICETYPE.채무발생 || document.document_type === INVOICETYPE.채권발생) {
     invoiceDetailCard = (
       <MY_InvoiceDetailCard
@@ -122,7 +122,7 @@ function Index({ open, onClose, onComplete, document, invoices, className }) {
     )
   } else if (document.document_type === INVOICETYPE.일반전표) {
     invoiceDetailCard = (
-      <MY_InvoiceDetailCard
+      <MY_InvoiceDetailCard_G
         type={'read'}
         invoices={invoices}
         attachments={document.attachments} />

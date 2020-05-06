@@ -29,6 +29,7 @@ import {invoices, voucher} from "../../mock";
 import MySnackbars from "../../components/MY_snackbar";
 import getPerfectScrollbarHeight from "../../utils/getPerfectScrollbarHeight";
 import LoadingBar from "../../components/MY_LoadingBar";
+import {INVOICETYPE} from "./index";
 
 // import WriteReportModal from "../CustomerManagementDetails/Summary/WriteReporttModal";
 
@@ -220,9 +221,13 @@ function Results({className, invoices, totalInvoices, fetchInvoices, invoiceType
                       />
                     </TableCell>
                     <TableCell className={classes.header}>배치번호</TableCell>
-                    <TableCell className={classes.header}>공급자명</TableCell>
+                    {invoiceType !== INVOICETYPE.일반전표 ? (
+                      <TableCell className={classes.header}>공급자명</TableCell>
+                      ) : null }
                     <TableCell className={classes.header}>G/L일자</TableCell>
-                    <TableCell className={classes.header}>금액</TableCell>
+                    {invoiceType !== INVOICETYPE.일반전표 ? (
+                      <TableCell className={classes.header}>금액</TableCell>
+                      ) : null }
                     <TableCell className={classes.header}>비고</TableCell>
                     <TableCell className={classes.header}>작성자</TableCell>
                   </TableRow>
@@ -238,11 +243,15 @@ function Results({className, invoices, totalInvoices, fetchInvoices, invoiceType
                         <TableCell />
                       )}
                       <TableCell align="center" className={classes.whiteSpaceNoWrap}>{invoice.RPICU}</TableCell>
-                      <TableCell align="center" className={classes.whiteSpaceNoWrap}>{invoice.RPALPH}</TableCell>
+                      {invoiceType !== INVOICETYPE.일반전표 ? (
+                        <TableCell align="center" className={classes.whiteSpaceNoWrap}>{invoice.RPALPH}</TableCell>
+                        ) : null }
                       <TableCell align="center" className={classes.whiteSpaceNoWrap}>{invoice.RPDGJ}</TableCell>
-                      <TableCell align="center" className={classes.whiteSpaceNoWrap}>
-                        {getCurrency((invoice.RPZ5DEBITAT + invoice.RPZ5CREDITAT))}
-                      </TableCell>
+                      {invoiceType !== INVOICETYPE.일반전표 ? (
+                        <TableCell align="center" className={classes.whiteSpaceNoWrap}>
+                          {getCurrency((invoice.RPZ5DEBITAT + invoice.RPZ5CREDITAT))}
+                        </TableCell>
+                        ) : null }
                       <TableCell>{getShortBigo(width, invoice.RPRMK)}</TableCell>
                       <TableCell align="center" className={classes.whiteSpaceNoWrap}>{invoice.RPNAME}</TableCell>
                     </TableRow>

@@ -27,6 +27,7 @@ import LoadingBar from "../../../components/MY_LoadingBar";
 import {INVOICETYPE} from "../index";
 import MY_InvoiceDetailCard_P from "../../../components/MY_InvoiceDetailCard_P";
 import MY_InvoiceDetailCard_R from "../../../components/MY_InvoiceDetailCard_R";
+import MY_InvoiceDetailCard_G from "../../../components/MY_InvoiceDetailCard_G";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -163,7 +164,7 @@ function Index({open, onClose, onComplete, invoices, className, invoiceType}) {
     )
   } else if (invoiceType === INVOICETYPE.일반전표) {
     invoiceDetailCard = (
-      <MY_InvoiceDetailCard
+      <MY_InvoiceDetailCard_G
         type={'write'}
         invoices={invoices}
         attachments={inputAttachments}
@@ -249,7 +250,11 @@ function Index({open, onClose, onComplete, invoices, className, invoiceType}) {
 
         </Card>
       </Modal>
-      <ChooseDialog open={openDialog} onClose={handleClose} onSubmit={handleSubmit}/>
+      <ChooseDialog
+        open={openDialog}
+        onClose={handleClose}
+        onSubmit={handleSubmit}
+        invoiceType={invoiceType} />
     </>
   );
 }

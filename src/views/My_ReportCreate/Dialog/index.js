@@ -124,7 +124,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function ChooseDialog({open, onClose, onSubmit}) {
+function ChooseDialog({open, onClose, onSubmit, invoiceType}) {
   const classes = useStyles();
   const [users, setUsers] = React.useState([]);
   const [departmentUsers, setDepartmentUsers] = React.useState([]);
@@ -234,7 +234,7 @@ function ChooseDialog({open, onClose, onSubmit}) {
     let mounted = true;
     const headers = {Authorization: `Token ${session.token}`};
     const fetchUsers = () => {
-      axios.get(`ea/get_defaultUsers/${session.user.id}`, {headers}).then(response => {
+      axios.get(`ea/get_defaultUsers/${session.user.id}/${invoiceType.toString()}`, {headers}).then(response => {
         if (mounted) {
           setUsers(response.data);
         }
@@ -432,6 +432,7 @@ ChooseDialog.propTypes = {
   open: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
+  invoiceType: PropTypes.string.isRequired,
 };
 
 export default ChooseDialog;
