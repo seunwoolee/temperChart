@@ -10,6 +10,10 @@ const useStyles = makeStyles((theme) => ({
   root: {
     boxShadow: 'none'
   },
+  toolbar: {
+      minHeight: 48,
+      backgroundColor: '#1e4a6d',
+  },
   logos: {
     fontSize: '1rem',
     color: theme.palette.common.white,
@@ -25,7 +29,7 @@ function Topbar({ className, ...rest }) {
       className={clsx(classes.root, className)}
       color="primary"
     >
-      <Toolbar>
+      <Toolbar className={classes.toolbar}>
         <RouterLink to="/auth/login">
           <Button
             className={classes.logos}

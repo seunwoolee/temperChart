@@ -36,8 +36,8 @@ const useStyles = makeStyles((theme) => ({
   },
   desktopDrawer: {
     width: 256,
-    top: 64,
-    height: 'calc(100% - 64px)'
+    top: 48,
+    height: 'calc(100% - 48)'
   },
   navigation: {
     overflow: 'auto',

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import {makeStyles} from '@material-ui/styles';
@@ -10,21 +10,12 @@ import {
   CardActions,
   Grid,
   Divider,
-  TextField,
   Button, Table, TableBody, TableRow, TableCell, Typography
 } from '@material-ui/core';
 import TableContainer from "@material-ui/core/TableContainer";
 import Paper from "@material-ui/core/Paper";
-import {useSelector} from "react-redux";
-import MySnackbars from "../../../components/MY_snackbar";
-import ChooseDialog from '../Dialog';
-// import axios from "../../../utils/axios";
 import {documents} from "../../../mock/my_documentsMock";
 import MY_approverLine from "../../../components/MY_approverLine";
-import getCurrency from "../../../utils/getCurrency";
-import axios from "../../../utils/my_axios";
-import MY_attachmentsBase from "../../../components/MY_attachmentsBase";
-import MY_InvoiceCard from "../../../components/MY_InvoiceCard";
 import MY_opinion from "../../../components/MY_opinion";
 import MY_InvoiceDetailCard from "../../../components/MY_InvoiceDetailCard";
 import {INVOICETYPE} from "../../My_ReportCreate";
@@ -40,12 +31,14 @@ const useStyles = makeStyles((theme) => ({
     transform: 'translate(-50%, -50%)',
     outline: 'none',
     boxShadow: theme.shadows[20],
-    width: 900,
+    width: 820,
+    height: 820,
     [theme.breakpoints.up('lg')]: {
+      paddingLeft: theme.spacing(2),
       width: '100%',
       backgroundColor: 'transparent'
     },
-    maxHeight: '95%',
+    maxHeight: '100%',
     overflowY: 'auto',
     maxWidth: '100%'
   },
@@ -55,11 +48,13 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: 'white'
     }
   },
-  tableCellContent: {
+  tableCellTitle: {
+    textAlign: 'center',
     width: '50px',
-    whiteSpace: 'nowrap',
     backgroundColor: '#eeeeee'
-
+  },
+  tableCellContent: {
+    width: '100px',
   },
   cardContent: {
     paddingTop: theme.spacing(1)
@@ -74,7 +69,7 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'flex-end'
   },
   approverGrid: {
-    paddingBottom: theme.spacing(8)
+    paddingBottom: theme.spacing(2)
   }
 }));
 
@@ -167,15 +162,13 @@ function Index({
                     <Table>
                       <TableBody>
                         <TableRow>
-                          <TableCell className={classes.tableCellContent}>작성자</TableCell>
-                          <TableCell>{document.author}</TableCell>
+                          <TableCell className={classes.tableCellTitle}>작성자</TableCell>
+                          <TableCell className={classes.tableCellContent}>{document.author}</TableCell>
+                          <TableCell className={classes.tableCellTitle}>작성일자</TableCell>
+                          <TableCell className={classes.tableCellContent}>{document.created}</TableCell>
                         </TableRow>
                         <TableRow>
-                          <TableCell className={classes.tableCellContent}>작성일자</TableCell>
-                          <TableCell>{document.created}</TableCell>
-                        </TableRow>
-                        <TableRow>
-                          <TableCell className={classes.tableCellContent}>제목</TableCell>
+                          <TableCell className={classes.tableCellTitle}>제목</TableCell>
                           <TableCell>{document.title}</TableCell>
                         </TableRow>
                       </TableBody>

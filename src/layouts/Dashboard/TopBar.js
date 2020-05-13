@@ -45,6 +45,10 @@ const useStyles = makeStyles((theme) => ({
   root: {
     boxShadow: 'none',
   },
+  toolbar: {
+    minHeight: 48,
+    backgroundColor: '#1e4a6d',
+  },
   flexGrow: {
     flexGrow: 1
   },
@@ -249,7 +253,7 @@ function TopBar({
       className={clsx(classes.root, className)}
       color="primary"
     >
-      <Toolbar>
+      <Toolbar className={classes.toolbar}>
         <Hidden lgUp>
           <IconButton
             className={classes.menuButton}

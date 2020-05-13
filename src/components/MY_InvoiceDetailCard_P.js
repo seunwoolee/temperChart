@@ -81,9 +81,11 @@ const useStyles = makeStyles((theme) => ({
 
 function MY_InvoiceCard({ invoices, className, attachments, handleAttachments, type, ...rest }) {
   const classes = useStyles();
-  const getSumInvoices = () => getCurrency(invoices.filter(invoice => invoice.RPSEQ === 1)
-                                                    .map(invoice => invoice.RPZ5DEBITAT + invoice.RPZ5CREDITAT)
-                                                    .reduce((prev, curr) => prev + curr));
+  const getSumInvoices = () => getCurrency(invoices.map(invoice => invoice.RPZ5DEBITAT + invoice.RPZ5CREDITAT)
+                                                   .reduce((prev, curr) => prev + curr) / 2);
+  // const getSumInvoices = () => getCurrency(invoices.filter(invoice => invoice.RPSEQ === 1)
+  //                                                   .map(invoice => invoice.RPZ5DEBITAT + invoice.RPZ5CREDITAT)
+  //                                                   .reduce((prev, curr) => prev + curr));
   return (
     <>
       <Typography variant="h5">

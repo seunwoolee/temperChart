@@ -16,16 +16,16 @@ const useStyles = makeStyles((theme) => ({
     }
   },
   content: {
-    paddingTop: 64,
+    paddingTop: 48,
     flexGrow: 1,
     maxWidth: '100%',
     overflowX: 'hidden',
     [theme.breakpoints.up('lg')]: {
       paddingLeft: 256
     },
-    [theme.breakpoints.down('xs')]: {
-      paddingTop: 56
-    }
+    // [theme.breakpoints.down('xs')]: {
+    //   paddingTop: 56
+    // }
   }
 }));
 

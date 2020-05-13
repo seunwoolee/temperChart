@@ -31,6 +31,7 @@ const initialValues = {
 
 function ReportWritten() {
   const classes = useStyles();
+  const [headerText, setHeaderText] = useState('상신함');
   const [documents, setDocuments] = useState([]);
   const [inputDateValues, setInputDateValues] = useState({...initialValues});
   const [inputSearchContent, setInputSearchContent] = useState('');
@@ -52,8 +53,10 @@ function ReportWritten() {
 
     if (location.pathname === '/reportRejected') {
       url = `ea/rejected_document/${session.user.id}`;
+      setHeaderText('반려함');
     } else if (location.pathname === '/reportApproved') {
       url = `ea/approved_document/${session.user.id}`;
+      setHeaderText('기결함');
     }
 
     let params = {
@@ -101,7 +104,7 @@ function ReportWritten() {
       title="상신함"
     >
       <Container maxWidth={false}>
-        <Header/>
+        <Header headerText={headerText}/>
         <MY_SearchBar
           searchContent={inputSearchContent}
           setSearchContent={handleSearchContent}

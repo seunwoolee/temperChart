@@ -8,12 +8,11 @@ const useStyles = makeStyles(() => ({
   root: {}
 }));
 
-function Header({ className, ...rest }) {
+function Header({ className, headerText }) {
   const classes = useStyles();
 
   return (
     <div
-      {...rest}
       className={clsx(classes.root, className)}
     >
       <Grid
@@ -34,7 +33,7 @@ function Header({ className, ...rest }) {
             component="h1"
             variant="h3"
           >
-            상신함
+            {headerText}
           </Typography>
         </Grid>
       </Grid>
@@ -43,7 +42,8 @@ function Header({ className, ...rest }) {
 }
 
 Header.propTypes = {
-  className: PropTypes.string
+  className: PropTypes.string,
+  headerText: PropTypes.string
 };
 
 export default Header;

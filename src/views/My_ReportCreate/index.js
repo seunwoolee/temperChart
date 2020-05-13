@@ -103,7 +103,7 @@ function ReportCreate() {
       history.push('/auth/login');
     }
     fetchInvoices();
-  }, []);
+  }, [location]);
 
   let headerInvoices = []
   if(invoiceType === INVOICETYPE.채무발생 || invoiceType === INVOICETYPE.채권발생) {
@@ -117,7 +117,7 @@ function ReportCreate() {
   return (
     <Page
       className={classes.root}
-      title="결재작성"
+      title={"결재작성"}
     >
       <Container
         maxWidth={false}

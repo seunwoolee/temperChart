@@ -212,8 +212,10 @@ function Results({className, documents, fetchDocuments, ...rest}) {
                         onChange={handleSelectAll}
                       />
                     </TableCell>
-                    <TableCell className={classes.header}>문서번호</TableCell>
+                    <TableCell className={classes.header}>결재번호</TableCell>
+                    <TableCell className={classes.header}>전표수</TableCell>
                     <TableCell className={classes.header}>제목</TableCell>
+                    <TableCell className={classes.header}>금액</TableCell>
                     <TableCell className={classes.header}>기안일자</TableCell>
                     <TableCell className={classes.header}>기안부서</TableCell>
                     <TableCell className={classes.header}>기안자</TableCell>
@@ -239,7 +241,9 @@ function Results({className, documents, fetchDocuments, ...rest}) {
                       </TableCell>
 
                       <TableCell align="center" className={classes.whiteSpaceNoWrap}>{document.id}</TableCell>
+                      <TableCell align="center" className={classes.whiteSpaceNoWrap}>{document.invoices_count}</TableCell>
                       <TableCell className={classes.whiteSpaceNoWrap}>{document.title}</TableCell>
+                      <TableCell className={classes.whiteSpaceNoWrap}>{getCurrency(document.price)}</TableCell>
                       <TableCell align="center" className={classes.whiteSpaceNoWrap}>
                         {document.created}
                       </TableCell>

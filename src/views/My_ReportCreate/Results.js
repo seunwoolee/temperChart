@@ -200,7 +200,7 @@ function Results({className, invoices, totalInvoices, fetchInvoices, invoiceType
       <Card>
         <CardHeader
           action={<GenericMoreButton />}
-          title="전표 내역"
+          title={`전표 내역 (${invoiceType.toString()})`}
         />
         <Divider />
         <CardContent className={classes.content}>

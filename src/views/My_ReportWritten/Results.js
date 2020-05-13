@@ -1,5 +1,4 @@
-import React, {useEffect, useState} from 'react';
-import {Link as RouterLink} from 'react-router-dom';
+import React, {useState} from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import PerfectScrollbar from 'react-perfect-scrollbar';
@@ -31,6 +30,7 @@ import {documents} from '../../mock/my_documentsMock';
 import getPerfectScrollbarHeight from "../../utils/getPerfectScrollbarHeight";
 import axios from "../../utils/my_axios";
 import LoadingBar from "../../components/MY_LoadingBar";
+import getCurrency from "../../utils/getCurrency";
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -143,8 +143,9 @@ function Results({className, documents, ...rest}) {
               <Table>
                 <TableHead>
                   <TableRow>
-                    <TableCell className={classes.header}>문서번호</TableCell>
+                    <TableCell className={classes.header}>결재번호</TableCell>
                     <TableCell className={classes.header}>제목</TableCell>
+                    <TableCell className={classes.header}>금액</TableCell>
                     <TableCell className={classes.header}>기안일자</TableCell>
                     <TableCell className={classes.header}>기안부서</TableCell>
                     <TableCell className={classes.header}>기안자</TableCell>
@@ -162,6 +163,7 @@ function Results({className, documents, ...rest}) {
                     >
                       <TableCell align="center" className={classes.whiteSpaceNoWrap}>{document.id}</TableCell>
                       <TableCell className={classes.whiteSpaceNoWrap}>{document.title}</TableCell>
+                      <TableCell className={classes.whiteSpaceNoWrap}>{getCurrency(document.price)}</TableCell>
                       <TableCell align="center" className={classes.whiteSpaceNoWrap}>{document.created}</TableCell>
                       <TableCell align="center" className={classes.whiteSpaceNoWrap}>{document.department}</TableCell>
                       <TableCell align="center" className={classes.whiteSpaceNoWrap}>{document.author}</TableCell>

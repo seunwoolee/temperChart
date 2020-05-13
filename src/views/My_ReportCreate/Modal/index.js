@@ -1,5 +1,5 @@
 import React, {useRef, useState} from 'react';
-import PropTypes, {array} from 'prop-types';
+import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import {makeStyles} from '@material-ui/styles';
 import {
@@ -11,17 +11,13 @@ import {
   Grid,
   Divider,
   TextField,
-  Button, Table, TableBody, TableRow, TableCell, Typography
+  Button, Table, TableBody, TableRow, TableCell
 } from '@material-ui/core';
 import {useDispatch, useSelector} from "react-redux";
-import InvoiceCard from "./InvoiceCard";
 import ChooseDialog from '../Dialog';
-import UploadAttachments from "./UploadAttachments";
 import {voucher} from "../../../mock";
-import getCurrency from "../../../utils/getCurrency";
 import axios from "../../../utils/my_axios";
-import {authSuccess, isloading} from "../../../actions";
-import MY_InvoiceCard from "../../../components/MY_InvoiceCard";
+import {isloading} from "../../../actions";
 import MY_InvoiceDetailCard from "../../../components/MY_InvoiceDetailCard";
 import LoadingBar from "../../../components/MY_LoadingBar";
 import {INVOICETYPE} from "../index";
@@ -37,8 +33,9 @@ const useStyles = makeStyles((theme) => ({
     transform: 'translate(-50%, -50%)',
     outline: 'none',
     boxShadow: theme.shadows[20],
-    width: 900,
-    maxHeight: '95%',
+    width: 820,
+    height: 820,
+    maxHeight: '100%',
     overflowY: 'auto',
     maxWidth: '100%'
   },
@@ -50,6 +47,14 @@ const useStyles = makeStyles((theme) => ({
   },
   cardHeaderTitle: {
     color: theme.palette.primary.contrastText
+  },
+  tableCellTitle: {
+    textAlign: 'center',
+    width: '50px',
+    backgroundColor: '#eeeeee'
+  },
+  tableCellContent: {
+    width: '100px',
   },
   actions: {
     justifyContent: 'flex-end'
@@ -198,12 +203,10 @@ function Index({open, onClose, onComplete, invoices, className, invoiceType}) {
                   <Table>
                     <TableBody>
                       <TableRow>
-                        <TableCell>작성자</TableCell>
-                        <TableCell>{session.user.name}</TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell>작성일자</TableCell>
-                        <TableCell>{new Date().toISOString().slice(0, 10)}</TableCell>
+                        <TableCell className={classes.tableCellTitle}>작성자</TableCell>
+                        <TableCell className={classes.tableCellContent}>{session.user.name}</TableCell>
+                        <TableCell className={classes.tableCellTitle}>작성일자</TableCell>
+                        <TableCell className={classes.tableCellContent}>{new Date().toISOString().slice(0, 10)}</TableCell>
                       </TableRow>
                     </TableBody>
                   </Table>

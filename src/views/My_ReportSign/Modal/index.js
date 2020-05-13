@@ -23,6 +23,7 @@ import {INVOICETYPE} from "../../My_ReportCreate";
 import MY_InvoiceDetailCard_P from "../../../components/MY_InvoiceDetailCard_P";
 import MY_InvoiceDetailCard_R from "../../../components/MY_InvoiceDetailCard_R";
 import MY_InvoiceDetailCard_G from "../../../components/MY_InvoiceDetailCard_G";
+import useWindowDimensions from "../../../components/WindowDimenstions";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -32,14 +33,16 @@ const useStyles = makeStyles((theme) => ({
     transform: 'translate(-50%, -50%)',
     outline: 'none',
     boxShadow: theme.shadows[20],
-    width: 900,
+    width: 820,
+    height: 820,
     [theme.breakpoints.up('lg')]: {
+      paddingLeft: theme.spacing(2),
       width: '100%',
       backgroundColor: 'transparent'
     },
-    maxHeight: '95%',
+    maxHeight: '100%',
+    maxWidth: '100%',
     overflowY: 'auto',
-    maxWidth: '100%'
   },
   innerDiv: {
     [theme.breakpoints.up('lg')]: {
@@ -47,11 +50,13 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: 'white'
     }
   },
-  tableCellContent: {
+  tableCellTitle: {
+    textAlign: 'center',
     width: '50px',
-    whiteSpace: 'nowrap',
     backgroundColor: '#eeeeee'
-
+  },
+  tableCellContent: {
+    width: '100px',
   },
   cardContent: {
     paddingTop: theme.spacing(1)
@@ -66,7 +71,7 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'flex-end'
   },
   approverGrid: {
-    paddingBottom: theme.spacing(8)
+    paddingBottom: theme.spacing(2)
   }
 }));
 
@@ -97,6 +102,7 @@ function Index({ open, onClose, onComplete, document, invoices, className }) {
       onComplete('', '승인');
     }
   };
+
 
   let invoiceDetailCard = null;
   if (document.document_type === INVOICETYPE.채무발생 || document.document_type === INVOICETYPE.채권발생) {
@@ -184,15 +190,17 @@ function Index({ open, onClose, onComplete, document, invoices, className }) {
                     <Table>
                       <TableBody>
                         <TableRow>
-                          <TableCell className={classes.tableCellContent}>작성자</TableCell>
-                          <TableCell>{document.author}</TableCell>
+                          <TableCell className={classes.tableCellTitle}>작성자</TableCell>
+                          <TableCell className={classes.tableCellContent}>{document.author}</TableCell>
+                          <TableCell className={classes.tableCellTitle}>작성일자</TableCell>
+                          <TableCell className={classes.tableCellContent}>{document.created}</TableCell>
                         </TableRow>
                         <TableRow>
-                          <TableCell className={classes.tableCellContent}>작성일자</TableCell>
-                          <TableCell>{document.created}</TableCell>
+                          {/*<TableCell className={classes.tableCellContent}>작성일자</TableCell>*/}
+                          {/*<TableCell>{document.created}</TableCell>*/}
                         </TableRow>
                         <TableRow>
-                          <TableCell className={classes.tableCellContent}>제목</TableCell>
+                          <TableCell className={classes.tableCellTitle}>제목</TableCell>
                           <TableCell>{document.title}</TableCell>
                         </TableRow>
                       </TableBody>

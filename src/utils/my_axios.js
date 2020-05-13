@@ -1,7 +1,8 @@
 import axios from 'axios';
 
 let instance = axios.create({
-  baseURL: `http://155.1.39.223:8000/` // # TODO URL 변경 필요
+  baseURL: `http://155.1.39.223:8000/`
+  // baseURL: `https://kcfamily.kr/` // TODO URL 변경 필요
 })
 
 // instance.interceptors.response.use((res) => {
