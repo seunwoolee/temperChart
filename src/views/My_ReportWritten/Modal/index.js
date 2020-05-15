@@ -131,7 +131,19 @@ function Index({
           className={clsx(classes.root, className)}
         >
           <div className={classes.innerDiv}>
-            <CardHeader classes={{root: classes.cardHeaderRoot, title: classes.cardHeaderTitle}} title="상신문서" />
+            <CardHeader
+              classes={{root: classes.cardHeaderRoot, title: classes.cardHeaderTitle}}
+              title="상신문서"
+              action={(
+                <Button
+                  onClick={onClose}
+                  color="primary"
+                  variant="contained"
+                >
+                  닫기
+                </Button>
+                )}
+            />
             <Divider />
             <CardContent>
               <Grid

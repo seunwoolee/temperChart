@@ -10,10 +10,23 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import Typography from "@material-ui/core/Typography";
 import axios from "../utils/my_axios";
 import {useSelector} from "react-redux";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemAvatar from "@material-ui/core/ListItemAvatar";
+import Avatar from "@material-ui/core/Avatar";
+import ListItemText from "@material-ui/core/ListItemText";
+import NotificationsNoneIcon from '@material-ui/icons/NotificationsNone';
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import Divider from "@material-ui/core/Divider";
 
 const useStyles = makeStyles((theme) => ({
   dialogTitleRoot: {
     backgroundColor: theme.palette.primary.main,
+  },
+  alarm: {
+    paddingTop: theme.spacing(2),
+  },
+  password: {
+    paddingBottom: theme.spacing(2),
   },
   dialogTitleText: {
     fontSize: '16px',
@@ -83,7 +96,7 @@ export default function ChangePasswordDialog({open, onClose}) {
             value={inputNewPassword}
           />
         </DialogContent>
-        <DialogContent>
+        <DialogContent className={classes.password}>
           <TextField
             fullWidth
             label="신규패스워드 확인"
@@ -92,6 +105,17 @@ export default function ChangePasswordDialog({open, onClose}) {
             value={inputNewPassword2}
           />
         </DialogContent>
+        <Divider />
+        <ListItem className={classes.alarm}>
+          <ListItemIcon>
+            <Button>
+              <NotificationsNoneIcon fontSize="large"/>
+            </Button>
+          </ListItemIcon>
+          <ListItemText
+            primary="알림 설정"
+          />
+        </ListItem>
         <DialogActions>
           <Button onClick={handleSubmit} color="primary" variant="contained">확인</Button>
           <Button onClick={handleClose} color="primary" variant="outlined">취소</Button>

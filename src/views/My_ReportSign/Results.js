@@ -20,7 +20,7 @@ import {
   Typography
 } from '@material-ui/core';
 import GenericMoreButton from 'src/components/GenericMoreButton';
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import BottomBar from "./BottomBar/BottomBar";
 import getShortBigo from "../../utils/getShortBigo";
 import useWindowDimensions from "../../components/WindowDimenstions";
@@ -31,6 +31,7 @@ import getPerfectScrollbarHeight from "../../utils/getPerfectScrollbarHeight";
 import {documents} from "../../mock";
 import axios from "../../utils/my_axios";
 import LoadingBar from "../../components/MY_LoadingBar";
+import {getTodoCount} from "../../actions";
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -84,15 +85,17 @@ function Results({className, documents, fetchDocuments, ...rest}) {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [isSuccess, setIsSuccess] = useState(true);
   const session = useSelector((state) => state.session);
+  const dispatch = useDispatch();
 
   const startData = page * rowsPerPage;
   const endData = (page * rowsPerPage) + rowsPerPage;
 
   const props = { mobileInnerHeight: getPerfectScrollbarHeight(rowsPerPage, documents.length, 60)};
   const classes = useStyles(props);
+  const dispalyedDocuments = documents.slice(startData, endData);
 
   const handleSelectAll = (event) => {
-    event.target.checked ? setSelectedDocuments(documents) : setSelectedDocuments([]);
+    event.target.checked ? setSelectedDocuments(dispalyedDocuments) : setSelectedDocuments([]);
   };
 
   const handleSelectOne = (event, invoice) => {
@@ -143,6 +146,7 @@ function Results({className, documents, fetchDocuments, ...rest}) {
 
     axios.post('ea/do_sign/', data, {headers})
       .then(response => {
+        dispatch(getTodoCount(session.token));
         setSnackbarOpen(true);
         setIsSuccess(true);
         const newDocuments = selectedDocuments.slice(1);
@@ -223,7 +227,7 @@ function Results({className, documents, fetchDocuments, ...rest}) {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {documents.slice(startData, endData).map((document, i) => (
+                  {dispalyedDocuments.map((document, i) => (
                     <TableRow
                       hover
                       key={document.id}

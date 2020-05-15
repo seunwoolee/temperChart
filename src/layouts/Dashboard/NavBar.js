@@ -20,10 +20,12 @@ import {
 } from '@material-ui/core';
 import NavItem from 'src/components/NavItem';
 import axios from "../../utils/my_axios";
-import navConfig from './navConfig';
+// import navConfig from './navConfig';
+import {MY_navConfig} from './navConfig';
 import IconButton from "@material-ui/core/IconButton";
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import ChangePasswordDialog from "../../components/MY_changePassword";
+import Tooltip from "@material-ui/core/Tooltip";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -37,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
   desktopDrawer: {
     width: 256,
     top: 48,
-    height: 'calc(100% - 48)'
+    height: 'calc(100% - 48px)'
   },
   navigation: {
     overflow: 'auto',
@@ -45,6 +47,7 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1
   },
   profile: {
+    cursor: 'pointer',
     padding: theme.spacing(2),
     display: 'flex',
     alignItems: 'center'
@@ -74,7 +77,6 @@ const useStyles = makeStyles((theme) => ({
     height: 40
   },
   details: {
-    // cursor: 'pointer',
     marginLeft: theme.spacing(2)
   },
   moreButton: {
@@ -161,7 +163,7 @@ function NavBar({ openMobile, onMobileClose, className, ...rest }) {
       className={clsx(classes.root, className)}
     >
       <nav className={classes.navigation}>
-        {navConfig.map((list) => renderNavItems({
+        {MY_navConfig().map((list) => renderNavItems({
           items: list.items,
           subheader: list.subheader,
           pathname: location.pathname,
@@ -169,24 +171,26 @@ function NavBar({ openMobile, onMobileClose, className, ...rest }) {
         }))}
       </nav>
       <Divider className={classes.divider} />
-      <div className={classes.profile}>
-          <Avatar
-            alt="Person"
-            onClick={() => setOpen(true)}
-            className={classes.avatar}
-            src={session.user.avatar}
-          />
-        <div className={classes.details}>
-          <Link
-            variant="h5"
-            color="textPrimary"
-            underline="none"
-          >
-            {`${session.user.name} ${session.user.position}`}
-          </Link>
-          <Typography variant="body2">{session.user.department}</Typography>
+      <Tooltip title="개인 정보 변경">
+        <div className={classes.profile} onClick={() => setOpen(true)}>
+            <Avatar
+              alt="Person"
+              // onClick={() => setOpen(true)}
+              className={classes.avatar}
+              src={session.user.avatar}
+            />
+          <div className={classes.details}>
+            <Link
+              variant="h5"
+              color="textPrimary"
+              underline="none"
+            >
+              {`${session.user.name} ${session.user.position}`}
+            </Link>
+            <Typography variant="body2">{session.user.department}</Typography>
+          </div>
         </div>
-      </div>
+      </Tooltip>
     </div>
   );
 

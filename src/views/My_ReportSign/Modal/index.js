@@ -151,6 +151,7 @@ function Index({ open, onClose, onComplete, document, invoices, className }) {
               classes={{root: classes.cardHeaderRoot, title: classes.cardHeaderTitle}}
               title="미결함"
               action={(
+                <>
                 <Button
                   onClick={handleClickOpen}
                   color="primary"
@@ -158,6 +159,14 @@ function Index({ open, onClose, onComplete, document, invoices, className }) {
                 >
                   결재
                 </Button>
+                <Button
+                  style={{backgroundColor: '#2962ff'}}
+                  variant="contained"
+                  onClick={onClose}
+                >
+                  닫기
+                </Button>
+                </>
                 )}
             />
             <Divider />
@@ -196,8 +205,6 @@ function Index({ open, onClose, onComplete, document, invoices, className }) {
                           <TableCell className={classes.tableCellContent}>{document.created}</TableCell>
                         </TableRow>
                         <TableRow>
-                          {/*<TableCell className={classes.tableCellContent}>작성일자</TableCell>*/}
-                          {/*<TableCell>{document.created}</TableCell>*/}
                         </TableRow>
                         <TableRow>
                           <TableCell className={classes.tableCellTitle}>제목</TableCell>
@@ -214,10 +221,6 @@ function Index({ open, onClose, onComplete, document, invoices, className }) {
                   xs={12}
                 >
                   {invoiceDetailCard}
-                  {/*<MY_InvoiceDetailCard*/}
-                  {/*  type={'read'}*/}
-                  {/*  invoices={invoices}*/}
-                  {/*  attachments={document.attachments} />*/}
                 </Grid>
                 <Grid
                   item

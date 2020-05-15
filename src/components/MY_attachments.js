@@ -27,6 +27,7 @@ import Paper from '@material-ui/core/Paper';
 import Draggable from 'react-draggable';
 import DialogTitle from "@material-ui/core/DialogTitle";
 import useWindowDimensions from "./WindowDimenstions";
+import Tooltip from "@material-ui/core/Tooltip";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
@@ -131,6 +132,7 @@ function MY_attachments({attachments, className, ...rest}) {
         <PerfectScrollbar options={{suppressScrollX: true}}>
           <List className={classes.list}>
             {attachments.map((file, i) => (
+              <Tooltip title="미리보기">
               <ListItem
                 button={file.isImg || file.isPdf}
                 onClick={file.isImg || file.isPdf
@@ -148,13 +150,16 @@ function MY_attachments({attachments, className, ...rest}) {
                 />
                 <ListItemSecondaryAction>
                   <a target="_blank" href={`http://155.1.39.223:8000${file.path}`}>
+                    <Tooltip title="다운로드">
                     {/* TODO URL 변경 */}
                     <IconButton>
                       <GetAppIcon />
                     </IconButton>
+                    </Tooltip>
                   </a>
                 </ListItemSecondaryAction>
               </ListItem>
+              </Tooltip>
             ))}
           </List>
         </PerfectScrollbar>

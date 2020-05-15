@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import {makeStyles} from '@material-ui/styles';
@@ -17,7 +17,7 @@ import {useDispatch, useSelector} from "react-redux";
 import ChooseDialog from '../Dialog';
 import {voucher} from "../../../mock";
 import axios from "../../../utils/my_axios";
-import {isloading} from "../../../actions";
+import {getErpTodoCount, getTodoCount, isloading} from "../../../actions";
 import MY_InvoiceDetailCard from "../../../components/MY_InvoiceDetailCard";
 import LoadingBar from "../../../components/MY_LoadingBar";
 import {INVOICETYPE} from "../index";
@@ -73,6 +73,7 @@ function Index({open, onClose, onComplete, invoices, className, invoiceType}) {
   const handleAttachments = (attachments: Array) => {
     setInputAttachments(attachments);
   };
+
 
   const handleClickOpen = () => {
     if(inputTitleRef.current.value.length === 0){
@@ -131,6 +132,8 @@ function Index({open, onClose, onComplete, invoices, className, invoiceType}) {
         setOpenDialog(false);
         inputTitleRef.current.value = '';
         setInputAttachments([]);
+        dispatch(getTodoCount(session.token));
+        dispatch(getErpTodoCount(localStorage.getItem('token')));
         response.status === 201 ? onComplete(true) : onComplete(false);
       })
       .catch(error => {
@@ -188,7 +191,10 @@ function Index({open, onClose, onComplete, invoices, className, invoiceType}) {
           className={clsx(classes.root, className)}
         >
           <form>
-            <CardHeader classes={{root: classes.cardHeaderRoot, title: classes.cardHeaderTitle}} title="기안 작성"/>
+            <CardHeader
+              classes={{root: classes.cardHeaderRoot, title: classes.cardHeaderTitle}}
+              title="기안 작성"
+            />
             <Divider/>
             <CardContent>
               <Grid
@@ -265,7 +271,7 @@ function Index({open, onClose, onComplete, invoices, className, invoiceType}) {
 Index.propTypes = {
   className: PropTypes.string,
   invoiceType: PropTypes.string,
-  invoices: PropTypes.arrayOf(PropTypes.shape(voucher)),
+  invoices: PropTypes.array,
   onClose: PropTypes.func,
   onComplete: PropTypes.func,
   open: PropTypes.bool

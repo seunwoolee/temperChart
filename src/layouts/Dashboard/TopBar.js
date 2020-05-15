@@ -114,14 +114,6 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const popularSearches = [
-  'Devias React Dashboard',
-  'Devias',
-  'Admin Pannel',
-  'Project',
-  'Pages'
-];
-
 function TopBar({
   onOpenNavBarMobile,
   className,

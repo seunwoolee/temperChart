@@ -355,6 +355,7 @@ function ChooseDialog({open, onClose, onSubmit, invoiceType}) {
             취소
           </Button>
           <Button
+            disabled={users.length < 1}
             color="primary"
             onClick={handleSubmit}
             variant="contained"

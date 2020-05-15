@@ -6,7 +6,8 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import PropTypes from "prop-types";
 import {makeStyles} from "@material-ui/styles";
 import axios from "../../../../utils/my_axios";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
+import {getTodoCount} from "../../../../actions";
 
 const useStyles = makeStyles((theme) => ({
   dialogTitle: {
@@ -19,14 +20,15 @@ const useStyles = makeStyles((theme) => ({
 export default function MyDialog({open, onCloseDialog, selectedDocuments, fetchDocuments}) {
   const classes = useStyles();
   const session = useSelector((state) => state.session);
+  const dispatch = useDispatch();
 
   const handleSubmitClick = () => {
     const headers = {Authorization: `Token ${session.token}`};
     const data = {document_ids: selectedDocuments.map(document => document.id)};
 
-    debugger;
     axios.post('ea/do_sign_all/', data, {headers})
       .then(response => {
+        dispatch(getTodoCount(session.token));
         onCloseDialog();
         fetchDocuments();
       })
@@ -36,9 +38,6 @@ export default function MyDialog({open, onCloseDialog, selectedDocuments, fetchD
         console.log(error)
       }); // TODO 에러 로깅
 
-    // onCloseDialog();
-    // fetchDocuments();
-    // console.log(selectedDocuments);
   };
 
   const handleClose = () => {
