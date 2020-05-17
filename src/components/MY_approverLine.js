@@ -16,26 +16,33 @@ import {signs} from "../mock/my_signsMock";
 
 const useStyles = makeStyles(theme => ({
   root: {
-    padding: theme.spacing(0.5)
-    // paddingLeft: theme.spacing(1),
-    // paddingRight: theme.spacing(1),
+    padding: theme.spacing(0.2)
   },
   header: {
     backgroundColor: '#eeeeee'
   },
-  signDateCell: {
-    fontSize: '10px'
-  },
   rejectedDateCell: {
-    fontSize: '10px',
     color: 'red'
   },
   gridCell: {
     fontWeight: 600,
-    width: '160px',
+    fontSize: '11px',
+    width: '120px',
     borderBottom: '1px solid #a9a9a9',
     borderRight: '1px solid #a9a9a9'
-  }
+  },
+  gridDateCell: {
+    fontWeight: 600,
+    fontSize: '7px',
+    width: '120px',
+    borderBottom: '1px solid #a9a9a9',
+    borderRight: '1px solid #a9a9a9'
+  },
+  muiTableCell: {
+    '& .MuiTableCell-sizeSmall:last-child': {
+      paddingRight: theme.spacing(0.2)
+    }
+  },
 }));
 
 
@@ -43,16 +50,16 @@ export default function ApproverTable({signs}) {
   const classes = useStyles();
 
   const displayApproveType = (type: string) => {
-    if(type === "0") {
-      return "결재"
-    } else if(type === "1") {
-      return "합의"
+    if (type === "0") {
+      return "결재";
+    } if (type === "1") {
+      return "합의";
     }
-  }
+  };
 
   return (
     <TableContainer component={Paper}>
-      <Table size="small" aria-label="a dense table">
+      <Table size="small" aria-label="a dense table" className={classes.muiTableCell}>
         <TableHead className={classes.header}>
           <TableRow>
             {signs.map(sign => (
@@ -64,7 +71,10 @@ export default function ApproverTable({signs}) {
           <TableRow>
             {signs.map(sign => (
               <TableCell key={sign.user.id} align="center" className={clsx(classes.gridCell, classes.root)}>
-                {sign.user.name}({displayApproveType(sign.type)})
+                {sign.user.name}
+                (
+                {displayApproveType(sign.type)}
+                )
               </TableCell>
             ))}
           </TableRow>
@@ -76,12 +86,14 @@ export default function ApproverTable({signs}) {
                 key={sign.user.id}
                 align="center"
                 className={sign.result === '3'
-                  ? clsx(classes.gridCell, classes.rejectedDateCell, classes.root)
-                  : clsx(classes.gridCell, classes.signDateCell, classes.root)}
+                  ? clsx(classes.gridDateCell, classes.rejectedDateCell, classes.root)
+                  : clsx(classes.gridDateCell, classes.root)}
               >
                 {sign.result === '3'
                   ? '(반려)'
-                  : null} {sign.sign_date ? sign.sign_date.substring(0, 10) : <br />}
+                  : null}
+                {' '}
+                {sign.sign_date ? `${sign.sign_date.substring(0, 10)} ${sign.sign_date.substring(11, 16)}` : <br />}
               </TableCell>
             ))}
           </TableRow>

@@ -22,7 +22,6 @@ import {
 import GenericMoreButton from 'src/components/GenericMoreButton';
 import {useDispatch, useSelector} from "react-redux";
 import BottomBar from "./BottomBar/BottomBar";
-import getShortBigo from "../../utils/getShortBigo";
 import useWindowDimensions from "../../components/WindowDimenstions";
 import Index from "./Modal";
 import getCurrency from "../../utils/getCurrency";

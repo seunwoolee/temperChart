@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
@@ -8,15 +8,18 @@ import {makeStyles} from "@material-ui/styles";
 import PropTypes from "prop-types";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Typography from "@material-ui/core/Typography";
-import axios from "../utils/my_axios";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import ListItem from "@material-ui/core/ListItem";
-import ListItemAvatar from "@material-ui/core/ListItemAvatar";
-import Avatar from "@material-ui/core/Avatar";
 import ListItemText from "@material-ui/core/ListItemText";
 import NotificationsNoneIcon from '@material-ui/icons/NotificationsNone';
+import NotificationsActiveIcon from '@material-ui/icons/NotificationsActive';
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import Divider from "@material-ui/core/Divider";
+import axios from "../utils/my_axios";
+import {pushSave} from "../actions";
+import {swRegistration} from "../registerServiceWorker";
+import urlB64ToUint8Array from "../utils/urlB64ToUint8Array";
+import moment from "moment";
 
 const useStyles = makeStyles((theme) => ({
   dialogTitleRoot: {
@@ -36,9 +39,57 @@ const useStyles = makeStyles((theme) => ({
 
 export default function ChangePasswordDialog({open, onClose}) {
   const classes = useStyles();
+  const [notificationIcon, setNotificationIcon] = useState(<NotificationsNoneIcon fontSize="large" />);
   const [inputNewPassword, setInputNewPassword] = useState('');
   const [inputNewPassword2, setInputNewPassword2] = useState('');
   const session = useSelector((state) => state.session);
+  const dispatch = useDispatch();
+  const applicationServerPublicKey = 'BBvGTYHuHHla8VcJjlLFyFpBM6iU-uaSqw5Afqgi_EkB9ctCvMRMKThD4_VJj8j9XZh8QdZf9O9HSjPcjc6jIZE';
+  const applicationServerKey = urlB64ToUint8Array(applicationServerPublicKey);
+
+  const headers = {Authorization: `Token ${localStorage.getItem('token')}`};
+
+  const updateSubscriptionOnServer = (subscription) => {
+    const data = {pushInfo: subscription};
+    const axiosConfig = {headers};
+
+    return axios.post('ea/create_push/', data, axiosConfig)
+      .then(response => {
+        console.log('구독 완료');
+        if (response.status === 201) {
+          dispatch(pushSave({endpoint: subscription.endpoint}));
+        }
+      })
+      .catch(error => console.log(error)); // TODO 에러남기기
+  };
+
+  const setPushSubscribe = () => {
+    if (!('serviceWorker' in navigator)) { return; }
+    swRegistration.pushManager.subscribe({
+      userVisibleOnly: true,
+      applicationServerKey
+    }).then(subscription => updateSubscriptionOnServer(subscription));
+  };
+
+  const checkSubscribe = () => {
+    if (!('serviceWorker' in navigator)) { return; }
+    swRegistration.pushManager.subscribe({
+      userVisibleOnly: true,
+      applicationServerKey
+    }).then(subscription => {
+      const params = {endpoint: subscription.endpoint};
+      const axiosConfig = {headers, params};
+
+      axios.get('ea/check_push/', axiosConfig)
+        .then(res => setNotificationIcon(<NotificationsActiveIcon fontSize="large" />))
+        .catch(err => setNotificationIcon(<NotificationsNoneIcon fontSize="large" />));
+    });
+  };
+
+
+  useEffect(() => {
+    checkSubscribe();
+  }, [])
 
   const handleChangePassword = (event) => {
     setInputNewPassword(event.target.value);
@@ -49,7 +100,7 @@ export default function ChangePasswordDialog({open, onClose}) {
   };
 
   const handleSubmit = () => {
-    if(!(inputNewPassword) || !(inputNewPassword2)) {
+    if (!(inputNewPassword) || !(inputNewPassword2)) {
       alert('패스워드를 입력해주세요');
       return false;
     }
@@ -70,16 +121,19 @@ export default function ChangePasswordDialog({open, onClose}) {
       })
       .catch(error => {
         onClose();
-        console.log(error)
+        console.log(error);
       }); // TODO 에러 로깅
-
   };
 
   const handleClose = () => {
     setInputNewPassword('');
     setInputNewPassword2('');
     onClose();
-  }
+  };
+
+  const notificationClickHandler = () => {
+    setNotificationIcon(<NotificationsActiveIcon fontSize="large" />);
+  };
 
   return (
     <div>
@@ -108,8 +162,8 @@ export default function ChangePasswordDialog({open, onClose}) {
         <Divider />
         <ListItem className={classes.alarm}>
           <ListItemIcon>
-            <Button>
-              <NotificationsNoneIcon fontSize="large"/>
+            <Button onClick={notificationClickHandler}>
+              {notificationIcon}
             </Button>
           </ListItemIcon>
           <ListItemText

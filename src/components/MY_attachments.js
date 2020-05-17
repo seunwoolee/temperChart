@@ -1,4 +1,7 @@
-import React, {useState, useCallback, useEffect, ReactHTML as styled} from 'react';
+import React, {
+  useState, useCallback, useEffect, ReactHTML as styled
+} from 'react';
+import ReactDOM from "react-dom";
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import uuid from 'uuid/v1';
@@ -26,8 +29,8 @@ import Button from "@material-ui/core/Button";
 import Paper from '@material-ui/core/Paper';
 import Draggable from 'react-draggable';
 import DialogTitle from "@material-ui/core/DialogTitle";
-import useWindowDimensions from "./WindowDimenstions";
 import Tooltip from "@material-ui/core/Tooltip";
+import useWindowDimensions from "./WindowDimenstions";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
@@ -92,6 +95,21 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
+// function MY_WindowPortal({ children }) {
+//   const [containerEl, setContainerEl] = useState(document.createElement('div'));
+//   let externalWindow = null;
+//
+//   useEffect(() => {
+//     externalWindow = window.open('', '', 'width=600,height=400,left=200,top=200');
+//     externalWindow.document.body.appendChild(containerEl);
+//
+//     return () => {
+//       externalWindow.close();
+//     };
+//   }, []);
+//   return ReactDOM.createPortal(children, containerEl);
+// }
+
 function PaperComponent(props) {
   return (
     <Draggable handle="#draggable-dialog-title" cancel={'[class*="MuiDialogContent-root"]'}>
@@ -133,32 +151,32 @@ function MY_attachments({attachments, className, ...rest}) {
           <List className={classes.list}>
             {attachments.map((file, i) => (
               <Tooltip title="미리보기">
-              <ListItem
-                button={file.isImg || file.isPdf}
-                onClick={file.isImg || file.isPdf
-                  ? () => handleClickOpen(file.path, file.isImg) : null}
-                divider={i < attachments.length - 1}
-                key={uuid()}
-              >
-                <ListItemIcon>
-                  <FileCopyIcon />
-                </ListItemIcon>
-                <ListItemText
-                  primary={file.title}
-                  primaryTypographyProps={{variant: 'h5'}}
-                  secondary={bytesToSize(file.size)}
-                />
-                <ListItemSecondaryAction>
-                  <a target="_blank" href={`http://155.1.39.223:8000${file.path}`}>
-                    <Tooltip title="다운로드">
-                    {/* TODO URL 변경 */}
-                    <IconButton>
-                      <GetAppIcon />
-                    </IconButton>
-                    </Tooltip>
-                  </a>
-                </ListItemSecondaryAction>
-              </ListItem>
+                <ListItem
+                  button={file.isImg || file.isPdf}
+                  onClick={file.isImg || file.isPdf
+                    ? () => handleClickOpen(file.path, file.isImg) : null}
+                  divider={i < attachments.length - 1}
+                  key={uuid()}
+                >
+                  <ListItemIcon>
+                    <FileCopyIcon />
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={file.title}
+                    primaryTypographyProps={{variant: 'h5'}}
+                    secondary={bytesToSize(file.size)}
+                  />
+                  <ListItemSecondaryAction>
+                    <a target="_blank" href={`http://155.1.39.223:8000${file.path}`}>
+                      <Tooltip title="다운로드">
+                        {/* TODO URL 변경 */}
+                        <IconButton>
+                          <GetAppIcon />
+                        </IconButton>
+                      </Tooltip>
+                    </a>
+                  </ListItemSecondaryAction>
+                </ListItem>
               </Tooltip>
             ))}
           </List>
@@ -167,62 +185,61 @@ function MY_attachments({attachments, className, ...rest}) {
       <Dialog
         disablePortal
         hideBackdrop
-        classes={{root: classes.dialogRoot ,paper: classes.dialogPaper}}
+        classes={{root: classes.dialogRoot, paper: classes.dialogPaper}}
         maxWidth="lg"
         open={open}
         onClose={handleClose}
         PaperComponent={PaperComponent}
       >
-        <DialogTitle  className={classes.dialogTitle} id="draggable-dialog-title">
+        <DialogTitle className={classes.dialogTitle} id="draggable-dialog-title">
           첨부파일
         </DialogTitle>
         {contentType === 'img'
           ? (<img src={selectedImgPath} className={classes.img} alt="이미지" />)
           : (
             <>
-            <PerfectScrollbar>
-              <Document
-                file={selectedImgPath}
-                onLoadSuccess={onDocumentLoadSuccess}
-              >
-                {/*<Page width={1000} pageNumber={pageNumber} />*/}
-                <Page pageNumber={pageNumber} />
-              </Document>
-              <Grid
-                container
-                direction="row"
-                justify="space-between"
-                alignItems="center"
-              >
-                <Grid>
-                  <Button onClick={() => setPageNumber(prevPageNumber => prevPageNumber - 1)}>
-                    <NavigateBeforeIcon />
-                  </Button>
+              <PerfectScrollbar>
+                <Document
+                  file={selectedImgPath}
+                  onLoadSuccess={onDocumentLoadSuccess}
+                >
+                  <Page pageNumber={pageNumber} />
+                </Document>
+                <Grid
+                  container
+                  direction="row"
+                  justify="space-between"
+                  alignItems="center"
+                >
+                  <Grid>
+                    <Button onClick={() => setPageNumber(prevPageNumber => prevPageNumber - 1)}>
+                      <NavigateBeforeIcon />
+                    </Button>
+                  </Grid>
+                  <Grid>
+                    <Button onClick={() => setPageNumber(prevPageNumber => prevPageNumber + 1)}>
+                      <NavigateNextIcon />
+                    </Button>
+                  </Grid>
                 </Grid>
-                <Grid>
-                  <Button onClick={() => setPageNumber(prevPageNumber => prevPageNumber + 1)}>
-                    <NavigateNextIcon />
-                  </Button>
+                <Grid
+                  container
+                  direction="row"
+                  justify="center"
+                  alignItems="center"
+                >
+                  <Grid>
+                    <p>
+                      페이지
+                      {' '}
+                      {pageNumber}
+                      {' '}
+                      /
+                      {numPages}
+                    </p>
+                  </Grid>
                 </Grid>
-              </Grid>
-              <Grid
-                container
-                direction="row"
-                justify="center"
-                alignItems="center"
-              >
-                <Grid>
-                  <p>
-                    페이지
-                    {' '}
-                    {pageNumber}
-                    {' '}
-                    /
-                    {numPages}
-                  </p>
-                </Grid>
-              </Grid>
-            </PerfectScrollbar>
+              </PerfectScrollbar>
             </>
           )}
       </Dialog>

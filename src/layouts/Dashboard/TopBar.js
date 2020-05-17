@@ -137,17 +137,9 @@ function TopBar({
     history.push('/auth/login');
   };
 
-  // const handlePricingModalOpen = () => {
-  //   setPricingModalOpen(true);
-  // };
-
   const handlePricingModalClose = () => {
     setPricingModalOpen(false);
   };
-
-  // const handleChatBarOpen = () => {
-  //   setOpenChatBar(true);
-  // };
 
   const handleChatBarClose = () => {
     setOpenChatBar(false);
@@ -177,45 +169,6 @@ function TopBar({
   //   setOpenSearchPopover(false);
   // };
 
-  const urlB64ToUint8Array = (base64String) => {
-    const padding = '='.repeat((4 - base64String.length % 4) % 4);
-    const base64 = (base64String + padding)
-      .replace(/\-/g, '+')
-      .replace(/_/g, '/');
-
-    const rawData = window.atob(base64);
-    const outputArray = new Uint8Array(rawData.length);
-
-    for (let i = 0; i < rawData.length; ++i) {
-      outputArray[i] = rawData.charCodeAt(i);
-    }
-    return outputArray;
-  };
-
-  const updateSubscriptionOnServer = (subscription) => {
-    const headers = {Authorization: `Token ${localStorage.getItem('token')}`};
-    const axiosConfig = {headers};
-    const data = {pushInfo: subscription};
-
-    return axios.post('ea/create_push/', data, axiosConfig)
-      .then(response => {
-        console.log('구독 완료');
-        if (response.status === 201) {
-          dispatch(pushSave({endpoint: subscription.endpoint}));
-        }
-      })
-      .catch(error => console.log(error)) // TODO 에러남기기
-  };
-
-  const setPushSubscribe = () => {
-    const applicationServerPublicKey = 'BBvGTYHuHHla8VcJjlLFyFpBM6iU-uaSqw5Afqgi_EkB9ctCvMRMKThD4_VJj8j9XZh8QdZf9O9HSjPcjc6jIZE';
-    const applicationServerKey = urlB64ToUint8Array(applicationServerPublicKey);
-    if (!('serviceWorker' in navigator)) { return; }
-    swRegistration.pushManager.subscribe({
-      userVisibleOnly: true,
-      applicationServerKey
-    }).then(subscription => updateSubscriptionOnServer(subscription));
-  };
 
   // useEffect(() => {
   //   setTimeout(() => setPushSubscribe(), 3000);
