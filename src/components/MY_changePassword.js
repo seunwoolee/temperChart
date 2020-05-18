@@ -19,7 +19,7 @@ import axios from "../utils/my_axios";
 import {pushSave} from "../actions";
 import {swRegistration} from "../registerServiceWorker";
 import urlB64ToUint8Array from "../utils/urlB64ToUint8Array";
-import moment from "moment";
+import MySnackbars from "./MY_snackbar";
 
 const useStyles = makeStyles((theme) => ({
   dialogTitleRoot: {
@@ -39,14 +39,16 @@ const useStyles = makeStyles((theme) => ({
 
 export default function ChangePasswordDialog({open, onClose}) {
   const classes = useStyles();
-  const [notificationIcon, setNotificationIcon] = useState(<NotificationsNoneIcon fontSize="large" />);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(true);
+  const [info, setInfo] = useState("완료");
+  const [notificationIcon, setNotificationIcon] = useState(0);
   const [inputNewPassword, setInputNewPassword] = useState('');
   const [inputNewPassword2, setInputNewPassword2] = useState('');
   const session = useSelector((state) => state.session);
   const dispatch = useDispatch();
   const applicationServerPublicKey = 'BBvGTYHuHHla8VcJjlLFyFpBM6iU-uaSqw5Afqgi_EkB9ctCvMRMKThD4_VJj8j9XZh8QdZf9O9HSjPcjc6jIZE';
   const applicationServerKey = urlB64ToUint8Array(applicationServerPublicKey);
-
   const headers = {Authorization: `Token ${localStorage.getItem('token')}`};
 
   const updateSubscriptionOnServer = (subscription) => {
@@ -55,24 +57,61 @@ export default function ChangePasswordDialog({open, onClose}) {
 
     return axios.post('ea/create_push/', data, axiosConfig)
       .then(response => {
-        console.log('구독 완료');
+        setNotificationIcon(1);
+        setIsSuccess(true);
+        setInfo('알람 설정 완료');
+        setSnackbarOpen(true);
+
         if (response.status === 201) {
           dispatch(pushSave({endpoint: subscription.endpoint}));
         }
       })
-      .catch(error => console.log(error)); // TODO 에러남기기
+      .catch(error => {
+        setIsSuccess(false);
+        setInfo('실패(전산팀 문의)');
+        setSnackbarOpen(true);
+      }); // TODO 에러남기기
+  };
+
+  const deleteSubscriptionOnServer = (subscription) => {
+    const data = {endpoint: subscription.endpoint};
+    const axiosConfig = {headers};
+
+    return axios.post('ea/delete_push/', data, axiosConfig)
+      .then(response => {
+        setNotificationIcon(0);
+        setIsSuccess(true);
+        setInfo('알림 제거 완료');
+        setSnackbarOpen(true);
+      })
+      .catch(error => {
+        setIsSuccess(false);
+        setInfo('실패(전산팀 문의)');
+        setSnackbarOpen(true);
+      }); // TODO 에러남기기
   };
 
   const setPushSubscribe = () => {
-    if (!('serviceWorker' in navigator)) { return; }
+    if (!('serviceWorker' in navigator)) {
+      return;
+    }
     swRegistration.pushManager.subscribe({
       userVisibleOnly: true,
       applicationServerKey
-    }).then(subscription => updateSubscriptionOnServer(subscription));
+    }).then(subscription => {
+      notificationIcon === 0
+        ? updateSubscriptionOnServer(subscription)
+        : deleteSubscriptionOnServer(subscription);
+    });
   };
 
   const checkSubscribe = () => {
-    if (!('serviceWorker' in navigator)) { return; }
+    if (!('serviceWorker' in navigator)) {
+      return;
+    }
+    if (swRegistration === null) {
+      return;
+    }
     swRegistration.pushManager.subscribe({
       userVisibleOnly: true,
       applicationServerKey
@@ -81,15 +120,15 @@ export default function ChangePasswordDialog({open, onClose}) {
       const axiosConfig = {headers, params};
 
       axios.get('ea/check_push/', axiosConfig)
-        .then(res => setNotificationIcon(<NotificationsActiveIcon fontSize="large" />))
-        .catch(err => setNotificationIcon(<NotificationsNoneIcon fontSize="large" />));
+        .then(res => setNotificationIcon(1))
+        .catch(err => setNotificationIcon(0));
     });
   };
 
 
   useEffect(() => {
-    checkSubscribe();
-  }, [])
+    setTimeout(() => checkSubscribe(), 3000);
+  }, []);
 
   const handleChangePassword = (event) => {
     setInputNewPassword(event.target.value);
@@ -101,12 +140,16 @@ export default function ChangePasswordDialog({open, onClose}) {
 
   const handleSubmit = () => {
     if (!(inputNewPassword) || !(inputNewPassword2)) {
-      alert('패스워드를 입력해주세요');
+      setIsSuccess(false);
+      setInfo('패스워드를 입력해주세요');
+      setSnackbarOpen(true);
       return false;
     }
 
     if (inputNewPassword !== inputNewPassword2) {
-      alert('동일한 패스워드를 입력해주세요');
+      setIsSuccess(false);
+      setInfo('동일한 패스워드를 입력해주세요');
+      setSnackbarOpen(true);
       return false;
     }
 
@@ -114,14 +157,18 @@ export default function ChangePasswordDialog({open, onClose}) {
     const data = {new_password: inputNewPassword};
     axios.post('employee/change_password/', data, {headers})
       .then(response => {
-        alert('변경 완료');
+        setIsSuccess(true);
+        setInfo('변경 완료');
+        setSnackbarOpen(true);
         setInputNewPassword('');
         setInputNewPassword2('');
         onClose();
       })
       .catch(error => {
         onClose();
-        console.log(error);
+        setIsSuccess(false);
+        setInfo('에러 발생(네트워크 상태 확인)');
+        setSnackbarOpen(true);
       }); // TODO 에러 로깅
   };
 
@@ -132,7 +179,11 @@ export default function ChangePasswordDialog({open, onClose}) {
   };
 
   const notificationClickHandler = () => {
-    setNotificationIcon(<NotificationsActiveIcon fontSize="large" />);
+    setPushSubscribe();
+  };
+
+  const handleSnackbarOpen = (bool) => {
+    setSnackbarOpen(bool);
   };
 
   return (
@@ -163,7 +214,9 @@ export default function ChangePasswordDialog({open, onClose}) {
         <ListItem className={classes.alarm}>
           <ListItemIcon>
             <Button onClick={notificationClickHandler}>
-              {notificationIcon}
+              {notificationIcon === 0
+                ? <NotificationsNoneIcon fontSize="large" />
+                : <NotificationsActiveIcon fontSize="large" />}
             </Button>
           </ListItemIcon>
           <ListItemText
@@ -175,6 +228,16 @@ export default function ChangePasswordDialog({open, onClose}) {
           <Button onClick={handleClose} color="primary" variant="outlined">취소</Button>
         </DialogActions>
       </Dialog>
+      {snackbarOpen
+        ? (
+          <MySnackbars
+            open={snackbarOpen}
+            setOpen={handleSnackbarOpen}
+            isSuccess={isSuccess}
+            info={info}
+          />
+        )
+        : null}
     </div>
   );
 }

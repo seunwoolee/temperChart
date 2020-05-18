@@ -9,10 +9,7 @@ import {
   CardActions,
   CardContent,
   CardHeader,
-  Checkbox,
   Divider,
-  Button,
-  Link,
   Table,
   TableBody,
   TableCell,
@@ -25,7 +22,7 @@ import GenericMoreButton from 'src/components/GenericMoreButton';
 import {useSelector} from "react-redux";
 import useWindowDimensions from "../../components/WindowDimenstions";
 import Index from "./Modal";
-import MySnackbars from "../../components/MY_snackbar";
+// import MySnackbars from "../../components/MY_snackbar";
 import {documents} from '../../mock/my_documentsMock';
 import getPerfectScrollbarHeight from "../../utils/getPerfectScrollbarHeight";
 import axios from "../../utils/my_axios";
@@ -77,7 +74,7 @@ function Results({className, documents, ...rest}) {
   const [rowsPerPage, setRowsPerPage] = useState(25);
   const [openModal, setOpenModal] = useState(false);
   const {height, width} = useWindowDimensions();
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  // const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [isSuccess, setIsSuccess] = useState(true);
   const session = useSelector((state) => state.session);
 
@@ -106,9 +103,9 @@ function Results({className, documents, ...rest}) {
 
   const getClassName = () => width < 1024;
 
-  const handleSnackbarOpen = (bool) => {
-    setSnackbarOpen(bool);
-  };
+  // const handleSnackbarOpen = (bool) => {
+  //   setSnackbarOpen(bool);
+  // };
 
   return (
     <div
@@ -197,9 +194,9 @@ function Results({className, documents, ...rest}) {
         open={openModal}
       />
       ) }
-      {snackbarOpen
-        ? <MySnackbars open={snackbarOpen} setOpen={handleSnackbarOpen} isSuccess={isSuccess} />
-        : null}
+      {/*{snackbarOpen*/}
+      {/*  ? <MySnackbars open={snackbarOpen} setOpen={handleSnackbarOpen} isSuccess={isSuccess} />*/}
+      {/*  : null}*/}
     </div>
   );
 }

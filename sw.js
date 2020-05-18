@@ -68,13 +68,12 @@ self.addEventListener('notificationclick', event => {
 // eslint-disable-next-line no-restricted-globals
 self.addEventListener('push', event => {
   const data = event.data;
-  console.log('New notification', data.text());
   const options = {
-    body: '이승우짱',
+    body: '전자결재',
     icon: '/favicon_192.png',
     actions: [
-      {action: 'confirm', title: '확인', icon: '/favicon_192.png'},
-      {action: 'cancel', title: '취소', icon: '/favicon_192.png'}
+      {action: 'confirm', title: '확인', icon: '/favicon-96x96.png'},
+      {action: 'cancel', title: '취소', icon: '/favicon-96x96.png'}
     ]
   };
   event.waitUntil(

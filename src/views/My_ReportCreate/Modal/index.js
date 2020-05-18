@@ -15,7 +15,6 @@ import {
 } from '@material-ui/core';
 import {useDispatch, useSelector} from "react-redux";
 import ChooseDialog from '../Dialog';
-import {voucher} from "../../../mock";
 import axios from "../../../utils/my_axios";
 import {getErpTodoCount, getTodoCount, isloading} from "../../../actions";
 import MY_InvoiceDetailCard from "../../../components/MY_InvoiceDetailCard";
@@ -61,7 +60,9 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function Index({open, onClose, onComplete, invoices, className, invoiceType}) {
+function Index({
+  open, onClose, onComplete, invoices, className, invoiceType, setSnackbarsOpen, setIsSuccess, setInfo
+}) {
   const classes = useStyles();
   const session = useSelector((state) => state.session);
   const dispatch = useDispatch();
@@ -76,11 +77,13 @@ function Index({open, onClose, onComplete, invoices, className, invoiceType}) {
 
 
   const handleClickOpen = () => {
-    if(inputTitleRef.current.value.length === 0){
-      return alert('제목을 입력해주세요');
+    if (inputTitleRef.current.value.length === 0) {
+      setSnackbarsOpen(true);
+      setIsSuccess(false);
+      setInfo("제목을 입력해주세요");
+      return;
     }
     setOpenDialog(true);
-
   };
 
   const handleClose = () => {
@@ -91,11 +94,11 @@ function Index({open, onClose, onComplete, invoices, className, invoiceType}) {
     const headers = {Authorization: `Token ${session.token}`, 'Content-Type': 'multipart/form-data'};
     const axiosConfig = {headers};
     const url = 'ea/create_document/';
-    const invoiceArray: Array = []
-    const filesArray: Array = []
-    const filesCountArray: Array = []
+    const invoiceArray: Array = [];
+    const filesArray: Array = [];
+    const filesCountArray: Array = [];
 
-    for (let invoice in invoices) {
+    for(const invoice in invoices) {
       const invoice_id: string = invoices[invoice].id;
       invoiceArray.push(invoice_id);
       let invoiceFiles: Array = null;
@@ -107,10 +110,10 @@ function Index({open, onClose, onComplete, invoices, className, invoiceType}) {
       }
 
       if (invoiceFiles) {
-        filesArray.push(...invoiceFiles)
-        filesCountArray.push(invoiceFiles.length)
+        filesArray.push(...invoiceFiles);
+        filesCountArray.push(invoiceFiles.length);
       } else {
-        filesCountArray.push(0)
+        filesCountArray.push(0);
       }
     }
 
@@ -124,11 +127,11 @@ function Index({open, onClose, onComplete, invoices, className, invoiceType}) {
     filesArray.map(file => formData.append('files', file));
     invoiceArray.map(invoiceId => formData.append('invoices', invoiceId));
     filesCountArray.map(fileCount => formData.append('counts', fileCount));
-    dispatch(isloading(true))
+    dispatch(isloading(true));
 
     axios.post(url, formData, axiosConfig)
       .then(response => {
-        dispatch(isloading(false))
+        dispatch(isloading(false));
         setOpenDialog(false);
         inputTitleRef.current.value = '';
         setInputAttachments([]);
@@ -137,7 +140,7 @@ function Index({open, onClose, onComplete, invoices, className, invoiceType}) {
         response.status === 201 ? onComplete(true) : onComplete(false);
       })
       .catch(error => {
-        dispatch(isloading(false))
+        dispatch(isloading(false));
         setOpenDialog(false);
         inputTitleRef.current.value = '';
         setInputAttachments([]);
@@ -149,35 +152,39 @@ function Index({open, onClose, onComplete, invoices, className, invoiceType}) {
   if (invoiceType === INVOICETYPE.채무발생 || invoiceType === INVOICETYPE.채권발생) {
     invoiceDetailCard = (
       <MY_InvoiceDetailCard
-        type={'write'}
+        type="write"
         invoices={invoices}
         attachments={inputAttachments}
-        handleAttachments={handleAttachments}/>
-    )
+        handleAttachments={handleAttachments}
+      />
+    );
   } else if (invoiceType === INVOICETYPE.채무정리) {
     invoiceDetailCard = (
       <MY_InvoiceDetailCard_P
-        type={'write'}
+        type="write"
         invoices={invoices}
         attachments={inputAttachments}
-        handleAttachments={handleAttachments}/>
-    )
+        handleAttachments={handleAttachments}
+      />
+    );
   } else if (invoiceType === INVOICETYPE.채권정리) {
     invoiceDetailCard = (
       <MY_InvoiceDetailCard_R
-        type={'write'}
+        type="write"
         invoices={invoices}
         attachments={inputAttachments}
-        handleAttachments={handleAttachments}/>
-    )
+        handleAttachments={handleAttachments}
+      />
+    );
   } else if (invoiceType === INVOICETYPE.일반전표) {
     invoiceDetailCard = (
       <MY_InvoiceDetailCard_G
-        type={'write'}
+        type="write"
         invoices={invoices}
         attachments={inputAttachments}
-        handleAttachments={handleAttachments}/>
-    )
+        handleAttachments={handleAttachments}
+      />
+    );
   }
 
   return (
@@ -195,7 +202,7 @@ function Index({open, onClose, onComplete, invoices, className, invoiceType}) {
               classes={{root: classes.cardHeaderRoot, title: classes.cardHeaderTitle}}
               title="기안 작성"
             />
-            <Divider/>
+            <Divider />
             <CardContent>
               <Grid
                 container
@@ -230,7 +237,7 @@ function Index({open, onClose, onComplete, invoices, className, invoiceType}) {
                     variant="outlined"
                   />
                 </Grid>
-                <Divider/>
+                <Divider />
                 <Grid
                   item
                   md={12}
@@ -240,7 +247,7 @@ function Index({open, onClose, onComplete, invoices, className, invoiceType}) {
                 </Grid>
               </Grid>
             </CardContent>
-            <Divider/>
+            <Divider />
             <CardActions className={classes.actions}>
               <Button onClick={onClose}>
                 닫기
@@ -255,7 +262,7 @@ function Index({open, onClose, onComplete, invoices, className, invoiceType}) {
             </CardActions>
           </form>
 
-          <LoadingBar/>
+          <LoadingBar />
 
         </Card>
       </Modal>
@@ -263,7 +270,8 @@ function Index({open, onClose, onComplete, invoices, className, invoiceType}) {
         open={openDialog}
         onClose={handleClose}
         onSubmit={handleSubmit}
-        invoiceType={invoiceType} />
+        invoiceType={invoiceType}
+      />
     </>
   );
 }
@@ -274,11 +282,11 @@ Index.propTypes = {
   invoices: PropTypes.array,
   onClose: PropTypes.func,
   onComplete: PropTypes.func,
-  open: PropTypes.bool
+  open: PropTypes.bool,
+  setSnackbarsOpen: PropTypes.func,
+  setIsSuccess: PropTypes.func,
+  setInfo: PropTypes.func
 };
 
-Index.defaultProps = {
-  open: false,
-};
 
 export default Index;

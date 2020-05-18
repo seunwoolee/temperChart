@@ -25,31 +25,34 @@ const Alert = (props) => {
   return <MuiAlert classes={{root: classes.alertRoot}} elevation={6} variant="filled" {...props} />;
 };
 
-function CustomizedSnackbars({open, setOpen, isSuccess, info='전산팀 문의 바랍니다.'}) {
+function CustomizedSnackbars({ open, setOpen, isSuccess, info }) {
   const classes = useStyles();
-  // const [open, setOpen] = React.useState(false);
   const handleClick = (bool: boolean) => {
     setOpen(bool);
   };
 
-  let message = (
-    <Alert onClose={() => handleClick(false)} severity="success">
-      완료
-    </Alert>
-  );
+  // let message = (
+  //   <Alert onClose={() => handleClick(false)} severity="success">
+  //     완료
+  //   </Alert>
+  // );
+  //
+  // if (!isSuccess) {
+  //   message=(
+  //    <Alert onClose={() => handleClick(false)} severity="error">
+  //      실패({info})
+  //    </Alert>
+  //   )
+  // }
 
-  if(!isSuccess){
-    message=(
-     <Alert onClose={() => handleClick(false)} severity="error">
-       실패({info})
-     </Alert>
-     )
-   }
+  const my_message = (
+    <Alert onClose={() => handleClick(false)} severity={!(isSuccess) ? "error" : "success"}>{info}</Alert>
+  );
 
   return (
     <div className={classes.root}>
-      <Snackbar open={open} autoHideDuration={3000} onClose={() => handleClick(false)}>
-        {message}
+      <Snackbar open={open} autoHideDuration={2000} onClose={() => handleClick(false)}>
+        {my_message}
       </Snackbar>
     </div>
   );

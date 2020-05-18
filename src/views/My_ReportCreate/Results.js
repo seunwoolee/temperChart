@@ -31,7 +31,6 @@ import getPerfectScrollbarHeight from "../../utils/getPerfectScrollbarHeight";
 import LoadingBar from "../../components/MY_LoadingBar";
 import {INVOICETYPE} from "./index";
 
-// import WriteReportModal from "../CustomerManagementDetails/Summary/WriteReporttModal";
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -75,7 +74,9 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function Results({className, invoices, totalInvoices, fetchInvoices, invoiceType}) {
+function Results({
+  className, invoices, totalInvoices, fetchInvoices, invoiceType
+}) {
   const [selectedInvoices, setSelectedInvoices] = useState([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(25);
@@ -83,6 +84,7 @@ function Results({className, invoices, totalInvoices, fetchInvoices, invoiceType
   const {height, width} = useWindowDimensions();
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [isSuccess, setIsSuccess] = useState(true);
+  const [info, setInfo] = useState("완료");
   let prevBatchNumber = 0;
   const startData = page * rowsPerPage;
   const endData = (page * rowsPerPage) + rowsPerPage;
@@ -140,6 +142,7 @@ function Results({className, invoices, totalInvoices, fetchInvoices, invoiceType
     }
     setSelectedInvoices(newInvoices);
     setIsSuccess(result);
+    result ? setInfo("완료") : setInfo("이미 상신된 문서입니다");
     setSnackbarOpen(true);
   };
 
@@ -223,11 +226,11 @@ function Results({className, invoices, totalInvoices, fetchInvoices, invoiceType
                     <TableCell className={classes.header}>배치번호</TableCell>
                     {invoiceType !== INVOICETYPE.일반전표 ? (
                       <TableCell className={classes.header}>공급자명</TableCell>
-                      ) : null }
+                    ) : null }
                     <TableCell className={classes.header}>G/L일자</TableCell>
                     {invoiceType !== INVOICETYPE.일반전표 ? (
                       <TableCell className={classes.header}>금액</TableCell>
-                      ) : null }
+                    ) : null }
                     <TableCell className={classes.header}>비고</TableCell>
                     <TableCell className={classes.header}>작성자</TableCell>
                   </TableRow>
@@ -245,13 +248,13 @@ function Results({className, invoices, totalInvoices, fetchInvoices, invoiceType
                       <TableCell align="center" className={classes.whiteSpaceNoWrap}>{invoice.RPICU}</TableCell>
                       {invoiceType !== INVOICETYPE.일반전표 ? (
                         <TableCell align="center" className={classes.whiteSpaceNoWrap}>{invoice.RPALPH}</TableCell>
-                        ) : null }
+                      ) : null }
                       <TableCell align="center" className={classes.whiteSpaceNoWrap}>{invoice.RPDGJ}</TableCell>
                       {invoiceType !== INVOICETYPE.일반전표 ? (
                         <TableCell align="center" className={classes.whiteSpaceNoWrap}>
                           {getCurrency((invoice.RPZ5DEBITAT + invoice.RPZ5CREDITAT))}
                         </TableCell>
-                        ) : null }
+                      ) : null }
                       <TableCell>{getShortBigo(width, invoice.RPRMK)}</TableCell>
                       <TableCell align="center" className={classes.whiteSpaceNoWrap}>{invoice.RPNAME}</TableCell>
                     </TableRow>
@@ -278,19 +281,24 @@ function Results({className, invoices, totalInvoices, fetchInvoices, invoiceType
       && (
         <Index
           invoiceType={invoiceType}
-          // invoices={selectedInvoices.filter(invoice => invoice.RPICU === selectedInvoices[0].RPICU)} // 0, 같은 배치번호까지
           invoices={totalInvoices.filter(invoice => invoice.RPICU === selectedInvoices[0].RPICU)} // 0, 같은 배치번호까지
           onClose={closeReportModal}
           onComplete={completeReportModal}
           open={openModal}
+          setSnackbarsOpen={setSnackbarOpen}
+          setIsSuccess={setIsSuccess}
+          setInfo={setInfo}
         />
       )}
       {snackbarOpen
-        ? <MySnackbars
+        ? (
+          <MySnackbars
             open={snackbarOpen}
             setOpen={handleSnackbarOpen}
             isSuccess={isSuccess}
-            info={'이미 상신된 문서입니다'}/> : null}
+            info={info}
+          />
+        ) : null}
 
     </div>
   );
@@ -302,10 +310,6 @@ Results.propTypes = {
   invoices: PropTypes.arrayOf(PropTypes.shape(voucher)).isRequired,
   fetchInvoices: PropTypes.func.isRequired,
   totalInvoices: PropTypes.arrayOf(PropTypes.shape(voucher)).isRequired
-};
-
-Results.defaultProps = {
-  invoices: []
 };
 
 export default Results;

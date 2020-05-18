@@ -288,7 +288,11 @@ function Results({className, documents, fetchDocuments, ...rest}) {
          />
          )}
       {snackbarOpen
-        ? <MySnackbars open={snackbarOpen} setOpen={handleSnackbarOpen} isSuccess={isSuccess} />
+        ? <MySnackbars
+          open={snackbarOpen}
+          setOpen={handleSnackbarOpen}
+          isSuccess={isSuccess}
+          info={isSuccess ? "완료" : "에러 발생(전산팀 문의)"} />
         : null}
     </div>
   );
