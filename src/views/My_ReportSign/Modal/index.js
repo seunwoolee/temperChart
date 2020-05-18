@@ -56,7 +56,9 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: '#eeeeee'
   },
   tableCellContent: {
-    width: '100px',
+    [theme.breakpoints.up('lg')]: {
+      width: '100px'
+    },
   },
   cardContent: {
     paddingTop: theme.spacing(1)
@@ -201,7 +203,7 @@ function Index({ open, onClose, onComplete, document, invoices, className }) {
                         <TableRow>
                           <TableCell className={classes.tableCellTitle}>작성자</TableCell>
                           <TableCell className={classes.tableCellContent}>{document.author}</TableCell>
-                          <TableCell className={classes.tableCellTitle}>작성일자</TableCell>
+                          <TableCell className={classes.tableCellTitle}>작성일</TableCell>
                           <TableCell className={classes.tableCellContent}>{document.created}</TableCell>
                         </TableRow>
                         <TableRow>
