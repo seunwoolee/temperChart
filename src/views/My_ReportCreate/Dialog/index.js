@@ -32,6 +32,7 @@ import Input from "@material-ui/core/Input";
 import SearchIcon from '@material-ui/icons/Search';
 import {useSelector} from "react-redux";
 import axios from "../../../utils/my_axios";
+import {avatar_URL} from "../../../my_config";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -330,7 +331,7 @@ function ChooseDialog({open, onClose, onSubmit, invoiceType}) {
                       alt="Profile image"
                       className={classes.avatar}
                       component={RouterLink}
-                      src={`http://155.1.39.223:8000${user.avatar}`} // TODO URL 변경 필요
+                      src={`${avatar_URL}${user.avatar}`} // TODO URL 변경 필요
                       to="/profile/1/timeline"
                     />
                     <ListItemText
@@ -407,7 +408,7 @@ function ChooseDialog({open, onClose, onSubmit, invoiceType}) {
                   <Avatar
                     alt="Profile image"
                     className={classes.avatar}
-                    src={`http://155.1.39.223:8000${user.avatar}`} // TODO URL 변경 필요
+                    src={`${avatar_URL}${user.avatar}`} // TODO URL 변경 필요
                   />
                   <ListItemText
                     className={classes.listItemText}

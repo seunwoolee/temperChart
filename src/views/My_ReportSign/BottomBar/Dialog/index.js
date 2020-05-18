@@ -35,8 +35,7 @@ export default function MyDialog({open, onCloseDialog, selectedDocuments, fetchD
       .catch(error => {
         onCloseDialog();
         fetchDocuments();
-        console.log(error)
-      }); // TODO 에러 로깅
+      });
 
   };
 

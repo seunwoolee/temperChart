@@ -1,7 +1,8 @@
 import axios from 'axios';
+import {axios_URL} from "../my_config";
 
 let instance = axios.create({
-  baseURL: `http://155.1.39.223:8000/`
+  baseURL: axios_URL
   // baseURL: `https://kcfamily.kr/` // TODO URL 변경 필요
 })
 

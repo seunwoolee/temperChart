@@ -19,8 +19,7 @@ import {
 } from '@material-ui/core';
 import axios from 'src/utils/axios';
 import getInitials from 'src/utils/getInitials';
-import TableCell from "@material-ui/core/TableCell";
-import TableRow from "@material-ui/core/TableRow";
+import {avatar_URL} from "../my_config";
 
 const useStyles = makeStyles(theme => ({
   root: {},
@@ -72,7 +71,7 @@ function MY_opinion({ signs, className, ...rest }) {
               <ListItemAvatar>
                 <Avatar
                   alt="사진"
-                  src={`http://155.1.39.223:8000${sign.user.avatar}`} // TODO URL 변경 필요
+                  src={`${avatar_URL}${sign.user.avatar}`} // TODO URL 변경 필요
                 >
                   {getInitials(sign.user.name)}
                 </Avatar>

@@ -22,7 +22,6 @@ import GetAppIcon from '@material-ui/icons/GetApp';
 import IconButton from "@material-ui/core/IconButton";
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
-import Label from 'src/components/Label';
 import {pdfjs, Document, Page} from 'react-pdf';
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
@@ -30,7 +29,7 @@ import Paper from '@material-ui/core/Paper';
 import Draggable from 'react-draggable';
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Tooltip from "@material-ui/core/Tooltip";
-import useWindowDimensions from "./WindowDimenstions";
+import {avatar_URL} from "../my_config";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
@@ -128,7 +127,7 @@ function MY_attachments({attachments, className, ...rest}) {
 
   const handleClickOpen = (imgPath, isImg) => {
     setOpen(true);
-    setSelectedImgPath(`http://155.1.39.223:8000${imgPath}`); // TODO URL 변경
+    setSelectedImgPath(`${avatar_URL}${imgPath}`); // TODO URL 변경
     isImg ? setContentType('img') : setContentType('pdf');
   };
 

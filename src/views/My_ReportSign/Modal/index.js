@@ -98,7 +98,7 @@ function Index({ open, onClose, onComplete, document, invoices, className }) {
   };
 
   const handleKeyPress = (event) => {
-    if (event.key === '1') { // TODO 1로 임시
+    if (event.key === '1') {
       onComplete('', '승인');
     }
   };

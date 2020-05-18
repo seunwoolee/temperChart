@@ -10,6 +10,7 @@ import {Provider as StoreProvider} from "react-redux";
 import {ThemeProvider} from "@material-ui/styles";
 import {theme} from "./theme";
 import registerServiceWorker from "./registerServiceWorker";
+import {axios_URL} from "./my_config";
 
 const store = configureStore();
 const app = (
@@ -22,4 +23,6 @@ const app = (
 
 // ReactDOM.render(<App />, document.getElementById('root'));
 ReactDOM.render(app, document.getElementById('root'));
-registerServiceWorker();
+if (axios_URL === 'https://kcfamily.kr/'){
+  registerServiceWorker();
+}

@@ -157,7 +157,7 @@ function Results({className, documents, fetchDocuments, ...rest}) {
         }
         setSelectedDocuments(newDocuments);
       })
-      .catch(error => console.log(error)); // TODO 에러 로깅
+      .catch(error => console.log(error));
   };
 
   const closeReportModal = () => {
