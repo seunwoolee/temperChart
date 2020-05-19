@@ -266,7 +266,8 @@ function ChooseDialog({open, onClose, onSubmit, invoiceType}) {
     return () => {
       mounted = false;
     };
-  }, [session.token, session.user.department, session.user.id]);
+  }, []);
+  // }, [session.token, session.user.department, session.user.id]);
 
 
   return (
