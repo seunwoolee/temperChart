@@ -105,13 +105,22 @@ function ReportCreate() {
     fetchInvoices();
   }, [location]);
 
-  let headerInvoices = []
-  if(invoiceType === INVOICETYPE.채무발생 || invoiceType === INVOICETYPE.채권발생) {
-    headerInvoices = invoices.filter(invoice => invoice.RPSFX === '001' && invoice.RPSEQ === 1)
-  } else if(invoiceType === INVOICETYPE.채권정리 ||
-            invoiceType === INVOICETYPE.채무정리 ||
-            invoiceType === INVOICETYPE.일반전표) {
-    headerInvoices = invoices.filter(invoice => invoice.RPSEQ === 1)
+  let headerInvoices = [];
+  if (invoiceType === INVOICETYPE.채무발생 || invoiceType === INVOICETYPE.채권발생) {
+    headerInvoices = invoices.filter(invoice => invoice.RPSFX === '001' && invoice.RPSEQ === 1);
+  } else if (invoiceType === INVOICETYPE.채권정리) {
+    let RPCKNU = 0;
+    headerInvoices = invoices.filter(invoice => {
+      if(invoice.RPCKNU !== RPCKNU){
+        RPCKNU = invoice.RPCKNU;
+        return true;
+      }
+      return false;
+    });
+  } else if (invoiceType === INVOICETYPE.일반전표){
+    headerInvoices = invoices.filter(invoice => invoice.RPSEQ === 1);
+  } else if (invoiceType === INVOICETYPE.채무정리){
+    headerInvoices = invoices.filter(invoice => invoice.RPSEQ === 1);
   }
 
   return (

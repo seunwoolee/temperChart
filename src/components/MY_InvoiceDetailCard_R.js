@@ -83,22 +83,28 @@ function MY_InvoiceCard({ invoices, className, attachments, handleAttachments, t
   const classes = useStyles();
   const getSumInvoices = () => getCurrency(invoices.map(invoice => invoice.RPZ5DEBITAT + invoice.RPZ5CREDITAT)
                                                    .reduce((prev, curr) => prev + curr) / 2);
-  // const getSumInvoices = () => getCurrency(invoices.filter(invoice => invoice.RPSEQ === 1)
-  //                                                   .map(invoice => invoice.RPZ5DEBITAT + invoice.RPZ5CREDITAT)
-  //                                                   .reduce((prev, curr) => prev + curr));
+  let RPCKNU = 0;
+  const headerInvoices = invoices.filter(invoice => {
+    if(invoice.RPCKNU !== RPCKNU){
+      RPCKNU = invoice.RPCKNU;
+      return true;
+    }
+    return false;
+  });
+
   return (
     <>
       <Typography variant="h5">
         총
         {' '}
-        {invoices.filter(invoice => invoice.RPSEQ === 1).length}
+        {headerInvoices.length}
         건 /
         {' '}
         {getSumInvoices()}
         원
       </Typography>
 
-      {invoices.filter(invoice => invoice.RPSEQ === 1).map((invoice, i) => (
+      {headerInvoices.map((invoice, i) => (
         <Card
           key={i}
           {...rest}
@@ -141,7 +147,7 @@ function MY_InvoiceCard({ invoices, className, attachments, handleAttachments, t
           </div>
         </CardContent>
         <CardContent className={classes.erpDetailTable}>
-          <MY_erpDetailTable invoices={invoices.filter(my_invoice => my_invoice.RPPYID === invoice.RPPYID)} />
+          <MY_erpDetailTable invoices={invoices.filter(my_invoice => my_invoice.RPCKNU === invoice.RPCKNU)} />
         </CardContent>
         <Divider />
 

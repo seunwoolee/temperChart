@@ -166,9 +166,8 @@ function MY_attachments({attachments, className, ...rest}) {
                     secondary={bytesToSize(file.size)}
                   />
                   <ListItemSecondaryAction>
-                    <a target="_blank" href={`http://155.1.39.223:8000${file.path}`}>
+                    <a target="_blank" href={`${avatar_URL}${file.path}`}>
                       <Tooltip title="다운로드">
-                        {/* TODO URL 변경 */}
                         <IconButton>
                           <GetAppIcon />
                         </IconButton>
