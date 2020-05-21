@@ -9,13 +9,12 @@ const useStyles = makeStyles(() => ({
   root: {}
 }));
 
-function MY_attachmentsBase({ attachments, className, ...rest }) {
+function MY_attachmentsBase({ attachments}) {
   const classes = useStyles();
 
   return (
     <Card
-      {...rest}
-      className={clsx(classes.root, className)}
+      className={clsx(classes.root)}
     >
       {attachments.length > 0
         ? (

@@ -49,13 +49,13 @@ function ReportWritten() {
   };
 
   const fetchDocuments = (batchNumber = '', user = '', department = '') => {
-    let url = `ea/written_document/${session.user.id}`;
+    let url = `ea/written_document/`;
 
     if (location.pathname === '/reportRejected') {
-      url = `ea/rejected_document/${session.user.id}`;
+      url = `ea/rejected_document/`;
       setHeaderText('반려함');
     } else if (location.pathname === '/reportApproved') {
-      url = `ea/approved_document/${session.user.id}`;
+      url = `ea/approved_document/`;
       setHeaderText('기결함');
     }
 
@@ -96,7 +96,7 @@ function ReportWritten() {
       history.push('/auth/login');
     }
     fetchDocuments();
-  }, [location.pathname, session.user.id]);
+  }, [location.pathname]);
 
   return (
     <Page

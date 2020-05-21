@@ -9,7 +9,7 @@ import axios from "../../utils/my_axios";
 import Header from './Header';
 import Results from './Results';
 import MY_SearchBar from "../../components/MY_SearchBar";
-import {useHistory} from "react-router";
+import {useHistory, useLocation} from "react-router";
 import {isloading} from "../../actions";
 
 const useStyles = makeStyles((theme) => ({
@@ -35,6 +35,7 @@ function ReportSign() {
   const [inputSearchContent, setInputSearchContent] = useState('');
   const [documents, setDocuments] = useState([]);
   const session = useSelector((state) => state.session);
+  const location = useLocation();
   const history = useHistory();
   const dispatch = useDispatch();
 
@@ -56,7 +57,7 @@ function ReportSign() {
     };
 
     dispatch(isloading(true))
-    axios.get(`ea/sign_document/${session.user.id}`, config)
+    axios.get(`ea/sign_document/`, config)
       .then((response) => {
         setDocuments(response.data);
         dispatch(isloading(false))
@@ -73,7 +74,8 @@ function ReportSign() {
       history.push('/auth/login');
     }
     fetchDocuments();
-  }, [session.user.id]);
+
+  }, []);
 
   return (
     <Page

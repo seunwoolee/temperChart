@@ -1,7 +1,6 @@
 import React, {
   useState, useCallback, useEffect, ReactHTML as styled
 } from 'react';
-import ReactDOM from "react-dom";
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import uuid from 'uuid/v1';
@@ -18,8 +17,9 @@ import FileCopyIcon from '@material-ui/icons/FileCopy';
 import bytesToSize from 'src/utils/bytesToSize';
 import Dialog from '@material-ui/core/Dialog';
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
-import GetAppIcon from '@material-ui/icons/GetApp';
 import IconButton from "@material-ui/core/IconButton";
+import GetAppIcon from '@material-ui/icons/GetApp';
+import CloseIcon from '@material-ui/icons/Close';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
 import {pdfjs, Document, Page} from 'react-pdf';
@@ -30,6 +30,10 @@ import Draggable from 'react-draggable';
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Tooltip from "@material-ui/core/Tooltip";
 import {avatar_URL} from "../my_config";
+import Typography from "@material-ui/core/Typography";
+import { DialogActions } from '@material-ui/core';
+import useMediaQuery from "@material-ui/core/useMediaQuery";
+import useTheme from "@material-ui/core/styles/useTheme";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
@@ -69,7 +73,7 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(1)
   },
   dialogRoot: {
-    width: '100%',
+    // width: '100%',
     '& .MuiBackdrop-root': {
       backgroundColor: 'rgba(0, 0, 0, 0.1)'
     },
@@ -78,6 +82,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   dialogTitle: {
+    padding: theme.spacing(1),
     cursor: 'move',
     backgroundColor: theme.palette.primary.main,
     '& h2': {
@@ -93,7 +98,6 @@ const useStyles = makeStyles((theme) => ({
     }
   }
 }));
-
 // function MY_WindowPortal({ children }) {
 //   const [containerEl, setContainerEl] = useState(document.createElement('div'));
 //   let externalWindow = null;
@@ -139,6 +143,9 @@ function MY_attachments({attachments, className, ...rest}) {
   const onDocumentLoadSuccess = ({ numPages }) => {
     setNumPages(numPages);
   };
+
+  const theme =useTheme();
+  const fullScreen = useMediaQuery(theme.breakpoints.up('lg'));
 
   return (
     <div
@@ -189,8 +196,10 @@ function MY_attachments({attachments, className, ...rest}) {
         onClose={handleClose}
         PaperComponent={PaperComponent}
       >
-        <DialogTitle className={classes.dialogTitle} id="draggable-dialog-title">
-          첨부파일
+        <DialogTitle
+          className={classes.dialogTitle}
+          id="draggable-dialog-title">
+          <Button style={{padding: 3}} onClick={handleClose} color="primary" variant="contained">닫기</Button>
         </DialogTitle>
         {contentType === 'img'
           ? (<img src={selectedImgPath} className={classes.img} alt="이미지" />)
@@ -201,7 +210,7 @@ function MY_attachments({attachments, className, ...rest}) {
                   file={selectedImgPath}
                   onLoadSuccess={onDocumentLoadSuccess}
                 >
-                  <Page pageNumber={pageNumber} />
+                  <Page width={fullScreen ? 900: null} pageNumber={pageNumber} />
                 </Document>
                 <Grid
                   container

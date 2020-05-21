@@ -235,7 +235,7 @@ function ChooseDialog({open, onClose, onSubmit, invoiceType}) {
     let mounted = true;
     const headers = {Authorization: `Token ${session.token}`};
     const fetchUsers = () => {
-      axios.get(`ea/get_defaultUsers/${session.user.id}/${invoiceType.toString()}`, {headers}).then(response => {
+      axios.get(`ea/get_defaultUsers/${invoiceType.toString()}`, {headers}).then(response => {
         if (mounted) {
           setUsers(response.data);
         }
@@ -243,7 +243,8 @@ function ChooseDialog({open, onClose, onSubmit, invoiceType}) {
     };
 
     const fetchDepartmentUsers = () => {
-      axios.get(`ea/get_departmentUsers/${session.user.department}`, {headers}).then(response => {
+      axios.get(`ea/get_departmentUsers/`, {headers}).then(response => {
+      // axios.get(`ea/get_departmentUsers/${session.user.department}`, {headers}).then(response => {
         if (mounted) {
           setDepartmentUsers(response.data);
           setTypeUsers(response.data);

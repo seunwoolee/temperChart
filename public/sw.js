@@ -50,12 +50,12 @@ self.addEventListener('activate', event => {
 self.addEventListener('notificationclick', event => {
   const {notification} = event;
   const {action} = event;
-  notification.close();
-
-
-  if (action === 'confirm') {
-    clients.openWindow('https://kcfeed.kr/');
+  if (action === 'cancel') {
+      notification.close();
+      return;
   }
+  notification.close();
+  clients.openWindow('https://kcfeed.kr/');
 });
 
 // eslint-disable-next-line no-restricted-globals
