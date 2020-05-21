@@ -128,7 +128,6 @@ function Index({
     invoiceArray.map(invoiceId => formData.append('invoices', invoiceId));
     filesCountArray.map(fileCount => formData.append('counts', fileCount));
     dispatch(isloading(true));
-
     axios.post(url, formData, axiosConfig)
       .then(response => {
         dispatch(isloading(false));

@@ -1,7 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {makeStyles} from '@material-ui/styles';
 import {Container} from '@material-ui/core';
-// import axios from 'src/utils/axios';
 import Page from 'src/components/Page';
 import SearchBar from 'src/components/SearchBar';
 import {useDispatch, useSelector} from "react-redux";
@@ -36,14 +35,6 @@ export const INVOICETYPE = Object.freeze({
     채권정리: "채권정리",
     일반전표: "일반전표"
 });
-//
-// export const INVOICETYPE = Object.freeze({
-//     채무발생:   Symbol("채무발생"),
-//     채무정리:  Symbol("채무정리"),
-//     채권발생: Symbol("채권발생"),
-//     채권정리: Symbol("채권정리"),
-//     일반전표: Symbol("일반전표")
-// });
 
 function ReportCreate() {
   const classes = useStyles();

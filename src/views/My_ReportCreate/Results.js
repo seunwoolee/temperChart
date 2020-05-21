@@ -142,7 +142,7 @@ function Results({
     }
     setSelectedInvoices(newInvoices);
     setIsSuccess(result);
-    result ? setInfo("완료") : setInfo("이미 상신된 문서입니다");
+    result ? setInfo("완료") : setInfo("다시 시도해 주세요(에러 발생)");
     setSnackbarOpen(true);
   };
 
