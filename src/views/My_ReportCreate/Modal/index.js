@@ -91,7 +91,7 @@ function Index({
   };
 
   const handleSubmit = (users: Array) => {
-    const headers = {Authorization: `Token ${session.token}`, 'Content-Type': 'multipart/form-data'};
+    const headers = {Authorization: `Token ${localStorage.getItem('token')}`, 'Content-Type': 'multipart/form-data'};
     const axiosConfig = {headers};
     const url = 'ea/create_document/';
     const invoiceArray: Array = [];

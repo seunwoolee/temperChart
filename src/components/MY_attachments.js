@@ -156,7 +156,7 @@ function MY_attachments({attachments, className, ...rest}) {
         <PerfectScrollbar options={{suppressScrollX: true}}>
           <List className={classes.list}>
             {attachments.map((file, i) => (
-              <Tooltip title="미리보기">
+              <Tooltip disableHoverListener={!(file.isImg || file.isPdf)} title="미리보기">
                 <ListItem
                   button={file.isImg || file.isPdf}
                   onClick={file.isImg || file.isPdf
