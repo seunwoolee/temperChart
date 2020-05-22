@@ -7,7 +7,7 @@ import PropTypes from "prop-types";
 import {makeStyles} from "@material-ui/styles";
 import axios from "../../../../utils/my_axios";
 import {useDispatch, useSelector} from "react-redux";
-import {getTodoCount} from "../../../../actions";
+import {getTodoCount, isloading} from "../../../../actions";
 
 const useStyles = makeStyles((theme) => ({
   dialogTitle: {
@@ -26,13 +26,16 @@ export default function MyDialog({open, onCloseDialog, selectedDocuments, fetchD
     const headers = {Authorization: `Token ${session.token}`};
     const data = {document_ids: selectedDocuments.map(document => document.id)};
 
+    dispatch(isloading(true));
     axios.post('ea/do_sign_all/', data, {headers})
       .then(response => {
+        dispatch(isloading(false));
         dispatch(getTodoCount(session.token));
         onCloseDialog();
         fetchDocuments();
       })
       .catch(error => {
+        dispatch(isloading(false));
         onCloseDialog();
         fetchDocuments();
       });

@@ -6,7 +6,7 @@ self.addEventListener('notificationclick', event => {
       return;
   }
   notification.close();
-  clients.openWindow('https://kcfeed.kr/');
+  clients.openWindow('https://kcfeedpaperless.web.app/');
 });
 
 self.addEventListener('push', event => {
