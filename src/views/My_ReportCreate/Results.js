@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import PerfectScrollbar from 'react-perfect-scrollbar';
@@ -95,6 +95,10 @@ function Results({
   const handleSelectAll = (event) => {
     event.target.checked ? setSelectedInvoices(dispalyedInvoices) : setSelectedInvoices([]);
   };
+
+  useEffect(() => {
+    setPage(0);
+  }, [totalInvoices]);
 
   const getSameBatchInvoices = (invoice) => selectedInvoices.filter(my_invoice => my_invoice.RPICU === invoice.RPICU);
 

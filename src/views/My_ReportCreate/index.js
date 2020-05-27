@@ -24,8 +24,8 @@ const useStyles = makeStyles((theme) => ({
 
 const initialValues = {
   name: '',
-  startDate: moment().add(-3, 'month'),
-  endDate: moment().add(+10, 'day')
+  startDate: moment().add(-2, 'month'),
+  endDate: moment().add(+1, 'month')
 };
 
 export const INVOICETYPE = Object.freeze({

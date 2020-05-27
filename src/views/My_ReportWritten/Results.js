@@ -1,10 +1,9 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import {makeStyles} from '@material-ui/styles';
 import {
-  Avatar,
   Card,
   CardActions,
   CardContent,
@@ -22,10 +21,8 @@ import GenericMoreButton from 'src/components/GenericMoreButton';
 import {useSelector} from "react-redux";
 import useWindowDimensions from "../../components/WindowDimenstions";
 import Index from "./Modal";
-// import MySnackbars from "../../components/MY_snackbar";
 import {documents} from '../../mock/my_documentsMock';
 import getPerfectScrollbarHeight from "../../utils/getPerfectScrollbarHeight";
-import axios from "../../utils/my_axios";
 import LoadingBar from "../../components/MY_LoadingBar";
 import getCurrency from "../../utils/getCurrency";
 
@@ -70,19 +67,19 @@ const useStyles = makeStyles((theme) => ({
 function Results({className, documents, ...rest}) {
   const [page, setPage] = useState(0);
   const [selectedDocument, setSelectedDocument] = useState({});
-  const [invoices, setInvoices] = useState([]);
   const [rowsPerPage, setRowsPerPage] = useState(25);
   const [openModal, setOpenModal] = useState(false);
   const {height, width} = useWindowDimensions();
-  // const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [isSuccess, setIsSuccess] = useState(true);
-  const session = useSelector((state) => state.session);
 
   const startData = page * rowsPerPage;
   const endData = (page * rowsPerPage) + rowsPerPage;
 
   const props = { mobileInnerHeight: getPerfectScrollbarHeight(rowsPerPage, documents.length, 60)};
   const classes = useStyles(props);
+
+  useEffect(() => {
+    setPage(0);
+  }, [documents]);
 
   const handleChangePage = (event, page) => setPage(page);
 
@@ -102,10 +99,6 @@ function Results({className, documents, ...rest}) {
   };
 
   const getClassName = () => width < 1024;
-
-  // const handleSnackbarOpen = (bool) => {
-  //   setSnackbarOpen(bool);
-  // };
 
   return (
     <div

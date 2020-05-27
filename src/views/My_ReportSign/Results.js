@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import PerfectScrollbar from 'react-perfect-scrollbar';
@@ -30,7 +30,7 @@ import getPerfectScrollbarHeight from "../../utils/getPerfectScrollbarHeight";
 import {documents} from "../../mock";
 import axios from "../../utils/my_axios";
 import LoadingBar from "../../components/MY_LoadingBar";
-import {getTodoCount} from "../../actions";
+import {getTodoCount, isloading} from "../../actions";
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -93,6 +93,10 @@ function Results({className, documents, fetchDocuments, ...rest}) {
   const classes = useStyles(props);
   const dispalyedDocuments = documents.slice(startData, endData);
 
+  useEffect(() => {
+    setPage(0);
+  }, [documents]);
+
   const handleSelectAll = (event) => {
     event.target.checked ? setSelectedDocuments(dispalyedDocuments) : setSelectedDocuments([]);
   };
@@ -142,10 +146,11 @@ function Results({className, documents, fetchDocuments, ...rest}) {
       opinion,
       sign_type: type
     };
-
+    dispatch(isloading(true));
     axios.post('ea/do_sign/', data, {headers})
       .then(response => {
         dispatch(getTodoCount(session.token));
+        dispatch(isloading(false));
         setSnackbarOpen(true);
         setIsSuccess(true);
         const newDocuments = selectedDocuments.slice(1);
@@ -157,7 +162,10 @@ function Results({className, documents, fetchDocuments, ...rest}) {
         }
         setSelectedDocuments(newDocuments);
       })
-      .catch(error => console.log(error));
+      .catch(error => {
+        dispatch(isloading(false));
+        console.log(error)
+      });
   };
 
   const closeReportModal = () => {

@@ -7,10 +7,9 @@ import PropTypes from 'prop-types';
 import {useDispatch, useSelector} from 'react-redux';
 import {makeStyles} from '@material-ui/styles';
 import {Button, TextField} from '@material-ui/core';
-import {authCheckState, login} from 'src/actions';
-import {AxiosInstance, AxiosResponse} from "axios";
-import {Redirect} from "react-router-dom";
-import {EXPIRATIONDATE, getUserData, storeLoginData} from "../../actions";
+import {login} from 'src/actions';
+import {AxiosResponse} from "axios";
+import {EXPIRATIONDATE} from "../../actions";
 
 const schema = {
   username: {
@@ -74,7 +73,8 @@ function LoginForm({className, ...rest}) {
 
     if (result.status === 200) {
       const token = result.data.key;
-      const expirationDate = new Date(new Date().getTime() + EXPIRATIONDATE * 1000);
+      // const expirationDate = new Date(new Date().getTime() + EXPIRATIONDATE * 1000); 1시간
+      const expirationDate = new Date(new Date().getTime() + EXPIRATIONDATE * 1000000);
       localStorage.setItem('token', token);
       localStorage.setItem('expirationDate', expirationDate);
       setLogging(true);
@@ -146,7 +146,7 @@ function LoginForm({className, ...rest}) {
       <Button
         className={classes.submitButton}
         color="secondary"
-        disabled={!formState.isValid}
+        // disabled={!formState.isValid}
         size="large"
         type="submit"
         variant="contained"
