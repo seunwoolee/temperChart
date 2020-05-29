@@ -12,6 +12,8 @@ import {
   Divider,
   Button, Table, TableBody, TableRow, TableCell, Typography
 } from '@material-ui/core';
+import IconButton from "@material-ui/core/IconButton";
+import PrintOutlinedIcon from '@material-ui/icons/PrintOutlined';
 import TableContainer from "@material-ui/core/TableContainer";
 import Paper from "@material-ui/core/Paper";
 import {documents} from "../../../mock/my_documentsMock";
@@ -22,6 +24,7 @@ import {INVOICETYPE} from "../../My_ReportCreate";
 import MY_InvoiceDetailCard_P from "../../../components/MY_InvoiceDetailCard_P";
 import MY_InvoiceDetailCard_R from "../../../components/MY_InvoiceDetailCard_R";
 import MY_InvoiceDetailCard_G from "../../../components/MY_InvoiceDetailCard_G";
+import getInvoiceDetailCard from "../../../utils/getInvoiceDetailCard";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -77,47 +80,16 @@ function Index({
   open, onClose, onComplete, document, invoices, className, ...rest
 }) {
   const classes = useStyles();
-  // const [openDialog, setOpenDialog] = useState(false);
-  // const session = useSelector((state) => state.session);
 
+  let invoiceDetailCard = getInvoiceDetailCard(document.document_type, invoices, document.attachments);
 
-  // const handleClickOpen = () => setOpenDialog(true);
-  //
-  // const handleClose = () => setOpenDialog(false);
-  //
-  // const getSumInvoices = () => getCurrency(invoices.map(invoice => invoice.price)
-  //   .reduce((prev, curr) => prev + curr));
-
-  let invoiceDetailCard = null;
-  if (document.document_type === INVOICETYPE.채무발생 || document.document_type === INVOICETYPE.채권발생) {
-    invoiceDetailCard = (
-      <MY_InvoiceDetailCard
-        type={'read'}
-        invoices={invoices}
-        attachments={document.attachments} />
-    )
-  } else if (document.document_type === INVOICETYPE.채무정리) {
-    invoiceDetailCard = (
-      <MY_InvoiceDetailCard_P
-        type={'read'}
-        invoices={invoices}
-        attachments={document.attachments} />
-    )
-  } else if (document.document_type === INVOICETYPE.채권정리) {
-    invoiceDetailCard = (
-      <MY_InvoiceDetailCard_R
-        type={'read'}
-        invoices={invoices}
-        attachments={document.attachments} />
-    )
-  } else if (document.document_type === INVOICETYPE.일반전표) {
-    invoiceDetailCard = (
-      <MY_InvoiceDetailCard_G
-        type={'read'}
-        invoices={invoices}
-        attachments={document.attachments} />
-    )
-  }
+  const printDocument = () => {
+    window.open(
+      `http://155.1.39.223:3000/reportPrint?documentId=${document.id}`,
+      "_blank",
+      "width=700,height=700"
+    );
+  };
 
   return (
     <>
@@ -135,13 +107,18 @@ function Index({
               classes={{root: classes.cardHeaderRoot, title: classes.cardHeaderTitle}}
               title="상신문서"
               action={(
-                <Button
-                  onClick={onClose}
-                  color="primary"
-                  variant="contained"
-                >
-                  닫기
-                </Button>
+                <>
+                  <IconButton style={{color: 'white'}} onClick={printDocument} aria-label="settings">
+                    <PrintOutlinedIcon />
+                  </IconButton>
+                  <Button
+                    onClick={onClose}
+                    color="primary"
+                    variant="contained"
+                  >
+                    닫기
+                  </Button>
+                </>
                 )}
             />
             <Divider />
@@ -194,10 +171,6 @@ function Index({
                   xs={12}
                 >
                   {invoiceDetailCard}
-                  {/*<MY_InvoiceDetailCard*/}
-                  {/*  type={'read'}*/}
-                  {/*  invoices={invoices}*/}
-                  {/*  attachments={document.attachments} />*/}
                 </Grid>
                 <Grid
                   item

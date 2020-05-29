@@ -1,7 +1,5 @@
-/* eslint-disable react/no-multi-comp */
-/* eslint-disable react/display-name */
-import React, { lazy } from 'react';
-import { Redirect } from 'react-router-dom';
+import React, {lazy} from 'react';
+import {Redirect} from 'react-router-dom';
 import AuthLayout from './layouts/Auth';
 import ErrorLayout from './layouts/Error';
 import DashboardLayout from './layouts/Dashboard';
@@ -11,12 +9,18 @@ import OverviewView from './views/Overview';
 import PresentationView from './views/Presentation';
 import Root from "./Root";
 import ReportCreate from "./views/My_ReportCreate";
+import MY_Print from "./components/MY_Print";
 
 export default [
   {
     path: '/',
     exact: true,
     component: Root
+  },
+  {
+    path: '/reportPrint',
+    exact: true,
+    component: MY_Print
   },
   {
     path: '/auth',
@@ -33,7 +37,7 @@ export default [
         component: lazy(() => import('src/views/Register'))
       },
       {
-        component: () => <Redirect to="/errors/error-404" />
+        component: () => <Redirect to="/errors/error-404"/>
       }
     ]
   },
@@ -57,7 +61,7 @@ export default [
         component: lazy(() => import('src/views/Error500'))
       },
       {
-        component: () => <Redirect to="/errors/error-404" />
+        component: () => <Redirect to="/errors/error-404"/>
       }
     ]
   },
@@ -110,6 +114,11 @@ export default [
         exact: true,
         component: lazy(() => import('src/views/My_ReportWritten'))
       },
+      // {
+      //   path: '/reportPrint',
+      //   exact: true,
+      //   component: lazy(() => import('src/components/MY_Print'))
+      // },
       {
         path: '/calendar',
         exact: true,
@@ -281,7 +290,7 @@ export default [
         component: lazy(() => import('src/views/GettingStarted'))
       },
       {
-        component: () => <Redirect to="/errors/error-404" />
+        component: () => <Redirect to="/errors/error-404"/>
       }
     ]
   }

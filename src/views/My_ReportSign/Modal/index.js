@@ -24,6 +24,7 @@ import MY_InvoiceDetailCard_P from "../../../components/MY_InvoiceDetailCard_P";
 import MY_InvoiceDetailCard_R from "../../../components/MY_InvoiceDetailCard_R";
 import MY_InvoiceDetailCard_G from "../../../components/MY_InvoiceDetailCard_G";
 import useWindowDimensions from "../../../components/WindowDimenstions";
+import getInvoiceDetailCard from "../../../utils/getInvoiceDetailCard";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -105,37 +106,7 @@ function Index({ open, onClose, onComplete, document, invoices, className }) {
     }
   };
 
-
-  let invoiceDetailCard = null;
-  if (document.document_type === INVOICETYPE.채무발생 || document.document_type === INVOICETYPE.채권발생) {
-    invoiceDetailCard = (
-      <MY_InvoiceDetailCard
-        type={'read'}
-        invoices={invoices}
-        attachments={document.attachments} />
-    )
-  } else if (document.document_type === INVOICETYPE.채무정리) {
-    invoiceDetailCard = (
-      <MY_InvoiceDetailCard_P
-        type={'read'}
-        invoices={invoices}
-        attachments={document.attachments} />
-    )
-  } else if (document.document_type === INVOICETYPE.채권정리) {
-    invoiceDetailCard = (
-      <MY_InvoiceDetailCard_R
-        type={'read'}
-        invoices={invoices}
-        attachments={document.attachments} />
-    )
-  } else if (document.document_type === INVOICETYPE.일반전표) {
-    invoiceDetailCard = (
-      <MY_InvoiceDetailCard_G
-        type={'read'}
-        invoices={invoices}
-        attachments={document.attachments} />
-    )
-  }
+  let invoiceDetailCard = getInvoiceDetailCard(document.document_type, invoices, document.attachments);
 
   return (
     <>
