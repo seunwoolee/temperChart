@@ -25,6 +25,7 @@ import MY_InvoiceDetailCard_P from "../../../components/MY_InvoiceDetailCard_P";
 import MY_InvoiceDetailCard_R from "../../../components/MY_InvoiceDetailCard_R";
 import MY_InvoiceDetailCard_G from "../../../components/MY_InvoiceDetailCard_G";
 import getInvoiceDetailCard from "../../../utils/getInvoiceDetailCard";
+import {avatar_URL} from "../../../my_config";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -85,7 +86,7 @@ function Index({
 
   const printDocument = () => {
     window.open(
-      `http://155.1.39.223:3000/reportPrint?documentId=${document.id}`,
+      `/reportPrint?documentId=${document.id}`,
       "_blank",
       "width=700,height=700"
     );

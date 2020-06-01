@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-export default function MyDialog({open, onCloseDialog, selectedDocuments, fetchDocuments}) {
+export default function MyDialog({open, onCloseDialog, selectedDocuments, setSelectedDocuments, fetchDocuments}) {
   const classes = useStyles();
   const session = useSelector((state) => state.session);
   const dispatch = useDispatch();
@@ -33,11 +33,13 @@ export default function MyDialog({open, onCloseDialog, selectedDocuments, fetchD
         dispatch(getTodoCount(session.token));
         onCloseDialog();
         fetchDocuments();
+        setSelectedDocuments([]);
       })
       .catch(error => {
         dispatch(isloading(false));
         onCloseDialog();
         fetchDocuments();
+        setSelectedDocuments([]);
       });
 
   };
@@ -74,5 +76,6 @@ MyDialog.propTypes = {
   open: PropTypes.bool,
   onCloseDialog: PropTypes.func,
   selectedDocuments: PropTypes.array.isRequired,
+  setSelectedDocuments: PropTypes.func.isRequired,
   fetchDocuments: PropTypes.func
 };

@@ -284,7 +284,11 @@ function Results({className, documents, fetchDocuments, ...rest}) {
           />
         </CardActions>
       </Card>
-      <BottomBar fetchDocuments={fetchDocuments} onOpenModal={openReportModal} selectedDocuments={selectedDocuments} />
+      <BottomBar
+        fetchDocuments={fetchDocuments}
+        onOpenModal={openReportModal}
+        setSelectedDocuments={setSelectedDocuments}
+        selectedDocuments={selectedDocuments} />
       {openModal && selectedDocuments.length
          && (
          <Index

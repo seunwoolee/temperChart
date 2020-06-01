@@ -32,6 +32,7 @@ const useStyles = makeStyles((theme) => ({
 
 function BottomBar({
   selectedDocuments,
+  setSelectedDocuments,
   className,
   onOpenModal,
   fetchDocuments,
@@ -101,6 +102,7 @@ function BottomBar({
       <MyDialog
         fetchDocuments={fetchDocuments}
         selectedDocuments={selectedDocuments}
+        setSelectedDocuments={setSelectedDocuments}
         open={openDialog}
         onCloseDialog={handleCloseDialog} />
     </Drawer>
@@ -111,6 +113,7 @@ BottomBar.propTypes = {
   className: PropTypes.string,
   onOpenModal: PropTypes.func,
   selectedDocuments: PropTypes.array.isRequired,
+  setSelectedDocuments: PropTypes.func.isRequired,
   fetchDocuments: PropTypes.func.isRequired
 };
 
