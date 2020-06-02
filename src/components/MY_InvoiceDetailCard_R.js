@@ -18,6 +18,7 @@ import uuid from 'uuid/v1';
 import MY_attachmentsBase from "./MY_attachmentsBase";
 import MY_erpDetailTable from "./MY_erpDetailTable";
 import MY_InvoiceDetailCard_Attachment from "./MY_InvoiceDetailCard_Attachment";
+import getSumInvoices from "../utils/getSumInvoices";
 // import getShortBigo from "../../../utils/getShortBigo";
 // import {invoices} from "../../../mock";
 
@@ -82,8 +83,7 @@ const useStyles = makeStyles((theme) => ({
 
 function MY_InvoiceCard({ invoices, className, attachments, handleAttachments, type}) {
   const classes = useStyles();
-  const getSumInvoices = () => getCurrency(invoices.map(invoice => invoice.RPZ5DEBITAT + invoice.RPZ5CREDITAT)
-                                                   .reduce((prev, curr) => prev + curr) / 2);
+
   let RPCKNU = 0;
   const headerInvoices = invoices.filter(invoice => {
     if(invoice.RPCKNU !== RPCKNU){
@@ -101,7 +101,7 @@ function MY_InvoiceCard({ invoices, className, attachments, handleAttachments, t
         {headerInvoices.length}
         건 /
         {' '}
-        {getSumInvoices()}
+        {getSumInvoices(invoices)}
         원
       </Typography>
 

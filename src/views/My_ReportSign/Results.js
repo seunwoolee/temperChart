@@ -202,7 +202,7 @@ function Results({className, documents, fetchDocuments, ...rest}) {
       </Typography>
       <Card>
         <CardHeader
-          action={<GenericMoreButton />}
+          // action={<GenericMoreButton />}
           title="미결함"
         />
         <Divider />

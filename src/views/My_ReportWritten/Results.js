@@ -123,8 +123,8 @@ function Results({className, documents, ...rest}) {
       </Typography>
       <Card>
         <CardHeader
-          action={<GenericMoreButton />}
-          title="상신 내역"
+          // action={<GenericMoreButton />}
+          title="결재 내역"
         />
         <Divider />
         <CardContent className={classes.content}>

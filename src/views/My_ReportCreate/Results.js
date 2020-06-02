@@ -206,7 +206,7 @@ function Results({
       </Typography>
       <Card>
         <CardHeader
-          action={<GenericMoreButton />}
+          // action={<GenericMoreButton />}
           title={`전표 내역 (${invoiceType.toString()})`}
         />
         <Divider />
