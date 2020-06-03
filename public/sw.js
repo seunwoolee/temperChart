@@ -3,10 +3,10 @@ self.addEventListener('notificationclick', event => {
   const {action} = event;
   if (action === 'cancel') {
       notification.close();
-      return;
+  } else {
+      clients.openWindow('https://kcfeedpaperless.web.app/');
+      notification.close();
   }
-  notification.close();
-  clients.openWindow('https://kcfeedpaperless.web.app/');
 });
 
 self.addEventListener('push', event => {
