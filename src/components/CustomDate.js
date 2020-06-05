@@ -91,6 +91,7 @@ function CustomDate({values, setValues}) {
       </div>
       <MuiPickersUtilsProvider utils={DateFnsUtils} locale={koLocale}>
         <DatePicker
+          autoOk
           // minDate={calendarMinDate}
           onAccept={handleCalendarAccept}
           onChange={handleCalendarChange}
