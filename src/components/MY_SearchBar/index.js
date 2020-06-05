@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/styles';
@@ -7,6 +7,7 @@ import FilterListIcon from '@material-ui/icons/FilterList';
 import Search from './Search';
 import Filter from './Filter';
 import CustomDate from "../CustomDate";
+import {useSelector} from "react-redux";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -34,9 +35,10 @@ const initialValues = {
 
 function MY_SearchBar({
   onSearch, className,
-  dateValues, setDateValues, searchContent, setSearchContent, detail,...rest
+  dateValues, setDateValues, searchContent, setSearchContent, detail,
 }) {
   const classes = useStyles();
+  const session = useSelector((state) => state.session);
   const [openFilter, setOpenFilter] = useState(false);
   const [filterValues, setFilterValues] = useState({ ...initialValues });
 
@@ -54,7 +56,6 @@ function MY_SearchBar({
 
   return (
     <Grid
-      {...rest}
       className={clsx(classes.root, className)}
       container
       spacing={3}
@@ -94,26 +95,6 @@ function MY_SearchBar({
         />
       </>
       ): null}
-      {/*<Grid item xs={12} md={4}>*/}
-      {/*  <Button*/}
-      {/*    className={classes.filterButton}*/}
-      {/*    color="primary"*/}
-      {/*    onClick={handleFilterOpen}*/}
-      {/*    size="small"*/}
-      {/*    variant="outlined"*/}
-      {/*  >*/}
-      {/*    <FilterListIcon className={classes.filterIcon} />*/}
-      {/*    {' '}*/}
-      {/*    상세 검색*/}
-      {/*  </Button>*/}
-      {/*</Grid>*/}
-      {/*<Filter*/}
-      {/*  values={filterValues}*/}
-      {/*  setValues={setFilterValues}*/}
-      {/*  onClose={handleFilterClose}*/}
-      {/*  onFilter={handleSearch}*/}
-      {/*  open={openFilter}*/}
-      {/*/>*/}
     </Grid>
   );
 }

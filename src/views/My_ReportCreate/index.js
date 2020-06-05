@@ -50,11 +50,11 @@ function ReportCreate() {
     setInputSearchContent(event.target.value);
   };
 
-  const handleSearch = () => {
-    fetchInvoices();
+  const handleSearch = (batchNumber , user , department) => {
+    fetchInvoices(batchNumber , user , department);
   };
 
-  const fetchInvoices = () => {
+  const fetchInvoices = (batchNumber = '', user = '', department = '') => {
     let url = `erp/voucher_list/`;
 
     if (location.pathname === '/reportWritePayment') {
@@ -71,13 +71,27 @@ function ReportCreate() {
       setInvoiceType(INVOICETYPE.일반전표);
     }
 
+    let params = {
+      startDate: moment(inputDateValues.startDate).format('YYYY-MM-DD'),
+      endDate: moment(inputDateValues.endDate).format('YYYY-MM-DD'),
+      search: inputSearchContent
+    }
+
+    if (batchNumber) {
+      params['batchNumber'] = batchNumber;
+    }
+
+    if (user) {
+      params['user'] = user;
+    }
+
+    if (department) {
+      params['department'] = department;
+    }
+
     const config = {
       headers: {Authorization: `Token ${localStorage.getItem('token')}`},
-      params: {
-        startDate: moment(inputDateValues.startDate).format('YYYY-MM-DD'),
-        endDate: moment(inputDateValues.endDate).format('YYYY-MM-DD'),
-        search: inputSearchContent
-      }
+      params: params
     };
 
     dispatch(isloading(true))
@@ -130,6 +144,7 @@ function ReportCreate() {
           dateValues={inputDateValues}
           setDateValues={setInputDateValues}
           onSearch={handleSearch}
+          detail
         />
         {invoices && (
           <Results

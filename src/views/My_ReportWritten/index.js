@@ -35,7 +35,6 @@ function ReportWritten() {
   const [documents, setDocuments] = useState([]);
   const [inputDateValues, setInputDateValues] = useState({...initialValues});
   const [inputSearchContent, setInputSearchContent] = useState('');
-  const session = useSelector((state) => state.session);
   const history = useHistory();
   const location = useLocation();
   const dispatch = useDispatch();
