@@ -133,7 +133,7 @@ function Index({
               >
                 <Grid
                   item
-                  md={document.signs.length + 2}
+                  md={12}
                   xs={12}
                 >
                   <MY_approverLine signs={document.signs} />
