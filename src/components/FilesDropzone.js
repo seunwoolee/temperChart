@@ -16,6 +16,7 @@ import {
 } from '@material-ui/core';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
 import bytesToSize from 'src/utils/bytesToSize';
+import MySnackbars from "./MY_snackbar";
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -56,13 +57,19 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function FilesDropzone({ invoiceId, attachments, handleAttachments, className, ...rest }) {
+function FilesDropzone({ invoiceId, attachments, handleAttachments, className }) {
   const classes = useStyles();
   const [invoiceAttachments, setInvoiceAttachments] = useState([]);
-  const handleDrop = (acceptedFiles) => {
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const INFO = "이미지, PDF 파일만 Upload 가능합니다.(10MB 미만)"
+
+  const handleDrop = (acceptedFiles, rejectedFiles) => {
+    if(rejectedFiles.length > 0){
+      return setSnackbarOpen(true);
+    }
+
     const newAttachments ={};
     newAttachments[invoiceId] = acceptedFiles;
-
     handleAttachments((prevFiles) => {
       const prevInvoiceAttachments: Array = prevFiles.filter(file => invoiceId in file)
       const prevOthersAttachments: Array = prevFiles.filter(file => !(invoiceId in file))
@@ -87,12 +94,17 @@ function FilesDropzone({ invoiceId, attachments, handleAttachments, className, .
   };
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
-    onDrop: handleDrop
+    onDrop: handleDrop,
+    accept: 'image/*, .pdf',
+    maxSize: 10000000 // 10MB
   });
+
+  const handleSnackbarOpen = (bool) => {
+    setSnackbarOpen(bool);
+  };
 
   return (
     <div
-      {...rest}
       className={clsx(classes.root, className)}
     >
       <div
@@ -159,6 +171,15 @@ function FilesDropzone({ invoiceId, attachments, handleAttachments, className, .
           </div>
         </>
       )}
+      {snackbarOpen
+        ? (
+          <MySnackbars
+            open={snackbarOpen}
+            setOpen={handleSnackbarOpen}
+            isSuccess={false}
+            info={INFO}
+          />
+        ) : null}
     </div>
   );
 }

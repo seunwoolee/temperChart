@@ -31,27 +31,13 @@ function CustomizedSnackbars({ open, setOpen, isSuccess, info }) {
     setOpen(bool);
   };
 
-  // let message = (
-  //   <Alert onClose={() => handleClick(false)} severity="success">
-  //     완료
-  //   </Alert>
-  // );
-  //
-  // if (!isSuccess) {
-  //   message=(
-  //    <Alert onClose={() => handleClick(false)} severity="error">
-  //      실패({info})
-  //    </Alert>
-  //   )
-  // }
-
   const my_message = (
     <Alert onClose={() => handleClick(false)} severity={!(isSuccess) ? "error" : "success"}>{info}</Alert>
   );
 
   return (
     <div className={classes.root}>
-      <Snackbar open={open} autoHideDuration={2000} onClose={() => handleClick(false)}>
+      <Snackbar open={open} autoHideDuration={3000} onClose={() => handleClick(false)}>
         {my_message}
       </Snackbar>
     </div>
