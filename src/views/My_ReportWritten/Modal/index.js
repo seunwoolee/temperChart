@@ -10,22 +10,15 @@ import {
   CardActions,
   Grid,
   Divider,
-  Button, Table, TableBody, TableRow, TableCell, Typography
+  Button, Table, TableBody, TableRow, TableCell
 } from '@material-ui/core';
 import IconButton from "@material-ui/core/IconButton";
 import PrintOutlinedIcon from '@material-ui/icons/PrintOutlined';
 import TableContainer from "@material-ui/core/TableContainer";
 import Paper from "@material-ui/core/Paper";
-import {documents} from "../../../mock/my_documentsMock";
 import MY_approverLine from "../../../components/MY_approverLine";
 import MY_opinion from "../../../components/MY_opinion";
-import MY_InvoiceDetailCard from "../../../components/MY_InvoiceDetailCard";
-import {INVOICETYPE} from "../../My_ReportCreate";
-import MY_InvoiceDetailCard_P from "../../../components/MY_InvoiceDetailCard_P";
-import MY_InvoiceDetailCard_R from "../../../components/MY_InvoiceDetailCard_R";
-import MY_InvoiceDetailCard_G from "../../../components/MY_InvoiceDetailCard_G";
 import getInvoiceDetailCard from "../../../utils/getInvoiceDetailCard";
-import {avatar_URL} from "../../../my_config";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -201,7 +194,7 @@ function Index({
 
 Index.propTypes = {
   className: PropTypes.string,
-  document: PropTypes.shape(documents),
+  document: PropTypes.object,
   invoices: PropTypes.array,
   onClose: PropTypes.func,
   onComplete: PropTypes.func,

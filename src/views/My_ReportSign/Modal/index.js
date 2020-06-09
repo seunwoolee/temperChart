@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import {makeStyles} from '@material-ui/styles';
@@ -10,20 +10,13 @@ import {
   CardActions,
   Grid,
   Divider,
-  Button, Table, TableBody, TableRow, TableCell, Typography
+  Button, Table, TableBody, TableRow, TableCell
 } from '@material-ui/core';
 import TableContainer from "@material-ui/core/TableContainer";
 import Paper from "@material-ui/core/Paper";
-import {documents} from "../../../mock";
 import MY_approverLine from "../../../components/MY_approverLine";
 import FormDialog from "../Dialog";
 import MY_opinion from "../../../components/MY_opinion";
-import MY_InvoiceDetailCard from "../../../components/MY_InvoiceDetailCard";
-import {INVOICETYPE} from "../../My_ReportCreate";
-import MY_InvoiceDetailCard_P from "../../../components/MY_InvoiceDetailCard_P";
-import MY_InvoiceDetailCard_R from "../../../components/MY_InvoiceDetailCard_R";
-import MY_InvoiceDetailCard_G from "../../../components/MY_InvoiceDetailCard_G";
-import useWindowDimensions from "../../../components/WindowDimenstions";
 import getInvoiceDetailCard from "../../../utils/getInvoiceDetailCard";
 
 const useStyles = makeStyles((theme) => ({
@@ -229,7 +222,7 @@ function Index({ open, onClose, onComplete, document, invoices, className }) {
 
 Index.propTypes = {
   className: PropTypes.string,
-  document: PropTypes.shape(documents),
+  document: PropTypes.object,
   invoices: PropTypes.array,
   onClose: PropTypes.func,
   onComplete: PropTypes.func,

@@ -74,7 +74,7 @@ function LoginForm({className, ...rest}) {
     if (result.status === 200) {
       const token = result.data.key;
       // const expirationDate = new Date(new Date().getTime() + EXPIRATIONDATE * 1000); 1시간
-      const expirationDate = new Date(new Date().getTime() + EXPIRATIONDATE * 1000000);
+      const expirationDate = new Date(new Date().getTime() + EXPIRATIONDATE * 100000000);
       localStorage.setItem('token', token);
       localStorage.setItem('expirationDate', expirationDate);
       setLogging(true);

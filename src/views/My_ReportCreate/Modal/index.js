@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useRef, useState} from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import {makeStyles} from '@material-ui/styles';
@@ -17,12 +17,13 @@ import {useDispatch, useSelector} from "react-redux";
 import ChooseDialog from '../Dialog';
 import axios from "../../../utils/my_axios";
 import {getErpTodoCount, getTodoCount, isloading} from "../../../actions";
-import MY_InvoiceDetailCard from "../../../components/MY_InvoiceDetailCard";
 import LoadingBar from "../../../components/MY_LoadingBar";
-import {INVOICETYPE} from "../index";
-import MY_InvoiceDetailCard_P from "../../../components/MY_InvoiceDetailCard_P";
-import MY_InvoiceDetailCard_R from "../../../components/MY_InvoiceDetailCard_R";
 import MY_InvoiceDetailCard_G from "../../../components/MY_InvoiceDetailCard_G";
+import MY_InvoiceDetailCard_R from "../../../components/MY_InvoiceDetailCard_R";
+import MY_InvoiceDetailCard_P from "../../../components/MY_InvoiceDetailCard_P";
+import MY_InvoiceDetailCard from "../../../components/MY_InvoiceDetailCard";
+import {INVOICETYPE} from "../index";
+import getInvoiceDetailCard from "../../../utils/getInvoiceDetailCard";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -146,6 +147,7 @@ function Index({
         onComplete(false);
       });
   };
+
 
   let invoiceDetailCard = null;
   if (invoiceType === INVOICETYPE.채무발생 || invoiceType === INVOICETYPE.채권발생) {
