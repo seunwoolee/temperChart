@@ -214,7 +214,7 @@ function Results({className, documents, fetchDocuments, ...rest}) {
                   <TableRow>
                     <TableCell align="center" padding="checkbox">
                       <Checkbox
-                        checked={selectedDocuments.length === documents.length}
+                        checked={selectedDocuments.length === dispalyedDocuments.length}
                         color="primary"
                         indeterminate={
                           selectedDocuments.length > 0
