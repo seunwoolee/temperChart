@@ -191,7 +191,7 @@ function MY_attachments({attachments, className, ...rest}) {
         disablePortal
         hideBackdrop
         classes={{root: classes.dialogRoot, paper: classes.dialogPaper}}
-        maxWidth="lg"
+        maxWidth="md"
         open={open}
         onClose={handleClose}
         PaperComponent={PaperComponent}

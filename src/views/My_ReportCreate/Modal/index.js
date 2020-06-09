@@ -148,45 +148,7 @@ function Index({
       });
   };
 
-
-  let invoiceDetailCard = null;
-  if (invoiceType === INVOICETYPE.채무발생 || invoiceType === INVOICETYPE.채권발생) {
-    invoiceDetailCard = (
-      <MY_InvoiceDetailCard
-        type="write"
-        invoices={invoices}
-        attachments={inputAttachments}
-        handleAttachments={handleAttachments}
-      />
-    );
-  } else if (invoiceType === INVOICETYPE.채무정리) {
-    invoiceDetailCard = (
-      <MY_InvoiceDetailCard_P
-        type="write"
-        invoices={invoices}
-        attachments={inputAttachments}
-        handleAttachments={handleAttachments}
-      />
-    );
-  } else if (invoiceType === INVOICETYPE.채권정리) {
-    invoiceDetailCard = (
-      <MY_InvoiceDetailCard_R
-        type="write"
-        invoices={invoices}
-        attachments={inputAttachments}
-        handleAttachments={handleAttachments}
-      />
-    );
-  } else if (invoiceType === INVOICETYPE.일반전표) {
-    invoiceDetailCard = (
-      <MY_InvoiceDetailCard_G
-        type="write"
-        invoices={invoices}
-        attachments={inputAttachments}
-        handleAttachments={handleAttachments}
-      />
-    );
-  }
+  let invoiceDetailCard = getInvoiceDetailCard(invoiceType, invoices, inputAttachments, 'write', handleAttachments);
 
   return (
     <>
