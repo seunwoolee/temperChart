@@ -13,6 +13,7 @@ import MY_attachmentsBase from "./MY_attachmentsBase";
 import MY_erpDetailTable from "./MY_erpDetailTable";
 import MY_InvoiceDetailCard_Attachment from "./MY_InvoiceDetailCard_Attachment";
 import getSumInvoices from "../utils/getSumInvoices";
+import MY_erpDetailTable_G from "./MY_erpDetailTable_G";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -97,12 +98,12 @@ function MY_InvoiceCard({ invoices, className, attachments, handleAttachments, t
         </CardContent>
         <CardContent className={classes.contentBottom}>
           <div className={classes.bigo}>
-            <Typography variant="body2">배치번호</Typography>
-            <Typography variant="h6">{invoice.RPICU}</Typography>
+            <Typography variant="body2">제목</Typography>
+            <Typography variant="h6">{invoice.RPRMK}</Typography>
           </div>
-          <div className={classes.bigo}>
-            <Typography variant="body2">문서번호</Typography>
-            <Typography variant="h6">{invoice.RPDOC}</Typography>
+          <div className={classes.supplyName}>
+            <Typography variant="body2">배치번호/문서번호</Typography>
+            <Typography variant="h6">{invoice.RPICU}/{invoice.RPDOC}</Typography>
           </div>
           <div className={classes.supplyName}>
             <Typography variant="body2">G/L일자</Typography>
@@ -114,7 +115,7 @@ function MY_InvoiceCard({ invoices, className, attachments, handleAttachments, t
           </div>
         </CardContent>
         <CardContent className={classes.erpDetailTable}>
-          <MY_erpDetailTable invoices={invoices.filter(my_invoice =>  my_invoice.RPDOC === invoice.RPDOC)} />
+          <MY_erpDetailTable_G invoices={invoices.filter(my_invoice =>  my_invoice.RPDOC === invoice.RPDOC)} />
         </CardContent>
         <Divider />
           <MY_InvoiceDetailCard_Attachment
