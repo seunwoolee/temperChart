@@ -311,9 +311,9 @@ function Results({
 Results.propTypes = {
   className: PropTypes.string,
   invoiceType: PropTypes.string.isRequired,
-  invoices: PropTypes.arrayOf(PropTypes.shape(voucher)).isRequired,
+  invoices: PropTypes.array.isRequired,
   fetchInvoices: PropTypes.func.isRequired,
-  totalInvoices: PropTypes.arrayOf(PropTypes.shape(voucher)).isRequired
+  totalInvoices: PropTypes.array.isRequired
 };
 
 export default Results;

@@ -10,7 +10,7 @@ import {
   CardActions,
   Grid,
   Divider,
-  Button, Table, TableBody, TableRow, TableCell
+  Button, Table, TableBody, TableRow, TableCell, Typography
 } from '@material-ui/core';
 import TableContainer from "@material-ui/core/TableContainer";
 import Paper from "@material-ui/core/Paper";
@@ -18,6 +18,7 @@ import MY_approverLine from "../../../components/MY_approverLine";
 import FormDialog from "../Dialog";
 import MY_opinion from "../../../components/MY_opinion";
 import getInvoiceDetailCard from "../../../utils/getInvoiceDetailCard";
+import Tooltip from "@material-ui/core/Tooltip";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -68,7 +69,7 @@ const useStyles = makeStyles((theme) => ({
   },
   approverGrid: {
     paddingBottom: theme.spacing(2)
-  }
+  },
 }));
 
 function Index({ open, onClose, onComplete, document, invoices, className }) {
@@ -118,6 +119,9 @@ function Index({ open, onClose, onComplete, document, invoices, className }) {
               title="미결함"
               action={(
                 <>
+                <Tooltip
+                  title={<><Typography style={{fontSize: 13}} color="inherit">키보드 1 누르면 결재가 됩니다.</Typography></>}
+                >
                 <Button
                   onClick={handleClickOpen}
                   color="primary"
@@ -125,6 +129,7 @@ function Index({ open, onClose, onComplete, document, invoices, className }) {
                 >
                   결재
                 </Button>
+                </Tooltip>
                 <Button
                   style={{backgroundColor: '#2962ff'}}
                   variant="contained"

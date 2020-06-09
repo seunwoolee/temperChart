@@ -17,6 +17,9 @@ import {
 import FileCopyIcon from '@material-ui/icons/FileCopy';
 import bytesToSize from 'src/utils/bytesToSize';
 import MySnackbars from "./MY_snackbar";
+import Tooltip from "@material-ui/core/Tooltip";
+import {setIn} from "immutable";
+
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -61,10 +64,30 @@ function FilesDropzone({ invoiceId, attachments, handleAttachments, className })
   const classes = useStyles();
   const [invoiceAttachments, setInvoiceAttachments] = useState([]);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const INFO = "이미지, PDF 파일만 Upload 가능합니다.(10MB 미만)"
+  const [info, setInfo] = useState("이미지, PDF 파일만 Upload 가능합니다.(10MB 미만)");
+  let validation = true;
 
   const handleDrop = (acceptedFiles, rejectedFiles) => {
     if(rejectedFiles.length > 0){
+      return setSnackbarOpen(true);
+    }
+
+    for(let i=0; i< acceptedFiles.length; i++){
+      const fileName: Array = acceptedFiles[i].name.split('_');
+      if(fileName.length !== 3){
+        validation = false;
+        setInfo("파일명을 규칙에 맞게 작성해주세요.")
+        break;
+      }
+
+      if(!Number(fileName[2].slice(0,8))){
+        validation = false;
+        setInfo("마지막 일자를 숫자 8자리만 입력해주세요.")
+        break;
+      }
+    }
+
+    if(!validation){
       return setSnackbarOpen(true);
     }
 
@@ -79,6 +102,7 @@ function FilesDropzone({ invoiceId, attachments, handleAttachments, className })
       return [...prevOthersAttachments, newAttachments]
     });
   };
+
 
   useEffect(() => {
     const newAttachments: Array = attachments.filter(attachment => invoiceId in attachment)
@@ -107,6 +131,12 @@ function FilesDropzone({ invoiceId, attachments, handleAttachments, className })
     <div
       className={clsx(classes.root, className)}
     >
+      <Tooltip
+        title={<>
+                <Typography style={{fontSize: 13}} color="inherit">파일명 규칙: 첨부유형_회사명_일자(숫자 8자리)</Typography>
+                  <em>{"ex)"}</em> {'세금계산서_승우전자_20200612'} {' '}
+              </>}
+      >
       <div
         className={clsx({
           [classes.dropZone]: true,
@@ -138,6 +168,7 @@ function FilesDropzone({ invoiceId, attachments, handleAttachments, className })
           </Typography>
         </div>
       </div>
+      </Tooltip>
       {invoiceAttachments.length > 0 && (
         <>
           <PerfectScrollbar options={{ suppressScrollX: true }}>
@@ -177,7 +208,7 @@ function FilesDropzone({ invoiceId, attachments, handleAttachments, className })
             open={snackbarOpen}
             setOpen={handleSnackbarOpen}
             isSuccess={false}
-            info={INFO}
+            info={info}
           />
         ) : null}
     </div>

@@ -196,7 +196,7 @@ function Results({className, documents, ...rest}) {
 
 Results.propTypes = {
   className: PropTypes.string,
-  documents: PropTypes.arrayOf(PropTypes.shape(documents))
+  documents: PropTypes.array
 };
 
 Results.defaultProps = {
