@@ -169,7 +169,6 @@ function Results({className, documents, fetchDocuments, ...rest}) {
   };
 
   const closeReportModal = () => {
-    fetchDocuments();
     setOpenModal(false);
   };
 
