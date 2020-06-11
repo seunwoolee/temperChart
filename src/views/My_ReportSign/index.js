@@ -2,13 +2,12 @@ import React, {useState, useEffect, useCallback} from 'react';
 import {makeStyles} from '@material-ui/styles';
 import {Container} from '@material-ui/core';
 import Page from 'src/components/Page';
-// import MY_SearchBar from 'src/components/MY_SearchBar';
 import {useDispatch, useSelector} from "react-redux";
 import moment from "moment";
 import axios from "../../utils/my_axios";
 import Header from './Header';
 import Results from './Results';
-import MY_SearchBar from "../../components/MY_SearchBar";
+import MY_SearchBar from "../../components/MY_CreateSearchBar";
 import {useHistory, useLocation} from "react-router";
 import {isloading} from "../../actions";
 
@@ -34,8 +33,6 @@ function ReportSign() {
   const [inputDateValues, setInputDateValues] = useState({...initialValues});
   const [inputSearchContent, setInputSearchContent] = useState('');
   const [documents, setDocuments] = useState([]);
-  const session = useSelector((state) => state.session);
-  const location = useLocation();
   const history = useHistory();
   const dispatch = useDispatch();
 

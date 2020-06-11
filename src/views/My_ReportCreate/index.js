@@ -2,13 +2,12 @@ import React, {useState, useEffect} from 'react';
 import {makeStyles} from '@material-ui/styles';
 import {Container} from '@material-ui/core';
 import Page from 'src/components/Page';
-import SearchBar from 'src/components/SearchBar';
 import {useDispatch, useSelector} from "react-redux";
 import axios from "../../utils/my_axios";
 import Header from './Header';
 import Results from './Results';
 import moment from "moment";
-import MY_SearchBar from "../../components/MY_SearchBar";
+import MY_SearchBar from "../../components/MY_CreateSearchBar";
 import {useHistory, useLocation} from "react-router";
 import {isloading} from "../../actions";
 
@@ -50,10 +49,6 @@ function ReportCreate() {
     setInputSearchContent(event.target.value);
   };
 
-  const handleSearch = (batchNumber , user , department) => {
-    fetchInvoices(batchNumber , user , department);
-  };
-
   const fetchInvoices = (batchNumber = '', user = '', department = '') => {
     let url = `erp/voucher_list/`;
 
@@ -75,7 +70,7 @@ function ReportCreate() {
       startDate: moment(inputDateValues.startDate).format('YYYY-MM-DD'),
       endDate: moment(inputDateValues.endDate).format('YYYY-MM-DD'),
       search: inputSearchContent
-    }
+    };
 
     if (batchNumber) {
       params['batchNumber'] = batchNumber;
@@ -101,6 +96,10 @@ function ReportCreate() {
         setInvoices(response.data);
       })
       .catch(error => dispatch(isloading(false)));
+  };
+
+  const handleSearch = (batchNumber, user, department) => {
+    fetchInvoices(batchNumber, user, department);
   };
 
   useEffect(() => {
@@ -137,7 +136,7 @@ function ReportCreate() {
         maxWidth={false}
         className={classes.container}
       >
-        <Header/>
+        <Header />
         <MY_SearchBar
           searchContent={inputSearchContent}
           setSearchContent={handleSearchContent}

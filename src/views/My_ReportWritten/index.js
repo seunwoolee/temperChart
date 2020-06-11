@@ -2,13 +2,12 @@ import React, {useState, useEffect} from 'react';
 import {makeStyles} from '@material-ui/styles';
 import {Container} from '@material-ui/core';
 import Page from 'src/components/Page';
-import SearchBar from 'src/components/SearchBar';
-import {useDispatch, useSelector} from "react-redux";
+import {useDispatch} from "react-redux";
 import {useHistory, useLocation} from "react-router";
+import moment from "moment";
 import axios from "../../utils/my_axios";
 import Header from './Header';
 import Results from './Results';
-import moment from "moment";
 import MY_SearchBar from "../../components/MY_SearchBar";
 import {isloading} from "../../actions";
 
@@ -109,7 +108,7 @@ function ReportWritten() {
       history.push('/auth/login');
     }
     fetchDocuments();
-  }, [location.pathname]);
+  }, [location]);
 
   useEffect(() => {
     fetchDocuments();
