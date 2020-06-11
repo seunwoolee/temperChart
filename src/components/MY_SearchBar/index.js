@@ -27,20 +27,12 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const initialValues = {
-  batchNumber: '',
-  user: '',
-  department: '',
-};
-
 function MY_SearchBar({
-  onSearch, className,
+  onSearch, className, filterValues, setFilterValues,
   dateValues, setDateValues, searchContent, setSearchContent, detail,
 }) {
   const classes = useStyles();
-  const session = useSelector((state) => state.session);
   const [openFilter, setOpenFilter] = useState(false);
-  const [filterValues, setFilterValues] = useState({ ...initialValues });
 
   const handleFilterOpen = () => {
     setOpenFilter(true);
@@ -51,8 +43,8 @@ function MY_SearchBar({
   };
 
   const handleSearch = () => {
-    onSearch(filterValues.batchNumber, filterValues.user, filterValues.department);
-  }
+    onSearch(true);
+  };
 
   return (
     <Grid
@@ -102,6 +94,8 @@ function MY_SearchBar({
 MY_SearchBar.propTypes = {
   className: PropTypes.string,
   detail: PropTypes.bool,
+  filterValues: PropTypes.object,
+  setFilterValues: PropTypes.func,
   onSearch: PropTypes.func,
   dateValues: PropTypes.object,
   setDateValues: PropTypes.func,

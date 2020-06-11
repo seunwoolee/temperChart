@@ -64,26 +64,19 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Results({className, documents, ...rest}) {
-  const [page, setPage] = useState(0);
+function Results({className, documents, page, totalCount, setPage}) {
   const [selectedDocument, setSelectedDocument] = useState({});
-  const [rowsPerPage, setRowsPerPage] = useState(25);
   const [openModal, setOpenModal] = useState(false);
   const {height, width} = useWindowDimensions();
 
-  const startData = page * rowsPerPage;
-  const endData = (page * rowsPerPage) + rowsPerPage;
+  const rowsPerPage = 25;
 
-  const props = { mobileInnerHeight: getPerfectScrollbarHeight(rowsPerPage, documents.length, 60)};
+  const props = { mobileInnerHeight: getPerfectScrollbarHeight(rowsPerPage, totalCount, 60)};
   const classes = useStyles(props);
 
-  useEffect(() => {
-    setPage(0);
-  }, [documents]);
-
-  const handleChangePage = (event, page) => setPage(page);
-
-  const handleChangeRowsPerPage = (event) => setRowsPerPage(event.target.value);
+  const handleChangePage = (event, page) => {
+    setPage(page);
+  };
 
   const handleTableClick = (id) => {
     const newDocument = documents.find(document => document.id === id);
@@ -102,7 +95,6 @@ function Results({className, documents, ...rest}) {
 
   return (
     <div
-      {...rest}
       className={clsx(classes.root, className)}
     >
       <LoadingBar />
@@ -111,7 +103,8 @@ function Results({className, documents, ...rest}) {
         gutterBottom
         variant="body2"
       >
-        {documents.length}
+        {/*{documents.length}*/}
+        {totalCount}
         {' '}
         Records found. Page
         {' '}
@@ -119,11 +112,10 @@ function Results({className, documents, ...rest}) {
         {' '}
         of
         {' '}
-        {Math.ceil(documents.length / rowsPerPage)}
+        {Math.ceil(totalCount / rowsPerPage)}
       </Typography>
       <Card>
         <CardHeader
-          // action={<GenericMoreButton />}
           title="결재 내역"
         />
         <Divider />
@@ -143,8 +135,8 @@ function Results({className, documents, ...rest}) {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {/*{documents.slice(0, rowsPerPage).map((document, i) => (*/}
-                  {documents.slice(startData, endData).map((document, i) => (
+                  {/*{documents.slice(startData, endData).map((document, i) => (*/}
+                  {documents.map((document, i) => (
                     <TableRow
                       className={classes.tableRows}
                       onClick={() => handleTableClick(document.id)}
@@ -168,12 +160,11 @@ function Results({className, documents, ...rest}) {
         <CardActions className={classes.actions}>
           <TablePagination
             component="div"
-            count={documents.length}
+            count={totalCount}
             onChangePage={handleChangePage}
-            onChangeRowsPerPage={handleChangeRowsPerPage}
             page={page}
             rowsPerPage={rowsPerPage}
-            rowsPerPageOptions={[5, 10, 25]}
+            rowsPerPageOptions={[rowsPerPage]}
           />
         </CardActions>
       </Card>
@@ -187,15 +178,15 @@ function Results({className, documents, ...rest}) {
         open={openModal}
       />
       ) }
-      {/*{snackbarOpen*/}
-      {/*  ? <MySnackbars open={snackbarOpen} setOpen={handleSnackbarOpen} isSuccess={isSuccess} />*/}
-      {/*  : null}*/}
     </div>
   );
 }
 
 Results.propTypes = {
   className: PropTypes.string,
+  page: PropTypes.number,
+  totalCount: PropTypes.number,
+  setPage: PropTypes.func,
   documents: PropTypes.array
 };
 

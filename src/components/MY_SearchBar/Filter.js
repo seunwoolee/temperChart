@@ -106,7 +106,6 @@ function Filter({
 }) {
   const classes = useStyles();
   const [expandCustomer, setExpandCustomer] = useState(true);
-  // const [values, setValues] = useState({ ...initialValues });
 
   const handleClear = () => {
     setValues({ ...initialValues });
@@ -127,7 +126,7 @@ function Filter({
     setExpandCustomer((prevExpandCustomer) => !prevExpandCustomer);
   };
 
-  const handleConfirm = (event) => {
+  const handleConfirm = () => {
     onClose();
     onFilter();
   };
@@ -169,6 +168,7 @@ function Filter({
                 <div className={classes.contentSectionContent}>
                   <div className={classes.formGroup}>
                     <TextField
+                      type={"number"}
                       className={classes.field}
                       fullWidth
                       label="배치번호"

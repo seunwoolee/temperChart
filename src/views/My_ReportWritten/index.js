@@ -28,6 +28,12 @@ const initialValues = {
   endDate: moment()
 };
 
+const filterInitialValues = {
+  batchNumber: '',
+  user: '',
+  department: '',
+};
+
 
 function ReportWritten() {
   const classes = useStyles();
@@ -35,6 +41,10 @@ function ReportWritten() {
   const [documents, setDocuments] = useState([]);
   const [inputDateValues, setInputDateValues] = useState({...initialValues});
   const [inputSearchContent, setInputSearchContent] = useState('');
+  const [page, setPage] = useState(0);
+  const [totalCount, setTotalCount] = useState(0);
+  const [filterValues, setFilterValues] = useState({ ...filterInitialValues });
+
   const history = useHistory();
   const location = useLocation();
   const dispatch = useDispatch();
@@ -43,18 +53,20 @@ function ReportWritten() {
     setInputSearchContent(event.target.value);
   };
 
-  const handleSearch = (batchNumber, user, department) => {
-    fetchDocuments(batchNumber, user, department);
-  };
+  const fetchDocuments = (isFilter = false) => {
+    let paging = page + 1;
 
-  const fetchDocuments = (batchNumber = '', user = '', department = '') => {
-    let url = `ea/written_document/`;
+    if (isFilter) {
+      paging = 1;
+      setPage(0);
+    }
 
+    let url = `ea/written_document/?page=${paging}`;
     if (location.pathname === '/reportRejected') {
-      url = `ea/rejected_document/`;
+      url = `ea/rejected_document/?page=${paging}`;
       setHeaderText('반려함');
     } else if (location.pathname === '/reportApproved') {
-      url = `ea/approved_document/`;
+      url = `ea/approved_document/?page=${paging}`;
       setHeaderText('기결함');
     }
 
@@ -62,18 +74,18 @@ function ReportWritten() {
       startDate: moment(inputDateValues.startDate).format('YYYY-MM-DD'),
       endDate: moment(inputDateValues.endDate).format('YYYY-MM-DD'),
       search: inputSearchContent
+    };
+
+    if (filterValues.batchNumber) {
+      params['batchNumber'] = filterValues.batchNumber;
     }
 
-    if (batchNumber) {
-      params['batchNumber'] = batchNumber;
+    if (filterValues.user) {
+      params['user'] = filterValues.user;
     }
 
-    if (user) {
-      params['user'] = user;
-    }
-
-    if (department) {
-      params['department'] = department;
+    if (filterValues.department) {
+      params['department'] = filterValues.department;
     }
 
     const config = {
@@ -81,11 +93,13 @@ function ReportWritten() {
       params: params
     };
 
-    dispatch(isloading(true))
+    dispatch(isloading(true));
     axios.get(url, config)
       .then((response) => {
+        setTotalCount(response.data[response.data.length-1]['total_number']);
+        response.data.pop();
         setDocuments(response.data);
-        dispatch(isloading(false))
+        dispatch(isloading(false));
       })
       .catch(error => dispatch(isloading(false)));
   };
@@ -97,23 +111,33 @@ function ReportWritten() {
     fetchDocuments();
   }, [location.pathname]);
 
+  useEffect(() => {
+    fetchDocuments();
+  }, [page]);
+
   return (
     <Page
       className={classes.root}
       title="상신함"
     >
       <Container maxWidth={false}>
-        <Header headerText={headerText}/>
+        <Header headerText={headerText} />
         <MY_SearchBar
+          setPage={setPage}
+          filterValues={filterValues}
+          setFilterValues={setFilterValues}
           searchContent={inputSearchContent}
           setSearchContent={handleSearchContent}
           dateValues={inputDateValues}
           setDateValues={setInputDateValues}
-          onSearch={handleSearch}
+          onSearch={fetchDocuments}
           detail
         />
         {documents && (
           <Results
+            page={page}
+            totalCount={totalCount}
+            setPage={setPage}
             className={classes.results}
             documents={documents}
           />

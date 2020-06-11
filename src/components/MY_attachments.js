@@ -202,7 +202,7 @@ function MY_attachments({attachments, className, ...rest}) {
           <Button style={{padding: 3}} onClick={handleClose} color="primary" variant="contained">닫기</Button>
         </DialogTitle>
         {contentType === 'img'
-          ? (<img src={selectedImgPath} className={classes.img} alt="이미지" />)
+          ? (<div><img src={selectedImgPath} className={classes.img} alt="이미지" /></div>)
           : (
             <>
               <PerfectScrollbar>
