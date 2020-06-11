@@ -107,8 +107,7 @@ function ReportWritten() {
     if (!(localStorage.getItem('token'))) {
       history.push('/auth/login');
     }
-    fetchDocuments();
-  }, [location]);
+  }, []);
 
   useEffect(() => {
     fetchDocuments();
