@@ -1,6 +1,4 @@
-import React, {
-  useState, useCallback, useEffect, ReactHTML as styled
-} from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import uuid from 'uuid/v1';
@@ -11,7 +9,7 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
-  colors, CardContent
+  colors, Hidden, Card
 } from '@material-ui/core';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
 import bytesToSize from 'src/utils/bytesToSize';
@@ -19,7 +17,6 @@ import Dialog from '@material-ui/core/Dialog';
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import IconButton from "@material-ui/core/IconButton";
 import GetAppIcon from '@material-ui/icons/GetApp';
-import CloseIcon from '@material-ui/icons/Close';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
 import {pdfjs, Document, Page} from 'react-pdf';
@@ -29,11 +26,15 @@ import Paper from '@material-ui/core/Paper';
 import Draggable from 'react-draggable';
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Tooltip from "@material-ui/core/Tooltip";
-import {avatar_URL} from "../my_config";
-import Typography from "@material-ui/core/Typography";
-import { DialogActions } from '@material-ui/core';
+
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import useTheme from "@material-ui/core/styles/useTheme";
+
+import RotateRightIcon from '@material-ui/icons/RotateRight';
+import RotateLeftIcon from '@material-ui/icons/RotateLeft';
+import DialogActions from "@material-ui/core/DialogActions";
+import PrintOutlinedIcon from "@material-ui/icons/PrintOutlined";
+import {avatar_URL} from "../my_config";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
@@ -89,6 +90,8 @@ const useStyles = makeStyles((theme) => ({
       color: theme.palette.primary.contrastText
     }
   },
+  rotateMargin: {
+  },
   actions: {
     marginTop: theme.spacing(2),
     display: 'flex',
@@ -98,20 +101,6 @@ const useStyles = makeStyles((theme) => ({
     }
   }
 }));
-// function MY_WindowPortal({ children }) {
-//   const [containerEl, setContainerEl] = useState(document.createElement('div'));
-//   let externalWindow = null;
-//
-//   useEffect(() => {
-//     externalWindow = window.open('', '', 'width=600,height=400,left=200,top=200');
-//     externalWindow.document.body.appendChild(containerEl);
-//
-//     return () => {
-//       externalWindow.close();
-//     };
-//   }, []);
-//   return ReactDOM.createPortal(children, containerEl);
-// }
 
 function PaperComponent(props) {
   return (
@@ -128,6 +117,15 @@ function MY_attachments({attachments, className, ...rest}) {
   const [contentType, setContentType] = React.useState('img');
   const [numPages, setNumPages] = React.useState(null);
   const [pageNumber, setPageNumber] = React.useState(1);
+  const [rotate, setRotate] = React.useState(0);
+
+  const rotateLeft = () => {
+    setRotate(prev => prev - 90);
+  };
+
+  const rotateRight = () => {
+    setRotate(prev => prev + 90);
+  };
 
   const handleClickOpen = (imgPath, isImg) => {
     setOpen(true);
@@ -144,7 +142,7 @@ function MY_attachments({attachments, className, ...rest}) {
     setNumPages(numPages);
   };
 
-  const theme =useTheme();
+  const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.up('lg'));
 
   return (
@@ -198,11 +196,30 @@ function MY_attachments({attachments, className, ...rest}) {
       >
         <DialogTitle
           className={classes.dialogTitle}
-          id="draggable-dialog-title">
-          <Button style={{padding: 3}} onClick={handleClose} color="primary" variant="contained">닫기</Button>
+          id="draggable-dialog-title"
+        >
+          <Button style={{padding: 3, zIndex: 9999}} onClick={handleClose} color="primary" variant="contained">닫기</Button>
+          {contentType === 'img' ? (
+            <Hidden mdDown>
+              <Tooltip title="이미지 좌 회전">
+                <IconButton style={{color: 'white', zIndex: 9999}} onClick={rotateLeft}>
+                  <RotateLeftIcon style={{fontSize: "2rem"}} />
+                </IconButton>
+              </Tooltip>
+              <Tooltip title="이미지 우 회전">
+                <IconButton style={{color: 'white', zIndex: 9999}} onClick={rotateRight}>
+                  <RotateRightIcon style={{fontSize: "2rem"}} />
+                </IconButton>
+              </Tooltip>
+            </Hidden>
+          ) : null}
         </DialogTitle>
         {contentType === 'img'
-          ? (<div><img src={selectedImgPath} className={classes.img} alt="이미지" /></div>)
+          ? (
+            <div style={{transform: `rotate(${rotate}deg)`}} className={clsx(classes.rotateMargin)}>
+              <img src={selectedImgPath} className={classes.img} alt="이미지" />
+            </div>
+          )
           : (
             <>
               <PerfectScrollbar>
@@ -210,7 +227,7 @@ function MY_attachments({attachments, className, ...rest}) {
                   file={selectedImgPath}
                   onLoadSuccess={onDocumentLoadSuccess}
                 >
-                  <Page width={fullScreen ? 900: null} pageNumber={pageNumber} />
+                  <Page width={fullScreen ? 900 : null} pageNumber={pageNumber} />
                 </Document>
                 <Grid
                   container
