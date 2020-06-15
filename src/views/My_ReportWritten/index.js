@@ -133,6 +133,7 @@ function ReportWritten() {
         />
         {documents && (
           <Results
+            fetchDocuments={fetchDocuments}
             page={page}
             totalCount={totalCount}
             setPage={setPage}

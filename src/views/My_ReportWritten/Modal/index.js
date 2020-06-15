@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import {makeStyles} from '@material-ui/styles';
@@ -13,12 +13,18 @@ import {
   Button, Table, TableBody, TableRow, TableCell
 } from '@material-ui/core';
 import IconButton from "@material-ui/core/IconButton";
+import AddToPhotosIcon from '@material-ui/icons/AddToPhotos';
+import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import PrintOutlinedIcon from '@material-ui/icons/PrintOutlined';
 import TableContainer from "@material-ui/core/TableContainer";
 import Paper from "@material-ui/core/Paper";
+import {useDispatch, useSelector} from "react-redux";
 import MY_approverLine from "../../../components/MY_approverLine";
 import MY_opinion from "../../../components/MY_opinion";
 import getInvoiceDetailCard from "../../../utils/getInvoiceDetailCard";
+import axios from "../../../utils/my_axios";
+import {getErpTodoCount, getTodoCount, isloading, pushSave} from "../../../actions";
+import LoadingBar from "../../../components/MY_LoadingBar";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -62,6 +68,9 @@ const useStyles = makeStyles((theme) => ({
   cardHeaderTitle: {
     color: theme.palette.primary.contrastText
   },
+  iconColor: {
+    color: 'white'
+  },
   actions: {
     justifyContent: 'flex-end'
   },
@@ -74,8 +83,18 @@ function Index({
   open, onClose, onComplete, document, invoices, className, ...rest
 }) {
   const classes = useStyles();
+  const dispatch = useDispatch();
+  const session = useSelector((state) => state.session);
+  const [detailCardType, setDetailCardType] = useState('read');
+  const [inputAttachments, setInputAttachments] = useState(document.attachments);
+  const [typeIcon, setTypeIcon] = useState(0);
 
-  let invoiceDetailCard = getInvoiceDetailCard(document.document_type, invoices, document.attachments);
+  const handleAttachments = (attachments: Array) => {
+    setInputAttachments(attachments);
+  };
+
+  const invoiceDetailCard = getInvoiceDetailCard(document.document_type, invoices, inputAttachments,
+    detailCardType, handleAttachments);
 
   const printDocument = () => {
     window.open(
@@ -83,6 +102,60 @@ function Index({
       "_blank",
       "width=700,height=700"
     );
+  };
+
+  const changeDetailCardMode = () => {
+    setTypeIcon(1);
+    setDetailCardType('write');
+  };
+
+  const uploadNewAttachment = () => {
+    const headers = {Authorization: `Token ${localStorage.getItem('token')}`, 'Content-Type': 'multipart/form-data'};
+    const axiosConfig = {headers};
+    const url = 'ea/add_attachment/';
+    const invoiceArray: Array = [];
+    const filesArray: Array = [];
+    const filesCountArray: Array = [];
+
+    for(const invoice in invoices) {
+      const invoice_id: string = invoices[invoice].id;
+      invoiceArray.push(invoice_id);
+      let invoiceFiles: Array = null;
+
+      const invoiceAttachments = inputAttachments.filter(inputAttachment => invoice_id in inputAttachment);
+
+      if (invoiceAttachments.length > 0) {
+        invoiceFiles = invoiceAttachments[0][invoice_id];
+      }
+
+      if (invoiceFiles) {
+        filesArray.push(...invoiceFiles);
+        filesCountArray.push(invoiceFiles.length);
+      } else {
+        filesCountArray.push(0);
+      }
+    }
+
+    const formData = new FormData();
+    formData.append('document_id', document.id);
+
+    filesArray.map(file => formData.append('files', file));
+    invoiceArray.map(invoiceId => formData.append('invoices', invoiceId));
+    filesCountArray.map(fileCount => formData.append('counts', fileCount));
+    dispatch(isloading(true));
+    axios.post(url, formData, axiosConfig)
+      .then(response => {
+        dispatch(isloading(false));
+    //     setOpenDialog(false);
+        setInputAttachments([]);
+        response.status === 201 ? onComplete(true) : onComplete(false);
+      })
+      .catch(error => {
+        dispatch(isloading(false));
+    //     setOpenDialog(false);
+        setInputAttachments([]);
+        onComplete(false);
+      });
   };
 
   return (
@@ -93,7 +166,6 @@ function Index({
         open={open}
       >
         <Card
-          {...rest}
           className={clsx(classes.root, className)}
         >
           <div className={classes.innerDiv}>
@@ -102,9 +174,22 @@ function Index({
               title="상신문서"
               action={(
                 <>
-                  <IconButton style={{color: 'white'}} onClick={printDocument} aria-label="settings">
+                  <IconButton style={{color: 'white'}} onClick={printDocument} aria-label="print">
                     <PrintOutlinedIcon />
                   </IconButton>
+                  {document.author_id === session.user.id ? (
+                    <>
+                      {typeIcon === 0 ? (
+                        <IconButton className={classes.iconColor} onClick={changeDetailCardMode} aria-label="addAttachment">
+                          <AddToPhotosIcon />
+                        </IconButton>
+                      ) : (
+                        <IconButton className={classes.iconColor} onClick={uploadNewAttachment} aria-label="uploadAttachment">
+                          <CloudUploadIcon />
+                        </IconButton>
+                      )}
+                    </>
+                  ) : null}
                   <Button
                     onClick={onClose}
                     color="primary"
@@ -171,7 +256,7 @@ function Index({
                   md={12}
                   xs={12}
                 >
-                  <MY_opinion signs={document.signs.filter(sign => sign.comment !== null)}/>
+                  <MY_opinion signs={document.signs.filter(sign => sign.comment !== null)} />
                 </Grid>
               </Grid>
             </CardContent>
@@ -186,6 +271,9 @@ function Index({
               </Button>
             </CardActions>
           </div>
+
+          <LoadingBar />
+
         </Card>
       </Modal>
     </>

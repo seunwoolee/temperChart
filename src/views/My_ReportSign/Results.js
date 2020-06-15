@@ -311,7 +311,7 @@ function Results({className, documents, fetchDocuments, ...rest}) {
 
 Results.propTypes = {
   className: PropTypes.string,
-  documents: PropTypes.arrayOf(PropTypes.shape(documents)),
+  documents: PropTypes.array,
   fetchDocuments: PropTypes.func
 };
 

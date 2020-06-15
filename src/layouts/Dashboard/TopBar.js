@@ -121,12 +121,9 @@ function TopBar({
 }) {
   const classes = useStyles();
   const history = useHistory();
-  const searchRef = useRef(null);
   const dispatch = useDispatch();
   const session = useSelector((state) => state.session);
   const notificationsRef = useRef(null);
-  const [openSearchPopover, setOpenSearchPopover] = useState(false);
-  const [searchValue, setSearchValue] = useState('');
   const [notifications, setNotifications] = useState([]);
   const [openNotifications, setOpenNotifications] = useState(false);
   const [openChatBar, setOpenChatBar] = useState(false);
@@ -152,44 +149,6 @@ function TopBar({
   const handleNotificationsClose = () => {
     setOpenNotifications(false);
   };
-
-  // const handleSearchChange = (event) => {
-  //   setSearchValue(event.target.value);
-  //
-  //   if (event.target.value) {
-  //     if (!openSearchPopover) {
-  //       setOpenSearchPopover(true);
-  //     }
-  //   } else {
-  //     setOpenSearchPopover(false);
-  //   }
-  // };
-
-  // const handleSearchPopverClose = () => {
-  //   setOpenSearchPopover(false);
-  // };
-
-
-  // useEffect(() => {
-  //   setTimeout(() => setPushSubscribe(), 3000);
-  //
-  //   // let mounted = true;
-  //   //
-  //   // const fetchNotifications = () => {
-  //   //   axios.get('/api/account/notifications').then((response) => {
-  //   //     if (mounted) {
-  //   //       setNotifications(response.data.notifications);
-  //   //     }
-  //   //   });
-  //   // };
-  //   //
-  //   // fetchNotifications();
-  //   //
-  //   // return () => {
-  //   //   mounted = false;
-  //   // };
-  //
-  // }, []);
 
 
   return (

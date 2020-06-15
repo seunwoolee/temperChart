@@ -64,7 +64,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Results({className, documents, page, totalCount, setPage}) {
+function Results({className, fetchDocuments, documents, page, totalCount, setPage}) {
   const [selectedDocument, setSelectedDocument] = useState({});
   const [openModal, setOpenModal] = useState(false);
   const {height, width} = useWindowDimensions();
@@ -85,6 +85,8 @@ function Results({className, documents, page, totalCount, setPage}) {
   };
 
   const completeReportModal = () => {
+    fetchDocuments();
+    setOpenModal(false);
   };
 
   const closeReportModal = () => {
@@ -184,6 +186,7 @@ function Results({className, documents, page, totalCount, setPage}) {
 
 Results.propTypes = {
   className: PropTypes.string,
+  fetchDocuments: PropTypes.func,
   page: PropTypes.number,
   totalCount: PropTypes.number,
   setPage: PropTypes.func,

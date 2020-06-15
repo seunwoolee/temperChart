@@ -148,7 +148,7 @@ function Index({
       });
   };
 
-  let invoiceDetailCard = getInvoiceDetailCard(invoiceType, invoices, inputAttachments, 'write', handleAttachments);
+  const invoiceDetailCard = getInvoiceDetailCard(invoiceType, invoices, inputAttachments, 'write', handleAttachments);
 
   return (
     <>

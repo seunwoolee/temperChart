@@ -12,6 +12,7 @@ import PropTypes from "prop-types";
 import {documents} from "../mock/my_documentsMock";
 import {signs} from "../mock/my_signsMock";
 import Box from "@material-ui/core/Box";
+import * as uuid from "uuid";
 
 
 const useStyles = makeStyles(theme => ({
@@ -100,7 +101,6 @@ export default function ApproverTable({signs}) {
   }
 
   return (
-    // <TableContainer>
     <>
       <Box display="flex" flexDirection="row-reverse">
         <Table size="small" aria-label="a dense table" className={classes.muiTableCell}>
@@ -108,7 +108,7 @@ export default function ApproverTable({signs}) {
             <TableRow>
               {approvalUsersBlank.map( _ => approvalRenderBlank())}
               {approvalUsers.map(sign => (
-                <TableCell key={sign.user.id} align="center"
+                <TableCell align="center"
                            className={clsx(classes.gridCell, classes.gridCellTop, classes.gridCellLeft, classes.root)}>{sign.user.position}</TableCell>
               ))}
             </TableRow>
@@ -117,7 +117,7 @@ export default function ApproverTable({signs}) {
             <TableRow>
               {approvalUsersBlank.map( _ => approvalRenderBlank())}
               {approvalUsers.map(sign => (
-                <TableCell key={sign.user.id} align="center" className={clsx(classes.gridCell, classes.gridCellLeft, classes.root)}>
+                <TableCell align="center" className={clsx(classes.gridCell, classes.gridCellLeft, classes.root)}>
                   {sign.user.name}
                 </TableCell>
               ))}
@@ -128,7 +128,6 @@ export default function ApproverTable({signs}) {
               {approvalUsersBlank.map( _ => approvalRenderBlank())}
               {approvalUsers.map(sign => (
                 <TableCell
-                  key={sign.user.id}
                   align="center"
                   className={sign.result === '3'
                     ? clsx(classes.gridDateCell, classes.gridCellLeft, classes.rejectedDateCell, classes.root)
@@ -147,8 +146,7 @@ export default function ApproverTable({signs}) {
             <TableRow>
               {agreementUsersBlank.map( _ => agreementRenderBlank())}
               {agreementUsers.map(sign => (
-                <TableCell key={sign.user.id} align="center"
-                           className={clsx(classes.gridCell, classes.root)}>{sign.user.position}</TableCell>
+                <TableCell align="center" className={clsx(classes.gridCell, classes.root)}>{sign.user.position}</TableCell>
               ))}
             </TableRow>
           </TableHead>
@@ -156,7 +154,7 @@ export default function ApproverTable({signs}) {
             <TableRow>
               {agreementUsersBlank.map( _ => agreementRenderBlank())}
               {agreementUsers.map(sign => (
-                <TableCell key={sign.user.id} align="center" className={clsx(classes.gridCell, classes.root)}>
+                <TableCell align="center" className={clsx(classes.gridCell, classes.root)}>
                   {sign.user.name}
                 </TableCell>
               ))}
@@ -167,7 +165,6 @@ export default function ApproverTable({signs}) {
               {agreementUsersBlank.map( _ => agreementRenderBlank())}
               {agreementUsers.map(sign => (
                 <TableCell
-                  key={sign.user.id}
                   align="center"
                   className={sign.result === '3'
                     ? clsx(classes.gridDateCell, classes.rejectedDateCell, classes.root)
@@ -184,11 +181,10 @@ export default function ApproverTable({signs}) {
           </TableBody>
         </Table>
       </Box>
-
     </>
   );
 }
 
 ApproverTable.propTypes = {
-  signs: PropTypes.arrayOf(PropTypes.shape(signs))
+  signs: PropTypes.array
 };
