@@ -29,10 +29,16 @@ import AddCircleOutlineOutlinedIcon from '@material-ui/icons/AddCircleOutlineOut
 import CardHeader from "@material-ui/core/CardHeader";
 import ExpandLessOutlinedIcon from '@material-ui/icons/ExpandLessOutlined';
 import Input from "@material-ui/core/Input";
+import GroupIcon from '@material-ui/icons/Group';
 import SearchIcon from '@material-ui/icons/Search';
 import {useSelector} from "react-redux";
 import axios from "../../../utils/my_axios";
 import {avatar_URL} from "../../../my_config";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import {ApproverList} from "./ApproverList";
+import clsx from "clsx";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -135,6 +141,7 @@ function ChooseDialog({open, onClose, onSubmit, invoiceType}) {
   const [checked, setChecked] = React.useState(-1);
   const [expanded, setExpanded] = React.useState(false);
   const [addUserType, setAddUserType] = React.useState(10);
+  const [openGroup, setOpenGroup] = React.useState(false);
   const session = useSelector((state) => state.session);
 
   const handleChecked = (i) => {
@@ -270,6 +277,13 @@ function ChooseDialog({open, onClose, onSubmit, invoiceType}) {
   }, []);
   // }, [session.token, session.user.department, session.user.id]);
 
+  const handleClickOpen = () => {
+    setOpenGroup(true);
+  };
+
+  const handleClose = () => {
+    setOpenGroup(false);
+  };
 
   return (
     <Dialog onClose={onClose} aria-labelledby="simple-dialog-title" open={open}>
@@ -299,6 +313,9 @@ function ChooseDialog({open, onClose, onSubmit, invoiceType}) {
               <IconButton onClick={() => setExpanded(true)} style={{paddingRight: 3}} aria-label="add-user">
                 <PersonAddIcon className={classes.personAddIncon} color="inherit"/>
               </IconButton>
+              <IconButton onClick={handleClickOpen} style={{paddingRight: 3}} aria-label="user-list">
+                <GroupIcon className={classes.personAddIncon} color="inherit"/>
+              </IconButton>
             </Grid>
           </Grid>
         </div>
@@ -306,49 +323,12 @@ function ChooseDialog({open, onClose, onSubmit, invoiceType}) {
         <CardContent className={classes.content}>
           <PerfectScrollbar>
             <List disablePadding>
-              {users.map((user, i) => (
-                <Fragment key={user.id}>
-                  <FormControl className={classes.formControl}>
-                    <Select
-                      labelId="demo-simple-select-label"
-                      id="demo-simple-select"
-                      defaultValue={user.type}
-                      onChange={(event) => handleUserTypeChange(event, user.id)}
-                    >
-                      <MenuItem value={0}>결재</MenuItem>
-                      <MenuItem value={1}>합의</MenuItem>
-                      {/*<MenuItem value={2}>참조</MenuItem>*/}
-                    </Select>
-                  </FormControl>
-                  <ListItem
-                    selected={user.order === checked}
-                    button
-                    onClick={() => handleChecked(user.order)}
-                    className={classes.listItem}
-                    disableGutters
-                    divider={user.order < users.length - 1}
-                    key={user.id}
-                  >
-                    <Avatar
-                      alt="Profile image"
-                      className={classes.avatar}
-                      component={RouterLink}
-                      src={`${avatar_URL}${user.avatar}`} // TODO URL 변경 필요
-                      to="/profile/1/timeline"
-                    />
-                    <ListItemText
-                      className={classes.listItemText}
-                      primary={`${user.name} ${user.position}`}
-                      secondary={user.common}
-                    />
-                    <ListItemSecondaryAction classes={{root: classes.deleteUserButton}}>
-                      <IconButton onClick={() => deleteUser(user.order)} aria-label="delete-user">
-                        <CancelPresentationIcon fontSize="large"/>
-                      </IconButton>
-                    </ListItemSecondaryAction>
-                  </ListItem>
-                </Fragment>
-              ))}
+              <ApproverList
+                checked={checked}
+                deleteUser={deleteUser}
+                handleChecked={handleChecked}
+                handleUserTypeChange={handleUserTypeChange}
+                users={users} />
             </List>
           </PerfectScrollbar>
         </CardContent>
@@ -428,6 +408,60 @@ function ChooseDialog({open, onClose, onSubmit, invoiceType}) {
           </CardContent>
         </Collapse>
       </Card>
+
+      <Dialog open={openGroup} onClose={handleClose} aria-labelledby="gruop-list">
+      <Card
+        className={classes.root}
+      >
+        <div className={classes.main}>
+          <Grid
+            container
+            direction="row"
+            justify="space-between"
+            alignItems="center"
+          >
+            <Grid item>
+              <Typography color={"primary"} variant="h4" component="h4">
+                결재라인설정
+              </Typography>
+            </Grid>
+            <Grid item>
+              <IconButton onClick={setDown} className={classes.arrowIconButtom} aria-label="down-order">
+                <ArrowDownwardRoundedIcon className={classes.personAddIncon} color="inherit"/>
+              </IconButton>
+              <IconButton onClick={setUp} className={classes.arrowIconButtom} aria-label="up-order">
+                <ArrowUpwardRoundedIcon className={classes.personAddIncon} color="inherit"/>
+              </IconButton>
+              <IconButton onClick={() => setExpanded(true)} style={{paddingRight: 3}} aria-label="add-user">
+                <PersonAddIcon className={classes.personAddIncon} color="inherit"/>
+              </IconButton>
+              <IconButton onClick={handleClickOpen} style={{paddingRight: 3}} aria-label="user-list">
+                <GroupIcon className={classes.personAddIncon} color="inherit"/>
+              </IconButton>
+            </Grid>
+          </Grid>
+        </div>
+        <Divider/>
+        <CardContent className={classes.content}>
+          <PerfectScrollbar>
+            <List disablePadding>
+              <ApproverList
+                checked={checked}
+                deleteUser={deleteUser}
+                handleChecked={handleChecked}
+                handleUserTypeChange={handleUserTypeChange}
+                users={users} />
+            </List>
+          </PerfectScrollbar>
+        </CardContent>
+        <Divider/>
+        <CardActions className={classes.actions}>
+          <Button onClick={handleClose}>
+            취소
+          </Button>
+        </CardActions>
+      </Card>
+      </Dialog>
     </Dialog>
   );
 }
