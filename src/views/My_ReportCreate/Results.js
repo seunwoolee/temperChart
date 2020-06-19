@@ -228,6 +228,7 @@ function Results({
                       />
                     </TableCell>
                     <TableCell className={classes.header}>배치번호</TableCell>
+                    <TableCell className={classes.header}>사업장</TableCell>
                     {invoiceType !== INVOICETYPE.일반전표 ? (
                       <TableCell className={classes.header}>공급자명</TableCell>
                     ) : null }
@@ -250,6 +251,7 @@ function Results({
                         <TableCell />
                       )}
                       <TableCell align="center" className={classes.whiteSpaceNoWrap}>{invoice.RPICU}</TableCell>
+                      <TableCell align="center" className={classes.whiteSpaceNoWrap}>{invoice.RPCO}</TableCell>
                       {invoiceType !== INVOICETYPE.일반전표 ? (
                         <TableCell align="center" className={classes.whiteSpaceNoWrap}>{invoice.RPALPH}</TableCell>
                       ) : null }
