@@ -1,42 +1,19 @@
 import React, {Fragment, useEffect} from 'react';
 import PropTypes from 'prop-types';
 import {makeStyles} from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
 import Avatar from '@material-ui/core/Avatar';
-import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
-import Dialog from '@material-ui/core/Dialog';
-import Typography from '@material-ui/core/Typography';
 import {blue} from '@material-ui/core/colors';
-import {
-  Card, CardActions, CardContent, colors, Divider
-} from "@material-ui/core";
-import Grid from "@material-ui/core/Grid";
+import { colors } from "@material-ui/core";
 import IconButton from "@material-ui/core/IconButton";
-import PerfectScrollbar from "react-perfect-scrollbar";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import {Link as RouterLink} from "react-router-dom";
-import ArrowDownwardRoundedIcon from '@material-ui/icons/ArrowDownwardRounded';
-import ArrowUpwardRoundedIcon from '@material-ui/icons/ArrowUpwardRounded';
 import CancelPresentationIcon from '@material-ui/icons/CancelPresentation';
-import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
-import Collapse from "@material-ui/core/Collapse";
-import AddCircleOutlineOutlinedIcon from '@material-ui/icons/AddCircleOutlineOutlined';
-import CardHeader from "@material-ui/core/CardHeader";
-import ExpandLessOutlinedIcon from '@material-ui/icons/ExpandLessOutlined';
-import Input from "@material-ui/core/Input";
-import GroupIcon from '@material-ui/icons/Group';
-import SearchIcon from '@material-ui/icons/Search';
-import {useSelector} from "react-redux";
-import axios from "../../../utils/my_axios";
 import {avatar_URL} from "../../../my_config";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogContent from "@material-ui/core/DialogContent";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -129,17 +106,17 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-
 export function ApproverList({users, handleUserTypeChange, checked, handleChecked, deleteUser}) {
   const classes = useStyles();
+
+  debugger;
 
   return (
       users.map((user, i) => (
         <Fragment key={user.id}>
           <FormControl className={classes.formControl}>
             <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
+              value={user.type}
               defaultValue={user.type}
               onChange={(event) => handleUserTypeChange(event, user.id)}
             >
@@ -159,9 +136,7 @@ export function ApproverList({users, handleUserTypeChange, checked, handleChecke
             <Avatar
               alt="Profile image"
               className={classes.avatar}
-              component={RouterLink}
               src={`${avatar_URL}${user.avatar}`}
-              to="/profile/1/timeline"
             />
             <ListItemText
               className={classes.listItemText}

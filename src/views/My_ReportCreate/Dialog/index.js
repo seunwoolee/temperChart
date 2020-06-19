@@ -1,4 +1,4 @@
-import React, {Fragment, useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 import {makeStyles} from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
@@ -15,13 +15,10 @@ import {
 import Grid from "@material-ui/core/Grid";
 import IconButton from "@material-ui/core/IconButton";
 import PerfectScrollbar from "react-perfect-scrollbar";
-import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
-import {Link as RouterLink} from "react-router-dom";
 import ArrowDownwardRoundedIcon from '@material-ui/icons/ArrowDownwardRounded';
 import ArrowUpwardRoundedIcon from '@material-ui/icons/ArrowUpwardRounded';
-import CancelPresentationIcon from '@material-ui/icons/CancelPresentation';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import Collapse from "@material-ui/core/Collapse";
@@ -34,11 +31,8 @@ import SearchIcon from '@material-ui/icons/Search';
 import {useSelector} from "react-redux";
 import axios from "../../../utils/my_axios";
 import {avatar_URL} from "../../../my_config";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogContent from "@material-ui/core/DialogContent";
 import {ApproverList} from "./ApproverList";
-import clsx from "clsx";
+import ApproverGroupList from "./ApproverGroupList";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -48,6 +42,18 @@ const useStyles = makeStyles((theme) => ({
       width: 500,
     },
     maxHeight: 700,
+  },
+  groupRoot: {
+    backgroundColor: 'red',
+    height: '100%',
+    cursor: 'pointer',
+    display: 'flex',
+    overflow: 'hidden',
+  },
+  groupList: {
+    width: 300,
+    flexBasis: 300,
+    flexShrink: 0,
   },
   content: {
     paddingTop: 0
@@ -128,7 +134,12 @@ const useStyles = makeStyles((theme) => ({
   },
   selectTypeButton: {
     left: 1
-  }
+  },
+  approverGroupList: {
+    width: 300,
+    flexBasis: 300,
+    flexShrink: 0,
+  },
 }));
 
 function ChooseDialog({open, onClose, onSubmit, invoiceType}) {
@@ -142,6 +153,8 @@ function ChooseDialog({open, onClose, onSubmit, invoiceType}) {
   const [expanded, setExpanded] = React.useState(false);
   const [addUserType, setAddUserType] = React.useState(10);
   const [openGroup, setOpenGroup] = React.useState(false);
+  const [signGroups, setSignGroups] = useState([]);
+
   const session = useSelector((state) => state.session);
 
   const handleChecked = (i) => {
@@ -228,7 +241,7 @@ function ChooseDialog({open, onClose, onSubmit, invoiceType}) {
 
   useEffect(() => {
     const searchUsers = addUserType === 10 ? departmentUsers : allUsers
-    if(inputSearch.length > 0){
+    if (inputSearch.length > 0) {
       return setTypeUsers(searchUsers.filter(user => user.name.includes(inputSearch)))
     }
     setTypeUsers(searchUsers)
@@ -240,7 +253,7 @@ function ChooseDialog({open, onClose, onSubmit, invoiceType}) {
 
   useEffect(() => {
     let mounted = true;
-    const headers = {Authorization: `Token ${session.token}`};
+    const headers = {Authorization: `Token ${localStorage.getItem('token')}`};
     const fetchUsers = () => {
       axios.get(`ea/get_defaultUsers/${invoiceType.toString()}`, {headers}).then(response => {
         if (mounted) {
@@ -251,7 +264,7 @@ function ChooseDialog({open, onClose, onSubmit, invoiceType}) {
 
     const fetchDepartmentUsers = () => {
       axios.get(`ea/get_departmentUsers/`, {headers}).then(response => {
-      // axios.get(`ea/get_departmentUsers/${session.user.department}`, {headers}).then(response => {
+        // axios.get(`ea/get_departmentUsers/${session.user.department}`, {headers}).then(response => {
         if (mounted) {
           setDepartmentUsers(response.data);
           setTypeUsers(response.data);
@@ -267,9 +280,17 @@ function ChooseDialog({open, onClose, onSubmit, invoiceType}) {
       });
     };
 
+    const fetchSignGroup = () => {
+      const url = `ea/sign_group/`;
+      axios.get(url, {headers}).then((response) => {
+          setSignGroups(response.data);
+      });
+    };
+
     fetchUsers();
     fetchDepartmentUsers();
     fetchAllUsers();
+    fetchSignGroup();
 
     return () => {
       mounted = false;
@@ -328,7 +349,7 @@ function ChooseDialog({open, onClose, onSubmit, invoiceType}) {
                 deleteUser={deleteUser}
                 handleChecked={handleChecked}
                 handleUserTypeChange={handleUserTypeChange}
-                users={users} />
+                users={users}/>
             </List>
           </PerfectScrollbar>
         </CardContent>
@@ -410,57 +431,12 @@ function ChooseDialog({open, onClose, onSubmit, invoiceType}) {
       </Card>
 
       <Dialog open={openGroup} onClose={handleClose} aria-labelledby="gruop-list">
-      <Card
-        className={classes.root}
-      >
-        <div className={classes.main}>
-          <Grid
-            container
-            direction="row"
-            justify="space-between"
-            alignItems="center"
-          >
-            <Grid item>
-              <Typography color={"primary"} variant="h4" component="h4">
-                결재라인설정
-              </Typography>
-            </Grid>
-            <Grid item>
-              <IconButton onClick={setDown} className={classes.arrowIconButtom} aria-label="down-order">
-                <ArrowDownwardRoundedIcon className={classes.personAddIncon} color="inherit"/>
-              </IconButton>
-              <IconButton onClick={setUp} className={classes.arrowIconButtom} aria-label="up-order">
-                <ArrowUpwardRoundedIcon className={classes.personAddIncon} color="inherit"/>
-              </IconButton>
-              <IconButton onClick={() => setExpanded(true)} style={{paddingRight: 3}} aria-label="add-user">
-                <PersonAddIcon className={classes.personAddIncon} color="inherit"/>
-              </IconButton>
-              <IconButton onClick={handleClickOpen} style={{paddingRight: 3}} aria-label="user-list">
-                <GroupIcon className={classes.personAddIncon} color="inherit"/>
-              </IconButton>
-            </Grid>
-          </Grid>
-        </div>
-        <Divider/>
-        <CardContent className={classes.content}>
-          <PerfectScrollbar>
-            <List disablePadding>
-              <ApproverList
-                checked={checked}
-                deleteUser={deleteUser}
-                handleChecked={handleChecked}
-                handleUserTypeChange={handleUserTypeChange}
-                users={users} />
-            </List>
-          </PerfectScrollbar>
-        </CardContent>
-        <Divider/>
-        <CardActions className={classes.actions}>
-          <Button onClick={handleClose}>
-            취소
-          </Button>
-        </CardActions>
-      </Card>
+        <ApproverGroupList
+          onClose={handleClose}
+          setUsers={setUsers}
+          className={classes.approverGroupList}
+          signGroups={signGroups}
+        />
       </Dialog>
     </Dialog>
   );

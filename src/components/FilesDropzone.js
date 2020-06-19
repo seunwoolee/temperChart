@@ -216,7 +216,7 @@ function FilesDropzone({ invoiceId, attachments, handleAttachments, className })
 }
 
 FilesDropzone.propTypes = {
-  invoiceId: PropTypes.number,
+  invoiceId: PropTypes.string,
   attachments: PropTypes.array,
   handleAttachments: PropTypes.func,
   className: PropTypes.string

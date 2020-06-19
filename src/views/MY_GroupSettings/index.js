@@ -2,16 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/styles';
-import axios from 'src/utils/axios';
+import axios from "../../utils/my_axios";
 import Page from 'src/components/Page';
-import ConversationList from './ConversationList';
-import ConversationDetails from './ConversationDetails';
-import ConversationPlaceholder from './ConversationPlaceholder';
+import ApproverGroupDetails from "./ApproverGroupDetails";
+import ApproverGroupList from "./ApproverGroupList";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     height: '100%',
-    cursor: 'pointer',
     display: 'flex',
     overflow: 'hidden',
     '@media (max-width: 863px)': {
@@ -31,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
       }
     }
   },
-  conversationList: {
+  approverGroupList: {
     width: 300,
     flexBasis: 300,
     flexShrink: 0,
@@ -39,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
       borderRight: `1px solid ${theme.palette.divider}`
     }
   },
-  conversationDetails: {
+  approverGroupDetails: {
     flexGrow: 1
   },
   conversationPlaceholder: {
@@ -50,31 +48,25 @@ const useStyles = makeStyles((theme) => ({
 function Chat() {
   const classes = useStyles();
   const params = useParams();
-  const [conversations, setConversations] = useState([]);
+  const [signGroups, setSignGroups] = useState([]);
+
+  const fetchSignGroup = () => {
+    const url = `ea/sign_group/`;
+    const config = { headers: {Authorization: `Token ${localStorage.getItem('token')}`} };
+    axios.get(url, config).then((response) => {
+        setSignGroups(response.data);
+    });
+  };
 
   useEffect(() => {
-    let mounted = true;
-
-    const fetchConversations = () => {
-      axios.get('/api/chat/conversations').then((response) => {
-        if (mounted) {
-          setConversations(response.data.conversations);
-        }
-      });
-    };
-
-    fetchConversations();
-
-    return () => {
-      mounted = false;
-    };
+    fetchSignGroup();
   }, []);
 
-  let selectedConversation;
+  let selectedSignGroup;
 
   if (params.id) {
-    selectedConversation = conversations.find(
-      (c) => c.id === params.id
+    selectedSignGroup = signGroups.find(
+      (c) => c.id === Number(params.id)
     );
   }
 
@@ -82,22 +74,19 @@ function Chat() {
     <Page
       className={clsx({
         [classes.root]: true,
-        [classes.openConversion]: selectedConversation
+        [classes.openConversion]: selectedSignGroup
       })}
-      title="Chat"
+      title="결재라인설정"
     >
-      <ConversationList
-        className={classes.conversationList}
-        conversations={conversations}
+      <ApproverGroupList
+        className={classes.approverGroupList}
+        signGroups={signGroups}
       />
-      {selectedConversation ? (
-        <ConversationDetails
-          className={classes.conversationDetails}
-          conversation={selectedConversation}
-        />
-      ) : (
-        <ConversationPlaceholder className={classes.conversationPlaceholder} />
-      )}
+      <ApproverGroupDetails
+        fetchSignGroup={fetchSignGroup}
+        className={classes.approverGroupDetails}
+        selectedSignGroup={selectedSignGroup}
+      />
     </Page>
   );
 }

@@ -8,7 +8,6 @@ import DashboardDefaultView from './views/DashboardDefault';
 import OverviewView from './views/Overview';
 import PresentationView from './views/Presentation';
 import Root from "./Root";
-import ReportCreate from "./views/My_ReportCreate";
 import MY_Print from "./components/MY_Print";
 
 export default [
@@ -132,12 +131,12 @@ export default [
       {
         path: '/chat',
         exact: true,
-        component: lazy(() => import('src/views/Chat'))
+        component: lazy(() => import('src/views/MY_GroupSettings'))
       },
       {
         path: '/chat/:id',
         exact: true,
-        component: lazy(() => import('src/views/Chat'))
+        component: lazy(() => import('src/views/MY_GroupSettings'))
       },
       {
         path: '/components/buttons',

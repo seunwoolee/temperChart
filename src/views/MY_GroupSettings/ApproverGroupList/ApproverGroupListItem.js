@@ -37,11 +37,10 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function ConversationListItem({
+function ApproverGroupListItem({
   active, conversation, className, ...rest
 }) {
   const classes = useStyles();
-  const lastMessage = conversation.messages[conversation.messages.length - 1];
 
   return (
     <ListItem
@@ -56,52 +55,21 @@ function ConversationListItem({
       component={RouterLink}
       to={`/chat/${conversation.id}`}
     >
-      <ListItemAvatar>
-        <Avatar
-          alt="Person"
-          className={classes.avatar}
-          src={conversation.otherUser.avatar}
-        />
-      </ListItemAvatar>
       <ListItemText
-        primary={conversation.otherUser.name}
+        primary={conversation.name}
         primaryTypographyProps={{
           noWrap: true,
           variant: 'h6'
         }}
-        secondary={`${lastMessage.sender.name}: ${lastMessage.content}`}
-        secondaryTypographyProps={{
-          noWrap: true,
-          variant: 'body1'
-        }}
       />
-      <div className={classes.details}>
-        <Typography
-          noWrap
-          variant="body2"
-        >
-          {moment(lastMessage.created_at).isSame(moment(), 'day')
-            ? moment(lastMessage.created_at).format('LT')
-            : moment(lastMessage.created_at).fromNow()}
-        </Typography>
-        {conversation.unread > 0 && (
-          <Label
-            className={classes.unread}
-            color={colors.red[500]}
-            shape="rounded"
-          >
-            {conversation.unread}
-          </Label>
-        )}
-      </div>
     </ListItem>
   );
 }
 
-ConversationListItem.propTypes = {
+ApproverGroupListItem.propTypes = {
   active: PropTypes.bool,
   className: PropTypes.string,
   conversation: PropTypes.object.isRequired
 };
 
-export default ConversationListItem;
+export default ApproverGroupListItem;

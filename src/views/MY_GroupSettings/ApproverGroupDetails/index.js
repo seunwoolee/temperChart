@@ -3,9 +3,8 @@ import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/styles';
 import { Divider } from '@material-ui/core';
-import ConversationToolbar from './ConversationToolbar';
-import ConversationMessages from './ConversationMessages';
-import ConversationForm from './ConversationForm';
+import ControlToolbar from "./ControlToolbar";
+import SignListTable from "./SignListTable";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -15,26 +14,25 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-function ConversationDetails({ conversation, className, ...rest }) {
+function ApproverGroupDetails({ selectedSignGroup, className, fetchSignGroup}) {
   const classes = useStyles();
 
   return (
     <div
-      {...rest}
       className={clsx(classes.root, className)}
     >
-      <ConversationToolbar conversation={conversation} />
+      <ControlToolbar selectedSignGroup={selectedSignGroup} fetchSignGroup={fetchSignGroup} />
       <Divider />
-      <ConversationMessages messages={conversation.messages} />
+      {selectedSignGroup ? <SignListTable signLists={selectedSignGroup.sign_lists} /> : null}
       <Divider />
-      <ConversationForm />
     </div>
   );
 }
 
-ConversationDetails.propTypes = {
+ApproverGroupDetails.propTypes = {
   className: PropTypes.string,
-  conversation: PropTypes.object.isRequired
+  selectedSignGroup: PropTypes.array.isRequired,
+  fetchSignGroup: PropTypes.func
 };
 
-export default ConversationDetails;
+export default ApproverGroupDetails;

@@ -18,11 +18,6 @@ import ChooseDialog from '../Dialog';
 import axios from "../../../utils/my_axios";
 import {getErpTodoCount, getTodoCount, isloading} from "../../../actions";
 import LoadingBar from "../../../components/MY_LoadingBar";
-import MY_InvoiceDetailCard_G from "../../../components/MY_InvoiceDetailCard_G";
-import MY_InvoiceDetailCard_R from "../../../components/MY_InvoiceDetailCard_R";
-import MY_InvoiceDetailCard_P from "../../../components/MY_InvoiceDetailCard_P";
-import MY_InvoiceDetailCard from "../../../components/MY_InvoiceDetailCard";
-import {INVOICETYPE} from "../index";
 import getInvoiceDetailCard from "../../../utils/getInvoiceDetailCard";
 
 const useStyles = makeStyles((theme) => ({

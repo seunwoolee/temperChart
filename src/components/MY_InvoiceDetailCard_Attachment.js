@@ -19,7 +19,7 @@ function MY_InvoiceDetailCard_Attachment({ invoiceId, attachments, handleAttachm
 }
 
 MY_InvoiceDetailCard_Attachment.propTypes = {
-  invoiceId: PropTypes.number.isRequired,
+  invoiceId: PropTypes.string.isRequired,
   attachments: PropTypes.array.isRequired,
   handleAttachments: PropTypes.func.isRequired,
   type: PropTypes.string.isRequired,
