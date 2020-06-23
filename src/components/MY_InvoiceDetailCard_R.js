@@ -7,20 +7,9 @@ import {
   CardContent, Divider, Grid,
   Typography,
 } from '@material-ui/core';
-import getShortBigo from "../utils/getShortBigo";
-import {invoices} from "../mock";
-import getCurrency from "../utils/getCurrency";
-import TableCell from "@material-ui/core/TableCell";
-import TableRow from "@material-ui/core/TableRow";
-import Button from "@material-ui/core/Button";
-import FilesDropzone from "./FilesDropzone";
-import uuid from 'uuid/v1';
-import MY_attachmentsBase from "./MY_attachmentsBase";
 import MY_erpDetailTable from "./MY_erpDetailTable";
 import MY_InvoiceDetailCard_Attachment from "./MY_InvoiceDetailCard_Attachment";
 import getSumInvoices from "../utils/getSumInvoices";
-// import getShortBigo from "../../../utils/getShortBigo";
-// import {invoices} from "../../../mock";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -73,7 +62,6 @@ const useStyles = makeStyles((theme) => ({
     }
   },
   bigo: {
-    // width: 330,
     padding: theme.spacing(1),
     [theme.breakpoints.down('sm')]: {
       flexBasis: '50%'

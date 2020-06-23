@@ -72,13 +72,13 @@ export default function ApproverTable({signs}) {
 
   const approvalRenderBlank = () => {
     return (
-        <TableCell className={clsx(classes.gridCell, classes.gridCellBlank, classes.gridCellTop, classes.gridCellLeft, classes.root)}><br /></TableCell>
+        <TableCell key={uuid()} className={clsx(classes.gridCell, classes.gridCellBlank, classes.gridCellTop, classes.gridCellLeft, classes.root)}><br /></TableCell>
     )
   };
 
   const agreementRenderBlank = () => {
     return (
-        <TableCell className={clsx(classes.gridCell, classes.gridCellBlank, classes.gridCellLeft, classes.root)}><br /></TableCell>
+        <TableCell key={uuid()} className={clsx(classes.gridCell, classes.gridCellBlank, classes.gridCellLeft, classes.root)}><br /></TableCell>
     )
   };
 
@@ -108,7 +108,8 @@ export default function ApproverTable({signs}) {
             <TableRow>
               {approvalUsersBlank.map( _ => approvalRenderBlank())}
               {approvalUsers.map(sign => (
-                <TableCell align="center"
+                <TableCell key={uuid()}
+                           align="center"
                            className={clsx(classes.gridCell, classes.gridCellTop, classes.gridCellLeft, classes.root)}>{sign.user.position}</TableCell>
               ))}
             </TableRow>
@@ -117,7 +118,7 @@ export default function ApproverTable({signs}) {
             <TableRow>
               {approvalUsersBlank.map( _ => approvalRenderBlank())}
               {approvalUsers.map(sign => (
-                <TableCell align="center" className={clsx(classes.gridCell, classes.gridCellLeft, classes.root)}>
+                <TableCell key={uuid()} align="center" className={clsx(classes.gridCell, classes.gridCellLeft, classes.root)}>
                   {sign.user.name}
                 </TableCell>
               ))}
@@ -128,6 +129,7 @@ export default function ApproverTable({signs}) {
               {approvalUsersBlank.map( _ => approvalRenderBlank())}
               {approvalUsers.map(sign => (
                 <TableCell
+                  key={uuid()}
                   align="center"
                   className={sign.result === '3'
                     ? clsx(classes.gridDateCell, classes.gridCellLeft, classes.rejectedDateCell, classes.root)
@@ -146,7 +148,7 @@ export default function ApproverTable({signs}) {
             <TableRow>
               {agreementUsersBlank.map( _ => agreementRenderBlank())}
               {agreementUsers.map(sign => (
-                <TableCell align="center" className={clsx(classes.gridCell, classes.root)}>{sign.user.position}</TableCell>
+                <TableCell key={uuid()} align="center" className={clsx(classes.gridCell, classes.root)}>{sign.user.position}</TableCell>
               ))}
             </TableRow>
           </TableHead>
@@ -154,7 +156,7 @@ export default function ApproverTable({signs}) {
             <TableRow>
               {agreementUsersBlank.map( _ => agreementRenderBlank())}
               {agreementUsers.map(sign => (
-                <TableCell align="center" className={clsx(classes.gridCell, classes.root)}>
+                <TableCell key={uuid()} align="center" className={clsx(classes.gridCell, classes.root)}>
                   {sign.user.name}
                 </TableCell>
               ))}
@@ -165,6 +167,7 @@ export default function ApproverTable({signs}) {
               {agreementUsersBlank.map( _ => agreementRenderBlank())}
               {agreementUsers.map(sign => (
                 <TableCell
+                  key={uuid()}
                   align="center"
                   className={sign.result === '3'
                     ? clsx(classes.gridDateCell, classes.rejectedDateCell, classes.root)

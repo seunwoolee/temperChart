@@ -4,6 +4,7 @@ import clsx from 'clsx';
 import { makeStyles } from '@material-ui/styles';
 import { Card, CardHeader, CardContent } from '@material-ui/core';
 import MY_attachments from "./MY_attachments";
+import * as uuid from "uuid";
 
 const useStyles = makeStyles(() => ({
   root: {}
@@ -14,7 +15,7 @@ function MY_attachmentsBase({ attachments}) {
 
   return (
     <Card
-      className={clsx(classes.root)}
+      className={classes.root}
     >
       {attachments.length > 0
         ? (

@@ -7,9 +7,6 @@ import {
   CardContent, Divider, Grid,
   Typography,
 } from '@material-ui/core';
-import getCurrency from "../utils/getCurrency";
-import FilesDropzone from "./FilesDropzone";
-import MY_attachmentsBase from "./MY_attachmentsBase";
 import MY_erpDetailTable from "./MY_erpDetailTable";
 import MY_InvoiceDetailCard_Attachment from "./MY_InvoiceDetailCard_Attachment";
 import getSumInvoices from "../utils/getSumInvoices";

@@ -111,7 +111,7 @@ function Index({ open, onClose, onComplete, document, invoices, className }) {
         open={open}
       >
         <Card
-          className={clsx(classes.root, className)}
+          className={classes.root}
         >
           <div className={classes.innerDiv}>
             <CardHeader

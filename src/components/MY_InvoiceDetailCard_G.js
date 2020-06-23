@@ -7,10 +7,6 @@ import {
   CardContent, Divider, Grid,
   Typography,
 } from '@material-ui/core';
-import getCurrency from "../utils/getCurrency";
-import FilesDropzone from "./FilesDropzone";
-import MY_attachmentsBase from "./MY_attachmentsBase";
-import MY_erpDetailTable from "./MY_erpDetailTable";
 import MY_InvoiceDetailCard_Attachment from "./MY_InvoiceDetailCard_Attachment";
 import getSumInvoices from "../utils/getSumInvoices";
 import MY_erpDetailTable_G from "./MY_erpDetailTable_G";
@@ -52,14 +48,12 @@ const useStyles = makeStyles((theme) => ({
     }
   },
   supplyName: {
-    // width: 180,
     padding: theme.spacing(1),
     [theme.breakpoints.down('sm')]: {
       flexBasis: '50%'
     }
   },
   stats: {
-    // width: 120,
     padding: theme.spacing(1),
     [theme.breakpoints.down('sm')]: {
       flexBasis: '50%'

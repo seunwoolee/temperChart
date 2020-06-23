@@ -32,49 +32,33 @@ import useTheme from "@material-ui/core/styles/useTheme";
 
 import RotateRightIcon from '@material-ui/icons/RotateRight';
 import RotateLeftIcon from '@material-ui/icons/RotateLeft';
-import DialogActions from "@material-ui/core/DialogActions";
-import PrintOutlinedIcon from "@material-ui/icons/PrintOutlined";
 import {avatar_URL} from "../my_config";
+import CardHeader from "@material-ui/core/CardHeader";
+import CardContent from "@material-ui/core/CardContent";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
 const useStyles = makeStyles((theme) => ({
-  root: {},
-  dropZone: {
-    border: `1px dashed ${theme.palette.divider}`,
-    padding: theme.spacing(3),
-    outline: 'none',
-    display: 'flex',
-    justifyContent: 'center',
-    flexWrap: 'wrap',
-    alignItems: 'center',
-    '&:hover': {
-      backgroundColor: colors.grey[50],
-      opacity: 0.5,
-      cursor: 'pointer'
-    }
-  },
-  dragActive: {
-    backgroundColor: colors.grey[50],
-    opacity: 0.5
+  root: {
+    // position: "relative"
   },
   image: {
     width: 130
-  },
-  info: {
-    marginTop: theme.spacing(1)
   },
   list: {
     maxHeight: 280
   },
   img: {
-    width: '100%',
+    maxWidth: '100%',
+  },
+  imgWrapper: {
+    overflow: 'scroll',
+    maxWidth: '100%',
   },
   dialogPaper: {
     margin: theme.spacing(1)
   },
   dialogRoot: {
-    // width: '100%',
     '& .MuiBackdrop-root': {
       backgroundColor: 'rgba(0, 0, 0, 0.1)'
     },
@@ -90,7 +74,25 @@ const useStyles = makeStyles((theme) => ({
       color: theme.palette.primary.contrastText
     }
   },
-  rotateMargin: {
+  attachmentCard: {
+    [theme.breakpoints.up('lg')]: {
+      maxHeight: '80%',
+      maxWidth: '960px',
+      marginTop: -550,
+    },
+    [theme.breakpoints.down('lg')]: {
+      width: '100%',
+    },
+    maxHeight: '90%',
+    overflow: "scroll",
+    position: 'absolute',
+    right: 5,
+    zIndex: 9999
+  },
+  attachmentCardHeader: {
+    padding: theme.spacing(1),
+    color: theme.palette.primary.contrastText,
+    backgroundColor: theme.palette.primary.main,
   },
   actions: {
     marginTop: theme.spacing(2),
@@ -102,17 +104,10 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function PaperComponent(props) {
-  return (
-    <Draggable handle="#draggable-dialog-title" cancel={'[class*="MuiDialogContent-root"]'}>
-      <Paper {...props} />
-    </Draggable>
-  );
-}
 
-function MY_attachments({attachments, className, ...rest}) {
+function MY_attachments({attachments, ...rest}) {
   const classes = useStyles();
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = React.useState('None');
   const [selectedImgPath, setSelectedImgPath] = React.useState('');
   const [contentType, setContentType] = React.useState('img');
   const [numPages, setNumPages] = React.useState(null);
@@ -128,17 +123,17 @@ function MY_attachments({attachments, className, ...rest}) {
   };
 
   const handleClickOpen = (imgPath, isImg) => {
-    setOpen(true);
+    setOpen('block');
     setSelectedImgPath(`${avatar_URL}${imgPath}`); // TODO URL 변경
     isImg ? setContentType('img') : setContentType('pdf');
   };
 
   const handleClose = () => {
-    setOpen(false);
+    setOpen('None');
     setSelectedImgPath('');
   };
 
-  const onDocumentLoadSuccess = ({ numPages }) => {
+  const onDocumentLoadSuccess = ({numPages}) => {
     setNumPages(numPages);
   };
 
@@ -147,23 +142,21 @@ function MY_attachments({attachments, className, ...rest}) {
 
   return (
     <div
-      {...rest}
-      className={clsx(classes.root, className)}
+      className={classes.root}
     >
       <>
         <PerfectScrollbar options={{suppressScrollX: true}}>
           <List className={classes.list}>
             {attachments.map((file, i) => (
-              <Tooltip disableHoverListener={!(file.isImg || file.isPdf)} title="미리보기">
+              <Tooltip key={uuid()} disableHoverListener={!(file.isImg || file.isPdf)} title="미리보기">
                 <ListItem
                   button={file.isImg || file.isPdf}
                   onClick={file.isImg || file.isPdf
                     ? () => handleClickOpen(file.path, file.isImg) : null}
                   divider={i < attachments.length - 1}
-                  key={uuid()}
                 >
                   <ListItemIcon>
-                    <FileCopyIcon />
+                    <FileCopyIcon/>
                   </ListItemIcon>
                   <ListItemText
                     primary={file.title}
@@ -174,7 +167,7 @@ function MY_attachments({attachments, className, ...rest}) {
                     <a target="_blank" href={`${avatar_URL}${file.path}`}>
                       <Tooltip title="다운로드">
                         <IconButton>
-                          <GetAppIcon />
+                          <GetAppIcon/>
                         </IconButton>
                       </Tooltip>
                     </a>
@@ -182,47 +175,41 @@ function MY_attachments({attachments, className, ...rest}) {
                 </ListItem>
               </Tooltip>
             ))}
+
           </List>
         </PerfectScrollbar>
       </>
-      <Dialog
-        disablePortal
-        hideBackdrop
-        classes={{root: classes.dialogRoot, paper: classes.dialogPaper}}
-        maxWidth="md"
-        open={open}
-        onClose={handleClose}
-        PaperComponent={PaperComponent}
-      >
-        <DialogTitle
-          className={classes.dialogTitle}
-          id="draggable-dialog-title"
-        >
-          <Button style={{padding: 3, zIndex: 9999}} onClick={handleClose} color="primary" variant="contained">닫기</Button>
-          {contentType === 'img' ? (
-            <Hidden mdDown>
-              <Tooltip title="이미지 좌 회전">
-                <IconButton style={{color: 'white', zIndex: 9999}} onClick={rotateLeft}>
-                  <RotateLeftIcon style={{fontSize: "2rem"}} />
-                </IconButton>
-              </Tooltip>
-              <Tooltip title="이미지 우 회전">
-                <IconButton style={{color: 'white', zIndex: 9999}} onClick={rotateRight}>
-                  <RotateRightIcon style={{fontSize: "2rem"}} />
-                </IconButton>
-              </Tooltip>
-            </Hidden>
-          ) : null}
-        </DialogTitle>
-        {contentType === 'img'
-          ? (
-            <div style={{transform: `rotate(${rotate}deg)`}} className={clsx(classes.rotateMargin)}>
-              <img src={selectedImgPath} className={classes.img} alt="이미지" />
-            </div>
-          )
-          : (
+
+      <Card className={classes.attachmentCard} style={{display: open}}>
+        <CardHeader
+          classes={{title: classes.attachmentCardHeader}}
+          className={classes.attachmentCardHeader}
+          title="첨부파일"
+          action={
             <>
-              <PerfectScrollbar>
+            {contentType === 'img' ? (
+              <Hidden mdDown>
+                <Tooltip title="이미지 좌 회전">
+                  <IconButton style={{color: 'white', zIndex: 9999}} onClick={rotateLeft}>
+                    <RotateLeftIcon style={{fontSize: "2rem"}} />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip title="이미지 우 회전">
+                  <IconButton style={{color: 'white', zIndex: 9999}} onClick={rotateRight}>
+                    <RotateRightIcon style={{fontSize: "2rem"}} />
+                  </IconButton>
+                </Tooltip>
+              </Hidden>
+            ) : null}
+            <Button style={{padding: 3, zIndex: 9999}} onClick={handleClose} color="primary" variant="contained">닫기</Button>
+            </>
+          }
+        >
+        </CardHeader>
+        <CardContent style={{transform: `rotate(${rotate}deg)`}}>
+          {contentType === 'img' ? (<div className={classes.imgWrapper}><img src={selectedImgPath} className={classes.img} alt="이미지"/></div>) : (
+            <>
+              {/*<PerfectScrollbar>*/}
                 <Document
                   file={selectedImgPath}
                   onLoadSuccess={onDocumentLoadSuccess}
@@ -263,17 +250,17 @@ function MY_attachments({attachments, className, ...rest}) {
                     </p>
                   </Grid>
                 </Grid>
-              </PerfectScrollbar>
+              {/*</PerfectScrollbar>*/}
             </>
           )}
-      </Dialog>
+        </CardContent>
+      </Card>
     </div>
   );
 }
 
 MY_attachments.propTypes = {
   attachments: PropTypes.array,
-  className: PropTypes.string
 };
 
 export default MY_attachments;
