@@ -13,7 +13,6 @@ import {
 } from '@material-ui/core';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
 import bytesToSize from 'src/utils/bytesToSize';
-import Dialog from '@material-ui/core/Dialog';
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import IconButton from "@material-ui/core/IconButton";
 import GetAppIcon from '@material-ui/icons/GetApp';
@@ -22,9 +21,7 @@ import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
 import {pdfjs, Document, Page} from 'react-pdf';
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
-import Paper from '@material-ui/core/Paper';
 import Draggable from 'react-draggable';
-import DialogTitle from "@material-ui/core/DialogTitle";
 import Tooltip from "@material-ui/core/Tooltip";
 
 import useMediaQuery from "@material-ui/core/useMediaQuery";
@@ -90,6 +87,7 @@ const useStyles = makeStyles((theme) => ({
     zIndex: 9999
   },
   attachmentCardHeader: {
+    cursor: 'move',
     padding: theme.spacing(1),
     color: theme.palette.primary.contrastText,
     backgroundColor: theme.palette.primary.main,
@@ -180,6 +178,7 @@ function MY_attachments({attachments, ...rest}) {
         </PerfectScrollbar>
       </>
 
+      <Draggable>
       <Card className={classes.attachmentCard} style={{display: open}}>
         <CardHeader
           classes={{title: classes.attachmentCardHeader}}
@@ -255,6 +254,7 @@ function MY_attachments({attachments, ...rest}) {
           )}
         </CardContent>
       </Card>
+      </Draggable>
     </div>
   );
 }
