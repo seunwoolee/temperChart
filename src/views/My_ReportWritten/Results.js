@@ -128,6 +128,7 @@ function Results({className, fetchDocuments, documents, page, totalCount, setPag
                 <TableHead>
                   <TableRow>
                     <TableCell className={classes.header}>결재번호</TableCell>
+                    <TableCell className={classes.header}>타입</TableCell>
                     <TableCell className={classes.header}>제목</TableCell>
                     <TableCell className={classes.header}>금액</TableCell>
                     <TableCell className={classes.header}>기안일자</TableCell>
@@ -146,6 +147,7 @@ function Results({className, fetchDocuments, documents, page, totalCount, setPag
                       key={document.id}
                     >
                       <TableCell align="center" className={classes.whiteSpaceNoWrap}>{document.id}</TableCell>
+                      <TableCell align="center" className={classes.whiteSpaceNoWrap}>{document.document_type}</TableCell>
                       <TableCell className={classes.whiteSpaceNoWrap}>{document.title}</TableCell>
                       <TableCell className={classes.whiteSpaceNoWrap}>{getCurrency(document.price)}</TableCell>
                       <TableCell align="center" className={classes.whiteSpaceNoWrap}>{document.created}</TableCell>
