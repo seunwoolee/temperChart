@@ -166,7 +166,7 @@ function ChooseDialog({open, onClose, onSubmit, invoiceType}) {
   };
 
   const handleSubmit = () => {
-    onSubmit(users);
+    onSubmit(users, receivers);
   };
 
   const handleAddUserTypeChange = event => setAddUserType(event.target.value);
@@ -189,6 +189,7 @@ function ChooseDialog({open, onClose, onSubmit, invoiceType}) {
 
   const handleAddReceiverButton = (receiverId) => {
     const newUser = typeUsers.find(user => user.id === receiverId);
+    newUser.type = '2';
     if (receivers.find(receiver => receiver.id === receiverId)) {
       return alert('이미 등록되어 있습니다.');
     }
@@ -266,7 +267,8 @@ function ChooseDialog({open, onClose, onSubmit, invoiceType}) {
     const fetchUsers = () => {
       axios.get(`ea/get_defaultUsers/${invoiceType.toString()}`, {headers}).then(response => {
         if (mounted) {
-          setUsers(response.data);
+          setUsers(response.data.filter(user => user.type !== '2'));
+          setReceivers(response.data.filter(user => user.type === '2'));
         }
       });
     };
@@ -458,6 +460,7 @@ function ChooseDialog({open, onClose, onSubmit, invoiceType}) {
         <ApproverGroupList
           onClose={handleClose}
           setUsers={setUsers}
+          setReceivers={setReceivers}
           className={classes.approverGroupList}
           signGroups={signGroups}
         />

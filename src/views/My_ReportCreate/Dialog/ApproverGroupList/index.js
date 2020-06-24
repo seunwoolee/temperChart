@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function ApproverGroupList({ signGroups, className, setUsers, onClose }) {
+function ApproverGroupList({ signGroups, className, setUsers, setReceivers, onClose }) {
   const classes = useStyles();
 
   return (
@@ -27,6 +27,7 @@ function ApproverGroupList({ signGroups, className, setUsers, onClose }) {
           <ApproverGroupListItem
             onClose={onClose}
             setUsers={setUsers}
+            setReceivers={setReceivers}
             signGroup={signGroup}
             divider={i < signGroups.length - 1}
             key={signGroup.id}
@@ -41,6 +42,7 @@ ApproverGroupList.propTypes = {
   className: PropTypes.string,
   onClose: PropTypes.func,
   setUsers: PropTypes.func,
+  setReceivers: PropTypes.func,
   signGroups: PropTypes.array.isRequired
 };
 

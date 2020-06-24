@@ -109,8 +109,6 @@ const useStyles = makeStyles((theme) => ({
 export function ApproverList({users, handleUserTypeChange, checked, handleChecked, deleteUser}) {
   const classes = useStyles();
 
-  debugger;
-
   return (
       users.map((user, i) => (
         <Fragment key={user.id}>

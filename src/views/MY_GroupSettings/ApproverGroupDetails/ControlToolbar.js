@@ -111,11 +111,12 @@ function ControlToolbar({className, selectedSignGroup, fetchSignGroup}) {
     setOpen(false);
   };
 
-  const handleSubmit = (users: Array) => {
+  const handleSubmit = (users: Array, receivers: Array) => {
     const url = 'ea/create_sign_group/';
     const formData = new FormData();
 
     formData.append('approvers', JSON.stringify(users));
+    formData.append('receivers', JSON.stringify(receivers));
     formData.append('groupName', groupName);
     dispatch(isloading(true));
     axios.post(url, formData, axiosConfig)

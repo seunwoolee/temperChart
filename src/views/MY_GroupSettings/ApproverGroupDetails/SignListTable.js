@@ -28,8 +28,18 @@ const useStyles = makeStyles(theme => ({
 
 
 function SignListTable({signLists, className}) {
-  debugger;
   const classes = useStyles();
+
+  const getSignType = (type) => {
+    if(type === "0") {
+      return "결재"
+    } else if(type ==='1') {
+      return "합의"
+    } else {
+      return "수신참조"
+    }
+  }
+
   return (
     <div
       className={clsx(classes.root, className)}
@@ -53,7 +63,7 @@ function SignListTable({signLists, className}) {
                     <TableCell align="center" component="th" scope="row">
                       {signList.order+1}
                     </TableCell>
-                    <TableCell align="center">{signList.type === "0" ? "결재" : "합의"}</TableCell>
+                    <TableCell align="center">{getSignType(signList.type)}</TableCell>
                     <TableCell align="center">{signList.department}</TableCell>
                     <TableCell align="center">{signList.position}</TableCell>
                     <TableCell align="center">{signList.name}</TableCell>

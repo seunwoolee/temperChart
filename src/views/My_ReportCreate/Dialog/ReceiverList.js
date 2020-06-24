@@ -24,13 +24,6 @@ const useStyles = makeStyles((theme) => ({
 
 export default function ReceiverList({receivers, setReceivers}) {
   const classes = useStyles();
-  const [chipData, setChipData] = React.useState([
-    { key: 0, label: 'Angular' },
-    { key: 1, label: 'jQuery' },
-    { key: 2, label: 'Polymer' },
-    { key: 3, label: 'React' },
-    { key: 4, label: 'Vue.js' },
-  ]);
 
   const handleDelete = (receiverId) => () => {
     setReceivers((prevReceivers) => prevReceivers.filter((prevReceiver) => prevReceiver.id !== receiverId));
