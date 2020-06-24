@@ -37,9 +37,11 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function ApproverGroupListItem({ signGroup, onClose, setUsers }) {
+function ApproverGroupListItem({ signGroup, onClose, setUsers, setReceivers }) {
+  // debugger;
   const handleClick = () => {
-    setUsers(signGroup.sign_lists);
+    setUsers(signGroup.sign_lists.filter(user => user.type !== '2'));
+    setReceivers(signGroup.sign_lists.filter(user => user.type === '2'));
   }
 
   return (
@@ -62,6 +64,7 @@ ApproverGroupListItem.propTypes = {
   className: PropTypes.string,
   onClose: PropTypes.func,
   setUsers: PropTypes.func,
+  setReceivers: PropTypes.func,
   signGroup: PropTypes.object.isRequired
 };
 

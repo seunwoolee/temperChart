@@ -71,7 +71,6 @@ function Index({
     setInputAttachments(attachments);
   };
 
-
   const handleClickOpen = () => {
     if (inputTitleRef.current.value.length === 0) {
       setSnackbarsOpen(true);
@@ -86,7 +85,9 @@ function Index({
     setOpenDialog(false);
   };
 
-  const handleSubmit = (users: Array) => {
+  const handleSubmit = (users: Array, receivers: Array) => {
+    console.log(receivers);
+    debugger;
     const headers = {Authorization: `Token ${localStorage.getItem('token')}`, 'Content-Type': 'multipart/form-data'};
     const axiosConfig = {headers};
     const url = 'ea/create_document/';
@@ -119,6 +120,7 @@ function Index({
     formData.append('author', session.user.id);
     formData.append('title', inputTitleRef.current.value);
     formData.append('approvers', JSON.stringify(users));
+    formData.append('receivers', JSON.stringify(receivers));
 
     filesArray.map(file => formData.append('files', file));
     invoiceArray.map(invoiceId => formData.append('invoices', invoiceId));
