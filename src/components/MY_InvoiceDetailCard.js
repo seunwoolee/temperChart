@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
-import { makeStyles } from '@material-ui/styles';
+import {makeStyles} from '@material-ui/styles';
 import {
   Card,
   CardContent, Divider, Grid,
@@ -70,7 +70,10 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function MY_InvoiceCard({ invoices, className, attachments, handleAttachments, type}) {
+function MY_InvoiceCard({
+    invoices, className, attachments, handleAttachments, type,
+    openAttachment, setOpenAttachment, selectedImgPath, setSelectedImgPath
+}) {
   const classes = useStyles();
 
   return (
@@ -90,51 +93,56 @@ function MY_InvoiceCard({ invoices, className, attachments, handleAttachments, t
           key={i}
           className={clsx(classes.root, className)}
         >
-        <CardContent className={classes.content}>
-          <div className={classes.supplyName}>
-            <Typography variant="body2">배치번호/문서번호</Typography>
-            <Typography variant="h6">{invoice.RPICU}/{invoice.RPDOC}</Typography>
-          </div>
-          <div className={classes.stats}>
-            <Typography variant="body2">거래처명</Typography>
-            <Typography variant="h6">{invoice.RPALPH}</Typography>
-          </div>
-          <div className={classes.bigo}>
-            <Typography variant="body2">거래처코드/사업자번호</Typography>
-            <Typography variant="h6">{invoice.RPAN8} / {invoice.RPTAX}</Typography>
-          </div>
-          <div className={classes.stats}>
-            <Typography variant="body2">세금유형</Typography>
-            <Typography variant="h6">{invoice.RPEXR1 || invoice.RPTXA1 ? invoice.RPEXR1 + ' / ' + invoice.RPTXA1 : <br />}</Typography>
-          </div>
-        </CardContent>
-        <CardContent className={classes.contentBottom}>
-          <div className={classes.supplyName}>
-            <Typography variant="body2">G/L일자/전표유형</Typography>
-            <Typography variant="h6">{invoice.RPDGJ} / {invoice.RPDCT}</Typography>
-          </div>
-          <div className={classes.stats}>
-            <Typography variant="body2">송장일자</Typography>
-            <Typography variant="h6">{invoice.RPDSVJ}</Typography>
-          </div>
-          <div className={classes.bigo}>
-            <Typography variant="body2">지급예정일</Typography>
-            <Typography variant="h6">{invoice.RPDDJ}</Typography>
-          </div>
-          <div className={classes.bigo}>
-            <Typography variant="body2">세금정보</Typography>
-            <Typography variant="h6">{invoice.RPEXR1NM}</Typography>
-          </div>
-        </CardContent>
-        <CardContent className={classes.erpDetailTable}>
-          <MY_erpDetailTable invoices={invoices.filter(my_invoice =>  my_invoice.RPDOC === invoice.RPDOC)} />
-        </CardContent>
-        <Divider />
+          <CardContent className={classes.content}>
+            <div className={classes.supplyName}>
+              <Typography variant="body2">배치번호/문서번호</Typography>
+              <Typography variant="h6">{invoice.RPICU}/{invoice.RPDOC}</Typography>
+            </div>
+            <div className={classes.stats}>
+              <Typography variant="body2">거래처명</Typography>
+              <Typography variant="h6">{invoice.RPALPH}</Typography>
+            </div>
+            <div className={classes.bigo}>
+              <Typography variant="body2">거래처코드/사업자번호</Typography>
+              <Typography variant="h6">{invoice.RPAN8} / {invoice.RPTAX}</Typography>
+            </div>
+            <div className={classes.stats}>
+              <Typography variant="body2">세금유형</Typography>
+              <Typography variant="h6">{invoice.RPEXR1 || invoice.RPTXA1 ? invoice.RPEXR1 + ' / ' + invoice.RPTXA1 :
+                <br/>}</Typography>
+            </div>
+          </CardContent>
+          <CardContent className={classes.contentBottom}>
+            <div className={classes.supplyName}>
+              <Typography variant="body2">G/L일자/전표유형</Typography>
+              <Typography variant="h6">{invoice.RPDGJ} / {invoice.RPDCT}</Typography>
+            </div>
+            <div className={classes.stats}>
+              <Typography variant="body2">송장일자</Typography>
+              <Typography variant="h6">{invoice.RPDSVJ}</Typography>
+            </div>
+            <div className={classes.bigo}>
+              <Typography variant="body2">지급예정일</Typography>
+              <Typography variant="h6">{invoice.RPDDJ}</Typography>
+            </div>
+            <div className={classes.bigo}>
+              <Typography variant="body2">세금정보</Typography>
+              <Typography variant="h6">{invoice.RPEXR1NM}</Typography>
+            </div>
+          </CardContent>
+          <CardContent className={classes.erpDetailTable}>
+            <MY_erpDetailTable invoices={invoices.filter(my_invoice => my_invoice.RPDOC === invoice.RPDOC)}/>
+          </CardContent>
+          <Divider/>
           <MY_InvoiceDetailCard_Attachment
+            setSelectedImgPath={setSelectedImgPath}
+            selectedImgPath={selectedImgPath}
+            openAttachment={openAttachment}
+            setOpenAttachment={setOpenAttachment}
             handleAttachments={handleAttachments}
             type={type}
             attachments={attachments}
-            invoiceId={invoice.id} />
+            invoiceId={invoice.id}/>
         </Card>
       ))}
     </>
@@ -147,6 +155,10 @@ MY_InvoiceCard.propTypes = {
   attachments: PropTypes.array,
   handleAttachments: PropTypes.func,
   type: PropTypes.string.isRequired,
+  openAttachment: PropTypes.bool,
+  setOpenAttachment: PropTypes.func,
+  selectedImgPath: PropTypes.string,
+  setSelectedImgPath: PropTypes.func,
 };
 
 export default MY_InvoiceCard;

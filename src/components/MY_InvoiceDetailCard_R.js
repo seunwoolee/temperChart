@@ -69,7 +69,11 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function MY_InvoiceCard({ invoices, className, attachments, handleAttachments, type}) {
+
+function MY_InvoiceCard({
+  invoices, className, attachments, handleAttachments, type,
+  openAttachment, setOpenAttachment, selectedImgPath, setSelectedImgPath
+}) {
   const classes = useStyles();
 
   let RPCKNU = 0;
@@ -139,6 +143,10 @@ function MY_InvoiceCard({ invoices, className, attachments, handleAttachments, t
         </CardContent>
         <Divider />
           <MY_InvoiceDetailCard_Attachment
+            setSelectedImgPath={setSelectedImgPath}
+            selectedImgPath={selectedImgPath}
+            openAttachment={openAttachment}
+            setOpenAttachment={setOpenAttachment}
             handleAttachments={handleAttachments}
             type={type}
             attachments={attachments}
@@ -155,6 +163,10 @@ MY_InvoiceCard.propTypes = {
   attachments: PropTypes.array,
   handleAttachments: PropTypes.func,
   type: PropTypes.string.isRequired,
+  openAttachment: PropTypes.bool,
+  setOpenAttachment: PropTypes.func,
+  selectedImgPath: PropTypes.string,
+  setSelectedImgPath: PropTypes.func,
 };
 
 export default MY_InvoiceCard;

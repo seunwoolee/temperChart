@@ -36,10 +36,11 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: 'transparent'
     },
     maxHeight: '100%',
-    maxWidth: '100%',
-    overflowY: 'auto',
+    maxWidth: '100%'
   },
   innerDiv: {
+    maxHeight: '100%',
+    overflowY: "scroll",
     [theme.breakpoints.up('lg')]: {
       width: '900px',
       backgroundColor: 'white'

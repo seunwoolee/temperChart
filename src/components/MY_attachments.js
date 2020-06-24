@@ -32,6 +32,7 @@ import RotateLeftIcon from '@material-ui/icons/RotateLeft';
 import {avatar_URL} from "../my_config";
 import CardHeader from "@material-ui/core/CardHeader";
 import CardContent from "@material-ui/core/CardContent";
+import Dialog from "@material-ui/core/Dialog";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
@@ -73,21 +74,23 @@ const useStyles = makeStyles((theme) => ({
   },
   attachmentCard: {
     [theme.breakpoints.up('lg')]: {
-      maxHeight: '80%',
+      // cursor: 'move',
+      // maxHeight: '80%',
       maxWidth: '960px',
-      marginTop: -550,
+      // marginTop: -550,
     },
     [theme.breakpoints.down('lg')]: {
       width: '100%',
     },
     maxHeight: '90%',
     overflow: "scroll",
-    position: 'absolute',
+    position: 'fixed',
     right: 5,
+    top: '5%',
     zIndex: 9999
   },
   attachmentCardHeader: {
-    cursor: 'move',
+    // cursor: 'move',
     padding: theme.spacing(1),
     color: theme.palette.primary.contrastText,
     backgroundColor: theme.palette.primary.main,
@@ -103,11 +106,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-function MY_attachments({attachments, ...rest}) {
+function MY_attachments({attachments, openAttachment, setOpenAttachment, selectedImgPath, setSelectedImgPath}) {
   const classes = useStyles();
-  const [open, setOpen] = React.useState('None');
-  const [selectedImgPath, setSelectedImgPath] = React.useState('');
-  const [contentType, setContentType] = React.useState('img');
   const [numPages, setNumPages] = React.useState(null);
   const [pageNumber, setPageNumber] = React.useState(1);
   const [rotate, setRotate] = React.useState(0);
@@ -120,15 +120,15 @@ function MY_attachments({attachments, ...rest}) {
     setRotate(prev => prev + 90);
   };
 
-  const handleClickOpen = (imgPath, isImg) => {
-    setOpen('block');
-    setSelectedImgPath(`${avatar_URL}${imgPath}`); // TODO URL 변경
-    isImg ? setContentType('img') : setContentType('pdf');
+  const handleClickOpen = (imgPath) => {
+    setOpenAttachment('block');
+    setSelectedImgPath(`${avatar_URL}${imgPath}`);
   };
 
   const handleClose = () => {
-    setOpen('None');
+    setOpenAttachment('None');
     setSelectedImgPath('');
+    setPageNumber(1);
   };
 
   const onDocumentLoadSuccess = ({numPages}) => {
@@ -149,8 +149,7 @@ function MY_attachments({attachments, ...rest}) {
               <Tooltip key={uuid()} disableHoverListener={!(file.isImg || file.isPdf)} title="미리보기">
                 <ListItem
                   button={file.isImg || file.isPdf}
-                  onClick={file.isImg || file.isPdf
-                    ? () => handleClickOpen(file.path, file.isImg) : null}
+                  onClick={file.isImg || file.isPdf ? () => handleClickOpen(file.path) : null}
                   divider={i < attachments.length - 1}
                 >
                   <ListItemIcon>
@@ -178,15 +177,14 @@ function MY_attachments({attachments, ...rest}) {
         </PerfectScrollbar>
       </>
 
-      <Draggable>
-      <Card className={classes.attachmentCard} style={{display: open}}>
+
+      <Card className={classes.attachmentCard} style={{display: openAttachment}}>
         <CardHeader
           classes={{title: classes.attachmentCardHeader}}
-          className={classes.attachmentCardHeader}
+          className={clsx(classes.attachmentCardHeader) }
           title="첨부파일"
           action={
             <>
-            {contentType === 'img' ? (
               <Hidden mdDown>
                 <Tooltip title="이미지 좌 회전">
                   <IconButton style={{color: 'white', zIndex: 9999}} onClick={rotateLeft}>
@@ -199,16 +197,16 @@ function MY_attachments({attachments, ...rest}) {
                   </IconButton>
                 </Tooltip>
               </Hidden>
-            ) : null}
-            <Button style={{padding: 3, zIndex: 9999}} onClick={handleClose} color="primary" variant="contained">닫기</Button>
+            <Button style={{zIndex: 9999}} onClick={handleClose} color="primary" variant="contained">닫기</Button>
             </>
           }
         >
         </CardHeader>
         <CardContent style={{transform: `rotate(${rotate}deg)`}}>
-          {contentType === 'img' ? (<div className={classes.imgWrapper}><img src={selectedImgPath} className={classes.img} alt="이미지"/></div>) : (
+          {selectedImgPath.substr(selectedImgPath.length - 3) !== 'pdf'
+            ? (<div className={classes.imgWrapper}><img src={selectedImgPath} className={classes.img} alt="이미지"/></div>)
+            : (
             <>
-              {/*<PerfectScrollbar>*/}
                 <Document
                   file={selectedImgPath}
                   onLoadSuccess={onDocumentLoadSuccess}
@@ -249,18 +247,21 @@ function MY_attachments({attachments, ...rest}) {
                     </p>
                   </Grid>
                 </Grid>
-              {/*</PerfectScrollbar>*/}
             </>
           )}
         </CardContent>
       </Card>
-      </Draggable>
+
     </div>
   );
 }
 
 MY_attachments.propTypes = {
   attachments: PropTypes.array,
+  openAttachment: PropTypes.bool,
+  setOpenAttachment: PropTypes.func,
+  selectedImgPath: PropTypes.string,
+  setSelectedImgPath: PropTypes.func,
 };
 
 export default MY_attachments;

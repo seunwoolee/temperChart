@@ -42,10 +42,11 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: 'transparent'
     },
     maxHeight: '100%',
-    overflowY: 'auto',
     maxWidth: '100%'
   },
   innerDiv: {
+    maxHeight: '100%',
+    overflowY: "scroll",
     [theme.breakpoints.up('lg')]: {
       width: '900px',
       backgroundColor: 'white'
@@ -80,7 +81,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Index({
-  open, onClose, onComplete, document, invoices, className, ...rest
+  open, onClose, onComplete, document, invoices
 }) {
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -146,13 +147,11 @@ function Index({
     axios.post(url, formData, axiosConfig)
       .then(response => {
         dispatch(isloading(false));
-    //     setOpenDialog(false);
         setInputAttachments([]);
         response.status === 201 ? onComplete(true) : onComplete(false);
       })
       .catch(error => {
         dispatch(isloading(false));
-    //     setOpenDialog(false);
         setInputAttachments([]);
         onComplete(false);
       });
@@ -166,7 +165,7 @@ function Index({
         open={open}
       >
         <Card
-          className={clsx(classes.root, className)}
+          className={classes.root}
         >
           <div className={classes.innerDiv}>
             <CardHeader
