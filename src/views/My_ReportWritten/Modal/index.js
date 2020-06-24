@@ -42,7 +42,8 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: 'transparent'
     },
     maxHeight: '100%',
-    overflowY: 'auto',
+    // maxHeight: 'calc(100vh - 210px)',
+    // overflowY: 'auto',
     maxWidth: '100%'
   },
   innerDiv: {
@@ -80,7 +81,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Index({
-  open, onClose, onComplete, document, invoices, className, ...rest
+  open, onClose, onComplete, document, invoices
 }) {
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -166,9 +167,9 @@ function Index({
         open={open}
       >
         <Card
-          className={clsx(classes.root, className)}
+          className={classes.root}
         >
-          <div className={classes.innerDiv}>
+          <div className={classes.innerDiv} style={{maxHeight: '100%' ,overflowY: "scroll"}}>
             <CardHeader
               classes={{root: classes.cardHeaderRoot, title: classes.cardHeaderTitle}}
               title="상신문서"

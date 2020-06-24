@@ -73,21 +73,23 @@ const useStyles = makeStyles((theme) => ({
   },
   attachmentCard: {
     [theme.breakpoints.up('lg')]: {
-      maxHeight: '80%',
+      // cursor: 'move',
+      // maxHeight: '80%',
       maxWidth: '960px',
-      marginTop: -550,
+      // marginTop: -550,
     },
     [theme.breakpoints.down('lg')]: {
       width: '100%',
     },
     maxHeight: '90%',
     overflow: "scroll",
-    position: 'absolute',
+    position: 'fixed',
     right: 5,
+    top: '5%',
     zIndex: 9999
   },
   attachmentCardHeader: {
-    cursor: 'move',
+    // cursor: 'move',
     padding: theme.spacing(1),
     color: theme.palette.primary.contrastText,
     backgroundColor: theme.palette.primary.main,
@@ -103,7 +105,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-function MY_attachments({attachments, ...rest}) {
+function MY_attachments({attachments}) {
   const classes = useStyles();
   const [open, setOpen] = React.useState('None');
   const [selectedImgPath, setSelectedImgPath] = React.useState('');
@@ -137,6 +139,82 @@ function MY_attachments({attachments, ...rest}) {
 
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.up('lg'));
+
+  const attachmentCard = (
+      <Card className={classes.attachmentCard} style={{display: open}}>
+        <CardHeader
+          classes={{title: classes.attachmentCardHeader}}
+          className={clsx(classes.attachmentCardHeader) }
+          title="첨부파일"
+          action={
+            <>
+            {contentType === 'img' ? (
+              <Hidden mdDown>
+                <Tooltip title="이미지 좌 회전">
+                  <IconButton style={{color: 'white', zIndex: 9999}} onClick={rotateLeft}>
+                    <RotateLeftIcon style={{fontSize: "2rem"}} />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip title="이미지 우 회전">
+                  <IconButton style={{color: 'white', zIndex: 9999}} onClick={rotateRight}>
+                    <RotateRightIcon style={{fontSize: "2rem"}} />
+                  </IconButton>
+                </Tooltip>
+              </Hidden>
+            ) : null}
+            <Button style={{zIndex: 9999}} onClick={handleClose} color="primary" variant="contained">닫기</Button>
+            </>
+          }
+        >
+        </CardHeader>
+        <CardContent style={{transform: `rotate(${rotate}deg)`}}>
+          {contentType === 'img' ? (<div className={classes.imgWrapper}><img src={selectedImgPath} className={classes.img} alt="이미지"/></div>) : (
+            <>
+                <Document
+                  file={selectedImgPath}
+                  onLoadSuccess={onDocumentLoadSuccess}
+                >
+                  <Page width={fullScreen ? 900 : null} pageNumber={pageNumber} />
+                </Document>
+                <Grid
+                  container
+                  direction="row"
+                  justify="space-between"
+                  alignItems="center"
+                >
+                  <Grid>
+                    <Button onClick={() => setPageNumber(prevPageNumber => prevPageNumber - 1)}>
+                      <NavigateBeforeIcon />
+                    </Button>
+                  </Grid>
+                  <Grid>
+                    <Button onClick={() => setPageNumber(prevPageNumber => prevPageNumber + 1)}>
+                      <NavigateNextIcon />
+                    </Button>
+                  </Grid>
+                </Grid>
+                <Grid
+                  container
+                  direction="row"
+                  justify="center"
+                  alignItems="center"
+                >
+                  <Grid>
+                    <p>
+                      페이지
+                      {' '}
+                      {pageNumber}
+                      {' '}
+                      /
+                      {numPages}
+                    </p>
+                  </Grid>
+                </Grid>
+            </>
+          )}
+        </CardContent>
+      </Card>
+  );
 
   return (
     <div
@@ -178,83 +256,9 @@ function MY_attachments({attachments, ...rest}) {
         </PerfectScrollbar>
       </>
 
-      <Draggable>
-      <Card className={classes.attachmentCard} style={{display: open}}>
-        <CardHeader
-          classes={{title: classes.attachmentCardHeader}}
-          className={classes.attachmentCardHeader}
-          title="첨부파일"
-          action={
-            <>
-            {contentType === 'img' ? (
-              <Hidden mdDown>
-                <Tooltip title="이미지 좌 회전">
-                  <IconButton style={{color: 'white', zIndex: 9999}} onClick={rotateLeft}>
-                    <RotateLeftIcon style={{fontSize: "2rem"}} />
-                  </IconButton>
-                </Tooltip>
-                <Tooltip title="이미지 우 회전">
-                  <IconButton style={{color: 'white', zIndex: 9999}} onClick={rotateRight}>
-                    <RotateRightIcon style={{fontSize: "2rem"}} />
-                  </IconButton>
-                </Tooltip>
-              </Hidden>
-            ) : null}
-            <Button style={{padding: 3, zIndex: 9999}} onClick={handleClose} color="primary" variant="contained">닫기</Button>
-            </>
-          }
-        >
-        </CardHeader>
-        <CardContent style={{transform: `rotate(${rotate}deg)`}}>
-          {contentType === 'img' ? (<div className={classes.imgWrapper}><img src={selectedImgPath} className={classes.img} alt="이미지"/></div>) : (
-            <>
-              {/*<PerfectScrollbar>*/}
-                <Document
-                  file={selectedImgPath}
-                  onLoadSuccess={onDocumentLoadSuccess}
-                >
-                  <Page width={fullScreen ? 900 : null} pageNumber={pageNumber} />
-                </Document>
-                <Grid
-                  container
-                  direction="row"
-                  justify="space-between"
-                  alignItems="center"
-                >
-                  <Grid>
-                    <Button onClick={() => setPageNumber(prevPageNumber => prevPageNumber - 1)}>
-                      <NavigateBeforeIcon />
-                    </Button>
-                  </Grid>
-                  <Grid>
-                    <Button onClick={() => setPageNumber(prevPageNumber => prevPageNumber + 1)}>
-                      <NavigateNextIcon />
-                    </Button>
-                  </Grid>
-                </Grid>
-                <Grid
-                  container
-                  direction="row"
-                  justify="center"
-                  alignItems="center"
-                >
-                  <Grid>
-                    <p>
-                      페이지
-                      {' '}
-                      {pageNumber}
-                      {' '}
-                      /
-                      {numPages}
-                    </p>
-                  </Grid>
-                </Grid>
-              {/*</PerfectScrollbar>*/}
-            </>
-          )}
-        </CardContent>
-      </Card>
-      </Draggable>
+
+      {attachmentCard}
+
     </div>
   );
 }

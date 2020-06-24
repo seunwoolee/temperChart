@@ -28,11 +28,13 @@ import ExpandLessOutlinedIcon from '@material-ui/icons/ExpandLessOutlined';
 import Input from "@material-ui/core/Input";
 import GroupIcon from '@material-ui/icons/Group';
 import SearchIcon from '@material-ui/icons/Search';
-import {useSelector} from "react-redux";
+import AddCircleIcon from '@material-ui/icons/AddCircle';
 import axios from "../../../utils/my_axios";
 import {avatar_URL} from "../../../my_config";
 import {ApproverList} from "./ApproverList";
 import ApproverGroupList from "./ApproverGroupList";
+import ReceiverList from "./ReceiverList";
+import Tooltip from "@material-ui/core/Tooltip";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -145,6 +147,7 @@ const useStyles = makeStyles((theme) => ({
 function ChooseDialog({open, onClose, onSubmit, invoiceType}) {
   const classes = useStyles();
   const [users, setUsers] = React.useState([]);
+  const [receivers, setReceivers] = React.useState([]);
   const [departmentUsers, setDepartmentUsers] = React.useState([]);
   const [allUsers, setAllUsers] = React.useState([]);
   const [typeUsers, setTypeUsers] = React.useState([]);
@@ -154,8 +157,6 @@ function ChooseDialog({open, onClose, onSubmit, invoiceType}) {
   const [addUserType, setAddUserType] = React.useState(10);
   const [openGroup, setOpenGroup] = React.useState(false);
   const [signGroups, setSignGroups] = useState([]);
-
-  const session = useSelector((state) => state.session);
 
   const handleChecked = (i) => {
     if (i === checked) {
@@ -184,6 +185,14 @@ function ChooseDialog({open, onClose, onSubmit, invoiceType}) {
     }
     newUser.order = users.reduce((max, n) => Math.max(max, n.order) + 1, 0);
     setUsers([...users, newUser].sort(sortUsers));
+  };
+
+  const handleAddReceiverButton = (receiverId) => {
+    const newUser = typeUsers.find(user => user.id === receiverId);
+    if (receivers.find(receiver => receiver.id === receiverId)) {
+      return alert('이미 등록되어 있습니다.');
+    }
+    setReceivers((prevState => [...prevState, newUser]));
   };
 
   const deleteUser = (index) => {
@@ -296,7 +305,6 @@ function ChooseDialog({open, onClose, onSubmit, invoiceType}) {
       mounted = false;
     };
   }, []);
-  // }, [session.token, session.user.department, session.user.id]);
 
   const handleClickOpen = () => {
     setOpenGroup(true);
@@ -307,7 +315,7 @@ function ChooseDialog({open, onClose, onSubmit, invoiceType}) {
   };
 
   return (
-    <Dialog onClose={onClose} aria-labelledby="simple-dialog-title" open={open}>
+    <Dialog onClose={onClose} open={open}>
       <Card
         className={classes.root}
       >
@@ -352,6 +360,15 @@ function ChooseDialog({open, onClose, onSubmit, invoiceType}) {
                 users={users}/>
             </List>
           </PerfectScrollbar>
+        </CardContent>
+        <CardContent className={classes.content}>
+          <Typography variant="h5" component="h5">
+            수신참조
+          </Typography>
+          <ReceiverList
+            receivers={receivers}
+            setReceivers={setReceivers}
+          />
         </CardContent>
         <Divider/>
         <CardActions className={classes.actions}>
@@ -411,7 +428,7 @@ function ChooseDialog({open, onClose, onSubmit, invoiceType}) {
                   <Avatar
                     alt="Profile image"
                     className={classes.avatar}
-                    src={`${avatar_URL}${user.avatar}`} // TODO URL 변경 필요
+                    src={`${avatar_URL}${user.avatar}`}
                   />
                   <ListItemText
                     className={classes.listItemText}
@@ -419,9 +436,16 @@ function ChooseDialog({open, onClose, onSubmit, invoiceType}) {
                     secondary={user.common}
                   />
                   <ListItemSecondaryAction classes={{root: classes.deleteUserButton}}>
-                    <IconButton onClick={() => handleAddButton(user.id)} aria-label="add-user">
-                      <AddCircleOutlineOutlinedIcon fontSize="large"/>
+                    <Tooltip title='결재추가'>
+                      <IconButton onClick={() => handleAddButton(user.id)} aria-label="add-user">
+                        <AddCircleOutlineOutlinedIcon fontSize="default"/>
+                      </IconButton>
+                    </Tooltip>
+                    <Tooltip title='수신참조추가'>
+                    <IconButton onClick={() => handleAddReceiverButton(user.id)} aria-label="add-receiver">
+                      <AddCircleIcon fontSize="default"/>
                     </IconButton>
+                    </Tooltip>
                   </ListItemSecondaryAction>
                 </ListItem>
               ))}
