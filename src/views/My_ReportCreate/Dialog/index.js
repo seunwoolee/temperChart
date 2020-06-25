@@ -189,11 +189,10 @@ function ChooseDialog({open, onClose, onSubmit, invoiceType}) {
 
   const handleAddReceiverButton = (receiverId) => {
     const newUser = typeUsers.find(user => user.id === receiverId);
-    newUser.type = '2';
     if (receivers.find(receiver => receiver.id === receiverId)) {
       return alert('이미 등록되어 있습니다.');
     }
-    setReceivers((prevState => [...prevState, newUser]));
+    setReceivers((prevState => [...prevState, {...newUser, type: 2}]));
   };
 
   const deleteUser = (index) => {
