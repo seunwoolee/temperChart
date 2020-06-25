@@ -86,8 +86,6 @@ function Index({
   };
 
   const handleSubmit = (users: Array, receivers: Array) => {
-    console.log(receivers);
-    debugger;
     const headers = {Authorization: `Token ${localStorage.getItem('token')}`, 'Content-Type': 'multipart/form-data'};
     const axiosConfig = {headers};
     const url = 'ea/create_document/';

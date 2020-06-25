@@ -203,7 +203,7 @@ function MY_attachments({attachments, openAttachment, setOpenAttachment, selecte
         >
         </CardHeader>
         <CardContent style={{transform: `rotate(${rotate}deg)`}}>
-          {selectedImgPath.substr(selectedImgPath.length - 3) !== 'pdf'
+          {selectedImgPath.substr(selectedImgPath.length - 3).toLowerCase() !== 'pdf'
             ? (<div className={classes.imgWrapper}><img src={selectedImgPath} className={classes.img} alt="이미지"/></div>)
             : (
             <>

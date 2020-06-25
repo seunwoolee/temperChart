@@ -6,6 +6,7 @@ import CreateIcon from '@material-ui/icons/Create';
 import DescriptionRoundedIcon from '@material-ui/icons/DescriptionRounded';
 import DescriptionOutlinedIcon from '@material-ui/icons/DescriptionOutlined';
 import BorderColorIcon from '@material-ui/icons/BorderColor';
+import RestorePageOutlinedIcon from '@material-ui/icons/RestorePageOutlined';
 import SettingsIcon from '@material-ui/icons/Settings';
 import Label from 'src/components/Label';
 import CreateOutlinedIcon from '@material-ui/icons/CreateOutlined';
@@ -57,6 +58,23 @@ export function MY_navConfig() {
           title: '반려함',
           href: '/reportRejected',
           icon: DescriptionRoundedIcon
+        },
+        {
+          title: '수신참조함',
+          href: '/reportCc',
+          icon: RestorePageOutlinedIcon,
+          label: () => {
+            return (
+              session.todoCount.수신참조함 > 0 ? (
+                <Label
+                  color={colors.grey[500]}
+                  shape="rounded"
+                >
+                  {session.todoCount.수신참조함}
+                </Label>
+              ) : null
+            )
+          }
         },
       ]
     },

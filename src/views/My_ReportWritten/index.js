@@ -10,6 +10,7 @@ import Header from './Header';
 import Results from './Results';
 import MY_SearchBar from "../../components/MY_SearchBar";
 import {isloading} from "../../actions";
+import CcResults from "./CcResult";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -67,6 +68,9 @@ function ReportWritten() {
     } else if (location.pathname === '/reportApproved') {
       url = `ea/approved_document/?page=${paging}`;
       setHeaderText('기결함');
+    } else if (location.pathname === '/reportCc') {
+      url = `ea/cc_document/?page=${paging}`;
+      setHeaderText('수신참조함');
     }
 
     let params = {
@@ -131,7 +135,16 @@ function ReportWritten() {
           onSearch={fetchDocuments}
           detail
         />
-        {documents && (
+        {documents && headerText === '수신참조함' ? (
+          <CcResults
+            fetchDocuments={fetchDocuments}
+            page={page}
+            totalCount={totalCount}
+            setPage={setPage}
+            className={classes.results}
+            documents={documents}
+          />
+        ) : (
           <Results
             fetchDocuments={fetchDocuments}
             page={page}

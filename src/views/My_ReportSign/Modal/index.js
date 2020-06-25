@@ -182,6 +182,10 @@ function Index({ open, onClose, onComplete, document, invoices, className }) {
                           <TableCell className={classes.tableCellTitle}>제목</TableCell>
                           <TableCell>{document.title}</TableCell>
                         </TableRow>
+                        <TableRow>
+                          <TableCell className={classes.tableCellTitle}>수신참조</TableCell>
+                          <TableCell>{document.carbon_copys.map(cc => cc.receiver_name).join(', ')}</TableCell>
+                        </TableRow>
                       </TableBody>
                     </Table>
                   </TableContainer>

@@ -113,11 +113,11 @@ export default [
         exact: true,
         component: lazy(() => import('src/views/My_ReportWritten'))
       },
-      // {
-      //   path: '/reportPrint',
-      //   exact: true,
-      //   component: lazy(() => import('src/components/MY_Print'))
-      // },
+      {
+        path: '/reportCc',
+        exact: true,
+        component: lazy(() => import('src/views/My_ReportWritten'))
+      },
       {
         path: '/calendar',
         exact: true,
