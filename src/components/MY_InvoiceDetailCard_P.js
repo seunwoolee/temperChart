@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/styles';
@@ -10,6 +10,11 @@ import {
 import MY_erpDetailTable from "./MY_erpDetailTable";
 import MY_InvoiceDetailCard_Attachment from "./MY_InvoiceDetailCard_Attachment";
 import getSumInvoices from "../utils/getSumInvoices";
+import {isloading} from "../actions";
+import axios from "../utils/my_axios";
+import {useDispatch} from "react-redux";
+import Tooltip from "@material-ui/core/Tooltip";
+import MY_occurInvoicesCard from "./MY_occurInvoicesCard";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -17,6 +22,7 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(3)
   },
   content: {
+    cursor: 'pointer',
     padding: theme.spacing(1),
     paddingBottom: theme.spacing(0.1),
     flexGrow: 1,
@@ -72,6 +78,29 @@ function MY_InvoiceCard({
   openAttachment, setOpenAttachment, selectedImgPath, setSelectedImgPath
 }) {
   const classes = useStyles();
+  const dispatch = useDispatch();
+  const [occurInvoices, setOccurInvoices] = useState([]);
+  const [open, setOpen] = useState('none');
+
+  const getOccurInvoices = (invoice) => {
+    const config = {
+      headers: {Authorization: `Token ${localStorage.getItem('token')}`},
+      params: {
+        RPDOC: invoice.RPDOC,
+        RPCO: invoice.RPCO,
+      }
+    };
+
+    dispatch(isloading(true))
+    axios.get(`ea/get_occur_invoices/`, config)
+      .then((response) => {
+        setOccurInvoices(response.data);
+        setOpen('block');
+        dispatch(isloading(false));
+      })
+      .catch(error => dispatch(isloading(false)));
+  }
+
   return (
     <>
       <Typography variant="h5">
@@ -84,12 +113,22 @@ function MY_InvoiceCard({
         원
       </Typography>
 
+      {occurInvoices.length > 0 ? (
+      <MY_occurInvoicesCard
+        open={open}
+        setOpen={setOpen}
+        invoices={occurInvoices}
+        className={classes.erpDetailTable}
+      />
+      ): null}
+
       {invoices.filter(invoice => invoice.RPSEQ === 1).map((invoice, i) => (
         <Card
           key={i}
           className={clsx(classes.root, className)}
         >
-        <CardContent className={classes.content}>
+        <Tooltip title="채무발생보기">
+        <CardContent className={classes.content} onClick={()=>getOccurInvoices(invoice)}>
           <div className={classes.supplyName}>
             <Typography variant="body2">배치번호/문서번호</Typography>
             <Typography variant="h6">{invoice.RPICU}/{invoice.RPDOC}</Typography>
@@ -107,6 +146,7 @@ function MY_InvoiceCard({
             <Typography variant="h6">{invoice.RPEXR1 || invoice.RPTXA1 ? invoice.RPEXR1 + ' / ' + invoice.RPTXA1 : <br />}</Typography>
           </div>
         </CardContent>
+        </Tooltip>
         <CardContent className={classes.contentBottom}>
           <div className={classes.supplyName}>
             <Typography variant="body2">G/L일자/전표유형</Typography>
@@ -148,6 +188,7 @@ function MY_InvoiceCard({
 MY_InvoiceCard.propTypes = {
   className: PropTypes.string,
   invoices: PropTypes.array.isRequired,
+  document_type: PropTypes.object,
   attachments: PropTypes.array,
   handleAttachments: PropTypes.func,
   type: PropTypes.string.isRequired,

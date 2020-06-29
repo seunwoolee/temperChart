@@ -74,10 +74,7 @@ const useStyles = makeStyles((theme) => ({
   },
   attachmentCard: {
     [theme.breakpoints.up('lg')]: {
-      // cursor: 'move',
-      // maxHeight: '80%',
       maxWidth: '960px',
-      // marginTop: -550,
     },
     [theme.breakpoints.down('lg')]: {
       width: '100%',
@@ -90,7 +87,6 @@ const useStyles = makeStyles((theme) => ({
     zIndex: 9999
   },
   attachmentCardHeader: {
-    // cursor: 'move',
     padding: theme.spacing(1),
     color: theme.palette.primary.contrastText,
     backgroundColor: theme.palette.primary.main,
@@ -181,7 +177,7 @@ function MY_attachments({attachments, openAttachment, setOpenAttachment, selecte
       <Card className={classes.attachmentCard} style={{display: openAttachment}}>
         <CardHeader
           classes={{title: classes.attachmentCardHeader}}
-          className={clsx(classes.attachmentCardHeader) }
+          className={classes.attachmentCardHeader}
           title="첨부파일"
           action={
             <>
@@ -258,7 +254,7 @@ function MY_attachments({attachments, openAttachment, setOpenAttachment, selecte
 
 MY_attachments.propTypes = {
   attachments: PropTypes.array,
-  openAttachment: PropTypes.bool,
+  openAttachment: PropTypes.string,
   setOpenAttachment: PropTypes.func,
   selectedImgPath: PropTypes.string,
   setSelectedImgPath: PropTypes.func,
