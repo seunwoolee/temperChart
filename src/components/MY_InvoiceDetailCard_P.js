@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
-import { makeStyles } from '@material-ui/styles';
+import {makeStyles} from '@material-ui/styles';
 import {
   Card,
   CardContent, Divider, Grid,
@@ -74,9 +74,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function MY_InvoiceCard({
-  invoices, className, attachments, handleAttachments, type,
-  openAttachment, setOpenAttachment, selectedImgPath, setSelectedImgPath
-}) {
+                          invoices, className, attachments, handleAttachments, type,
+                          openAttachment, setOpenAttachment, selectedImgPath, setSelectedImgPath
+                        }) {
   const classes = useStyles();
   const dispatch = useDispatch();
   const [occurInvoices, setOccurInvoices] = useState([]);
@@ -114,62 +114,65 @@ function MY_InvoiceCard({
       </Typography>
 
       {occurInvoices.length > 0 ? (
-      <MY_occurInvoicesCard
-        open={open}
-        setOpen={setOpen}
-        invoices={occurInvoices}
-        className={classes.erpDetailTable}
-      />
-      ): null}
+
+        <MY_occurInvoicesCard
+          open={open}
+          setOpen={setOpen}
+          invoices={occurInvoices}
+          className={classes.erpDetailTable}
+          cardClassName={classes.content}
+        />
+      ) : null}
 
       {invoices.filter(invoice => invoice.RPSEQ === 1).map((invoice, i) => (
         <Card
           key={i}
           className={clsx(classes.root, className)}
         >
-        <Tooltip title="채무발생보기">
-        <CardContent className={classes.content} onClick={()=>getOccurInvoices(invoice)}>
-          <div className={classes.supplyName}>
-            <Typography variant="body2">배치번호/문서번호</Typography>
-            <Typography variant="h6">{invoice.RPICU}/{invoice.RPDOC}</Typography>
-          </div>
-          <div className={classes.stats}>
-            <Typography variant="body2">거래처명</Typography>
-            <Typography variant="h6">{invoice.RPALPH}</Typography>
-          </div>
-          <div className={classes.bigo}>
-            <Typography variant="body2">거래처코드/사업자번호</Typography>
-            <Typography variant="h6">{invoice.RPAN8} / {invoice.RPTAX}</Typography>
-          </div>
-          <div className={classes.stats}>
-            <Typography variant="body2">세금유형</Typography>
-            <Typography variant="h6">{invoice.RPEXR1 || invoice.RPTXA1 ? invoice.RPEXR1 + ' / ' + invoice.RPTXA1 : <br />}</Typography>
-          </div>
-        </CardContent>
-        </Tooltip>
-        <CardContent className={classes.contentBottom}>
-          <div className={classes.supplyName}>
-            <Typography variant="body2">G/L일자/전표유형</Typography>
-            <Typography variant="h6">{invoice.RPDGJ} / {invoice.RPDCT}</Typography>
-          </div>
-          <div className={classes.stats}>
-            <Typography variant="body2">송장일자</Typography>
-            <Typography variant="h6">{invoice.RPDSVJ}</Typography>
-          </div>
-          <div className={classes.bigo}>
-            <Typography variant="body2">지급예정일</Typography>
-            <Typography variant="h6">{invoice.RPDDJ}</Typography>
-          </div>
-          <div className={classes.bigo}>
-            <Typography variant="body2">세금정보</Typography>
-            <Typography variant="h6">{invoice.RPEXR1NM}</Typography>
-          </div>
-        </CardContent>
-        <CardContent className={classes.erpDetailTable}>
-          <MY_erpDetailTable invoices={invoices.filter(my_invoice => my_invoice.RPDOCM === invoice.RPDOCM
-            && my_invoice.RPAN8 === invoice.RPAN8 )} />
-        </CardContent>
-        <Divider />
+          <Tooltip title="채무발생보기">
+            <CardContent className={classes.content} onClick={() => getOccurInvoices(invoice)}>
+              <div className={classes.supplyName}>
+                <Typography variant="body2">배치번호/문서번호</Typography>
+                <Typography variant="h6">{invoice.RPICU}/{invoice.RPDOC}</Typography>
+              </div>
+              <div className={classes.stats}>
+                <Typography variant="body2">거래처명</Typography>
+                <Typography variant="h6">{invoice.RPALPH}</Typography>
+              </div>
+              <div className={classes.bigo}>
+                <Typography variant="body2">거래처코드/사업자번호</Typography>
+                <Typography variant="h6">{invoice.RPAN8} / {invoice.RPTAX}</Typography>
+              </div>
+              <div className={classes.stats}>
+                <Typography variant="body2">세금유형</Typography>
+                <Typography variant="h6">{invoice.RPEXR1 || invoice.RPTXA1 ? invoice.RPEXR1 + ' / ' + invoice.RPTXA1 :
+                  <br/>}</Typography>
+              </div>
+            </CardContent>
+          </Tooltip>
+          <CardContent className={classes.contentBottom}>
+            <div className={classes.supplyName}>
+              <Typography variant="body2">G/L일자/전표유형</Typography>
+              <Typography variant="h6">{invoice.RPDGJ} / {invoice.RPDCT}</Typography>
+            </div>
+            <div className={classes.stats}>
+              <Typography variant="body2">송장일자</Typography>
+              <Typography variant="h6">{invoice.RPDSVJ}</Typography>
+            </div>
+            <div className={classes.bigo}>
+              <Typography variant="body2">지급예정일</Typography>
+              <Typography variant="h6">{invoice.RPDDJ}</Typography>
+            </div>
+            <div className={classes.bigo}>
+              <Typography variant="body2">세금정보</Typography>
+              <Typography variant="h6">{invoice.RPEXR1NM}</Typography>
+            </div>
+          </CardContent>
+          <CardContent className={classes.erpDetailTable}>
+            <MY_erpDetailTable invoices={invoices.filter(my_invoice => my_invoice.RPDOCM === invoice.RPDOCM
+              && my_invoice.RPAN8 === invoice.RPAN8)}/>
+          </CardContent>
+          <Divider/>
           <MY_InvoiceDetailCard_Attachment
             setSelectedImgPath={setSelectedImgPath}
             selectedImgPath={selectedImgPath}
@@ -178,7 +181,7 @@ function MY_InvoiceCard({
             handleAttachments={handleAttachments}
             type={type}
             attachments={attachments}
-            invoiceId={invoice.id} />
+            invoiceId={invoice.id}/>
         </Card>
       ))}
     </>

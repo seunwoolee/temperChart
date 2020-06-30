@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
-import { makeStyles } from '@material-ui/styles';
+import {makeStyles} from '@material-ui/styles';
 import {
   Card,
   CardContent, Divider, Grid, Hidden,
@@ -24,6 +24,7 @@ import Button from "@material-ui/core/Button";
 import {Document, Page} from "react-pdf";
 import NavigateBeforeIcon from "@material-ui/icons/NavigateBefore";
 import NavigateNextIcon from "@material-ui/icons/NavigateNext";
+import MY_attachments from "./MY_attachments";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -47,35 +48,63 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function MY_occurInvoicesCard({invoices, open, setOpen, className}) {
+function MY_occurInvoicesCard({invoices, open, setOpen, className, cardClassName}) {
   const classes = useStyles();
+  const [openAttachment, setOpenAttachment] = useState('none');
+  const [selectedImgPath, setSelectedImgPath] = React.useState('');
 
   const handleClose = () => {
     setOpen('None');
   };
 
-  return (
-      <Card className={classes.root} style={{display: open}}>
-        <CardHeader
-          classes={{title: classes.header}}
-          className={classes.header}
-          title="발생전표"
-          action={
-            <Button onClick={handleClose} color="primary" variant="contained">닫기</Button>
-          }
-        >
-        </CardHeader>
-        <CardContent className={className}>
-          <MY_erpDetailTable invoices={invoices} />
-        </CardContent>
+  const headerInvoice = invoices.find(invoice => invoice.RPSFX === '001' && invoice.RPSEQ === 1);
 
-      </Card>
+  return (
+    <Card className={classes.root} style={{display: open}}>
+      <CardHeader
+        classes={{title: classes.header}}
+        className={classes.header}
+        title="발생전표"
+        action={
+          <Button onClick={handleClose} color="primary" variant="contained">닫기</Button>
+        }
+      >
+      </CardHeader>
+      <CardContent className={cardClassName} style={{cursor: 'default'}}>
+        <div>
+          <Typography variant="body2">배치번호</Typography>
+          <Typography variant="h6">{headerInvoice.document.batch_number}</Typography>
+        </div>
+        <div>
+          <Typography variant="body2">제목</Typography>
+          <Typography variant="h6">{headerInvoice.document.title}</Typography>
+        </div>
+        <div>
+          <Typography variant="body2">작성자</Typography>
+          <Typography variant="h6">{headerInvoice.document.author}</Typography>
+        </div>
+        <div>
+          <Typography variant="body2">결재상태</Typography>
+          <Typography variant="h6">{headerInvoice.document.doc_status}</Typography>
+        </div>
+      </CardContent>
+      <CardContent className={className}>
+        <MY_erpDetailTable invoices={invoices}/>
+        <MY_attachments
+          openAttachment={openAttachment}
+          setOpenAttachment={setOpenAttachment}
+          setSelectedImgPath={setSelectedImgPath}
+          selectedImgPath={selectedImgPath}
+          attachments={headerInvoice.attachments}/>
+      </CardContent>
+    </Card>
 
   )
 }
 
 MY_occurInvoicesCard.propTypes = {
   className: PropTypes.string,
+  cardClassName: PropTypes.string,
   invoices: PropTypes.array.isRequired,
   open: PropTypes.string,
   setOpen: PropTypes.func
