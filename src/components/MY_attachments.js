@@ -204,6 +204,10 @@ function MY_attachments({attachments, openAttachment, setOpenAttachment, selecte
             : (
             <>
                 <Document
+                  options={{
+                    cMapUrl: `//cdn.jsdelivr.net/npm/pdfjs-dist@${pdfjs.version}/cmaps/`,
+                    cMapPacked: true,
+                  }}
                   file={selectedImgPath}
                   onLoadSuccess={onDocumentLoadSuccess}
                 >
