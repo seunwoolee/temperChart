@@ -125,9 +125,26 @@ export default function ChangePasswordDialog({open, onClose}) {
     });
   };
 
+  const checkServiceWorkerReloading = () => {
+    if (!('serviceWorker' in navigator)) {
+      return;
+    }
+    if (swRegistration === null) {
+      return;
+    }
+
+    if (swRegistration.waiting) {
+      swRegistration.waiting.postMessage('skipWaiting');
+    }
+
+    navigator.serviceWorker.addEventListener('controllerchange', () => {window.location.reload();}
+
+    );
+  }
 
   useEffect(() => {
     setTimeout(() => checkSubscribe(), 3000);
+    setTimeout(() => checkServiceWorkerReloading(), 1500);
   }, []);
 
   const handleChangePassword = (event) => {

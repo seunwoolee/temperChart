@@ -23,3 +23,8 @@ self.addEventListener('push', event => {
     self.registration.showNotification(data.text(), options)
   );
 });
+
+
+addEventListener('message', messageEvent => {
+  if (messageEvent.data === 'skipWaiting') return skipWaiting();
+});
