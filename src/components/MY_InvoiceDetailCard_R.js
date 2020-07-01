@@ -53,26 +53,13 @@ const useStyles = makeStyles((theme) => ({
       flexWrap: 'wrap'
     }
   },
-  supplyName: {
+  infoColumn: {
     // width: 180,
     padding: theme.spacing(1),
     [theme.breakpoints.down('sm')]: {
       flexBasis: '50%'
     }
   },
-  stats: {
-    // width: 120,
-    padding: theme.spacing(1),
-    [theme.breakpoints.down('sm')]: {
-      flexBasis: '50%'
-    }
-  },
-  bigo: {
-    padding: theme.spacing(1),
-    [theme.breakpoints.down('sm')]: {
-      flexBasis: '50%'
-    }
-  }
 }));
 
 
@@ -141,40 +128,32 @@ function MY_InvoiceCard({
         >
         <Tooltip title="채권발생보기">
         <CardContent className={classes.content} onClick={()=>getOccurInvoices(invoice)}>
-          <div className={classes.supplyName}>
+          <div className={classes.infoColumn}>
             <Typography variant="body2">배치번호/문서번호</Typography>
             <Typography variant="h6">{invoice.RPICU}/{invoice.RPDOC}</Typography>
           </div>
-          <div className={classes.stats}>
+          <div className={classes.infoColumn}>
             <Typography variant="body2">거래처명</Typography>
             <Typography variant="h6">{invoice.RPALPH}</Typography>
           </div>
-          <div className={classes.bigo}>
+          <div className={classes.infoColumn}>
             <Typography variant="body2">거래처코드/사업자번호</Typography>
             <Typography variant="h6">{invoice.RPAN8} / {invoice.RPTAX}</Typography>
-          </div>
-          <div className={classes.stats}>
-            <Typography variant="body2">세금유형</Typography>
-            <Typography variant="h6">{invoice.RPEXR1 || invoice.RPTXA1 ? invoice.RPEXR1 + ' / ' + invoice.RPTXA1 : <br />}</Typography>
           </div>
         </CardContent>
         </Tooltip>
         <CardContent className={classes.contentBottom}>
-          <div className={classes.supplyName}>
+          <div className={classes.infoColumn}>
             <Typography variant="body2">G/L일자/전표유형</Typography>
             <Typography variant="h6">{invoice.RPDGJ} / {invoice.RPDCT}</Typography>
           </div>
-          <div className={classes.stats}>
-            <Typography variant="body2">송장일자</Typography>
-            <Typography variant="h6">{invoice.RPDSVJ}</Typography>
+          <div className={classes.infoColumn}>
+            <Typography variant="body2">만기일</Typography>
+            <Typography variant="h6">{invoice.RPVLDT}</Typography>
           </div>
-          <div className={classes.bigo}>
-            <Typography variant="body2">지급예정일</Typography>
-            <Typography variant="h6">{invoice.RPDDJ}</Typography>
-          </div>
-          <div className={classes.bigo}>
-            <Typography variant="body2">세금정보</Typography>
-            <Typography variant="h6">{invoice.RPEXR1NM}</Typography>
+          <div className={classes.infoColumn}>
+            <Typography variant="body2">입금번호</Typography>
+            <Typography variant="h6">{invoice.RPCKNU}</Typography>
           </div>
         </CardContent>
         <CardContent className={classes.erpDetailTable}>
