@@ -17,11 +17,8 @@ import {
   TableRow,
   Typography
 } from '@material-ui/core';
-import GenericMoreButton from 'src/components/GenericMoreButton';
-import {useSelector} from "react-redux";
 import useWindowDimensions from "../../components/WindowDimenstions";
 import Index from "./Modal";
-import {documents} from '../../mock/my_documentsMock';
 import getPerfectScrollbarHeight from "../../utils/getPerfectScrollbarHeight";
 import LoadingBar from "../../components/MY_LoadingBar";
 import getCurrency from "../../utils/getCurrency";
@@ -95,6 +92,8 @@ function Results({className, fetchDocuments, documents, page, totalCount, setPag
 
   const getClassName = () => width < 1024;
 
+  debugger;
+
   return (
     <div
       className={clsx(classes.root, className)}
@@ -129,6 +128,7 @@ function Results({className, fetchDocuments, documents, page, totalCount, setPag
                   <TableRow>
                     <TableCell className={classes.header}>결재번호</TableCell>
                     <TableCell className={classes.header}>타입</TableCell>
+                    <TableCell className={classes.header}>G/L일자</TableCell>
                     <TableCell className={classes.header}>제목</TableCell>
                     <TableCell className={classes.header}>금액</TableCell>
                     <TableCell className={classes.header}>기안일자</TableCell>
@@ -148,6 +148,7 @@ function Results({className, fetchDocuments, documents, page, totalCount, setPag
                     >
                       <TableCell align="center" className={classes.whiteSpaceNoWrap}>{document.id}</TableCell>
                       <TableCell align="center" className={classes.whiteSpaceNoWrap}>{document.document_type}</TableCell>
+                      <TableCell align="center" className={classes.whiteSpaceNoWrap}>{document.invoices[0].RPDGJ}</TableCell>
                       <TableCell className={classes.whiteSpaceNoWrap}>{document.title}</TableCell>
                       <TableCell className={classes.whiteSpaceNoWrap}>{getCurrency(document.price)}</TableCell>
                       <TableCell align="center" className={classes.whiteSpaceNoWrap}>{document.created}</TableCell>
