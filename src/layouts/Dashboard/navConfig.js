@@ -48,6 +48,18 @@ export function MY_navConfig() {
           title: '상신함',
           href: '/reportWritten',
           icon: ReceiptRoundedIcon,
+          label: () => {
+            return (
+              session.todoCount.상신함 > 0 ? (
+                <Label
+                  color={colors.teal[500]}
+                  shape="rounded"
+                >
+                  {session.todoCount.상신함}
+                </Label>
+              ) : null
+            )
+          }
         },
         {
           title: '기결함',

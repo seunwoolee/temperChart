@@ -95,12 +95,14 @@ function CcResults({className, fetchDocuments, documents, page, totalCount, setP
 
   const handleTableClick = (document) => {
     const cc = getCc(document);
-    cc.is_readed = true;
-    const config = {
-      headers: {Authorization: `Token ${localStorage.getItem('token')}`},
-    };
-    axios.post(`ea/cc_update/${cc.id}`, {}, config)
-      .then(response =>  dispatch(getTodoCount(session.token)))
+    if(cc.is_readed === false){
+      cc.is_readed = true;
+      const config = {
+        headers: {Authorization: `Token ${localStorage.getItem('token')}`},
+      };
+      axios.post(`ea/cc_update/${cc.id}`, {}, config)
+        .then(response =>  dispatch(getTodoCount(session.token)))
+    }
 
     const newDocument = documents.find(my_document => my_document.id === document.id);
     setSelectedDocument(newDocument);

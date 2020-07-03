@@ -22,6 +22,9 @@ import Index from "./Modal";
 import getPerfectScrollbarHeight from "../../utils/getPerfectScrollbarHeight";
 import LoadingBar from "../../components/MY_LoadingBar";
 import getCurrency from "../../utils/getCurrency";
+import {useDispatch, useSelector} from "react-redux";
+import axios from "../../utils/my_axios";
+import {getTodoCount} from "../../actions";
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -41,6 +44,9 @@ const useStyles = makeStyles((theme) => ({
   },
   inner: {
     minWidth: 700,
+  },
+  fontWeight: {
+    fontWeight: 600
   },
   whiteSpaceNoWrap: {
     whiteSpace: 'nowrap'
@@ -65,10 +71,12 @@ function Results({className, fetchDocuments, documents, page, totalCount, setPag
   const [selectedDocument, setSelectedDocument] = useState({});
   const [openModal, setOpenModal] = useState(false);
   const {height, width} = useWindowDimensions();
+  const session = useSelector((state) => state.session);
+  const dispatch = useDispatch();
 
   const rowsPerPage = 25;
 
-  const props = { mobileInnerHeight: getPerfectScrollbarHeight(rowsPerPage, totalCount, 60)};
+  const props = {mobileInnerHeight: getPerfectScrollbarHeight(rowsPerPage, totalCount, 60)};
   const classes = useStyles(props);
 
   const handleChangePage = (event, page) => {
@@ -76,7 +84,17 @@ function Results({className, fetchDocuments, documents, page, totalCount, setPag
   };
 
   const handleTableClick = (id) => {
+
     const newDocument = documents.find(document => document.id === id);
+    if (checkReadedAfterFinising(newDocument)) {
+      newDocument.is_readed_after_finishing = true;
+      const config = {
+        headers: {Authorization: `Token ${localStorage.getItem('token')}`},
+      };
+      axios.post(`ea/document_is_readed_update/${newDocument.id}`, {}, config)
+        .then(response => dispatch(getTodoCount(session.token)))
+    }
+
     setSelectedDocument(newDocument);
     setOpenModal(true);
   };
@@ -92,19 +110,20 @@ function Results({className, fetchDocuments, documents, page, totalCount, setPag
 
   const getClassName = () => width < 1024;
 
-  debugger;
+  const checkReadedAfterFinising = (document) => {
+    return session.user.id === document.author_id && !document.is_readed_after_finishing && document.doc_status === "결재완료"
+  }
 
   return (
     <div
       className={clsx(classes.root, className)}
     >
-      <LoadingBar />
+      <LoadingBar/>
       <Typography
         color="textSecondary"
         gutterBottom
         variant="body2"
       >
-        {/*{documents.length}*/}
         {totalCount}
         {' '}
         Records found. Page
@@ -119,7 +138,7 @@ function Results({className, fetchDocuments, documents, page, totalCount, setPag
         <CardHeader
           title="결재 내역"
         />
-        <Divider />
+        <Divider/>
         <CardContent className={classes.content}>
           <PerfectScrollbar>
             <div className={getClassName() ? classes.mobileInner : classes.inner}>
@@ -138,25 +157,40 @@ function Results({className, fetchDocuments, documents, page, totalCount, setPag
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {/*{documents.slice(startData, endData).map((document, i) => (*/}
-                  {documents.map((document, i) => (
-                    <TableRow
-                      className={classes.tableRows}
-                      onClick={() => handleTableClick(document.id)}
-                      hover
-                      key={document.id}
-                    >
-                      <TableCell align="center" className={classes.whiteSpaceNoWrap}>{document.id}</TableCell>
-                      <TableCell align="center" className={classes.whiteSpaceNoWrap}>{document.document_type}</TableCell>
-                      <TableCell align="center" className={classes.whiteSpaceNoWrap}>{document.invoices[0].RPDGJ}</TableCell>
-                      <TableCell className={classes.whiteSpaceNoWrap}>{document.title}</TableCell>
-                      <TableCell className={classes.whiteSpaceNoWrap}>{getCurrency(document.price)}</TableCell>
-                      <TableCell align="center" className={classes.whiteSpaceNoWrap}>{document.created}</TableCell>
-                      <TableCell align="center" className={classes.whiteSpaceNoWrap}>{document.department}</TableCell>
-                      <TableCell align="center" className={classes.whiteSpaceNoWrap}>{document.author}</TableCell>
-                      <TableCell align="center">{document.doc_status}</TableCell>
-                    </TableRow>
-                  ))}
+                  {documents.map((document, i) => {
+                    let highlighting = false;
+                    if (checkReadedAfterFinising(document)) {
+                      highlighting = true
+                    }
+
+                    return (
+                      <TableRow
+                        className={classes.tableRows}
+                        onClick={() => handleTableClick(document.id)}
+                        hover
+                        key={document.id}
+                      >
+                        <TableCell align="center" className={clsx(classes.whiteSpaceNoWrap, highlighting ?
+                          classes.fontWeight : null)}>{document.id}</TableCell>
+                        <TableCell align="center" className={clsx(classes.whiteSpaceNoWrap, highlighting ?
+                          classes.fontWeight : null)}>{document.document_type}</TableCell>
+                        <TableCell align="center" className={clsx(classes.whiteSpaceNoWrap, highlighting ?
+                          classes.fontWeight : null)}>{document.invoices[0].RPDGJ}</TableCell>
+                        <TableCell className={clsx(classes.whiteSpaceNoWrap, highlighting ?
+                          classes.fontWeight : null)}>{document.title}</TableCell>
+                        <TableCell className={clsx(classes.whiteSpaceNoWrap, highlighting ?
+                          classes.fontWeight : null)}>{getCurrency(document.price)}</TableCell>
+                        <TableCell align="center" className={clsx(classes.whiteSpaceNoWrap, highlighting ?
+                          classes.fontWeight : null)}>{document.created}</TableCell>
+                        <TableCell align="center" className={clsx(classes.whiteSpaceNoWrap, highlighting ?
+                          classes.fontWeight : null)}>{document.department}</TableCell>
+                        <TableCell align="center" className={clsx(classes.whiteSpaceNoWrap, highlighting ?
+                          classes.fontWeight : null)}>{document.author}</TableCell>
+                        <TableCell align="center" className={clsx(classes.whiteSpaceNoWrap, highlighting ?
+                          classes.fontWeight : null)}>{document.doc_status}</TableCell>
+                      </TableRow>
+                    )
+                  })}
                 </TableBody>
               </Table>
             </div>
@@ -175,14 +209,14 @@ function Results({className, fetchDocuments, documents, page, totalCount, setPag
       </Card>
       {openModal
       && (
-      <Index
-        document={selectedDocument}
-        invoices={selectedDocument.invoices}
-        onClose={closeReportModal}
-        onComplete={completeReportModal}
-        open={openModal}
-      />
-      ) }
+        <Index
+          document={selectedDocument}
+          invoices={selectedDocument.invoices}
+          onClose={closeReportModal}
+          onComplete={completeReportModal}
+          open={openModal}
+        />
+      )}
     </div>
   );
 }

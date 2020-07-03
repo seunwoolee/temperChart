@@ -75,6 +75,7 @@ const saveSignCount = (state, action) => ({
     ...state.todoCount,
     '미결함': action.data[0],
     '수신참조함': action.data[1],
+    '상신함': action.data[2],
   },
 });
 
