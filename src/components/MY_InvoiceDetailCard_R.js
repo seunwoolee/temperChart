@@ -118,6 +118,7 @@ function MY_InvoiceCard({
         setOpen={setOpen}
         invoices={occurInvoices}
         className={classes.erpDetailTable}
+        cardClassName={classes.content}
       />
       ): null}
 
