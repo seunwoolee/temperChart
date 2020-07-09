@@ -15,6 +15,7 @@ import axios from "../utils/my_axios";
 import MY_occurInvoicesCard from "./MY_occurInvoicesCard";
 import {useDispatch} from "react-redux";
 import Tooltip from "@material-ui/core/Tooltip";
+import MY_erpDetailTable_R from "./MY_erpDetailTable_R";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -76,7 +77,7 @@ function MY_InvoiceCard({
     const config = {
       headers: {Authorization: `Token ${localStorage.getItem('token')}`},
       params: {
-        RPDOC: invoice.RPDOC,
+        RPDOC: invoice.RPDOCM,
         RPCO: invoice.RPCO,
       }
     };
@@ -127,10 +128,10 @@ function MY_InvoiceCard({
           key={i}
           className={clsx(classes.root, className)}
         >
-        <Tooltip title="채권발생보기">
-        <CardContent className={classes.content} onClick={()=>getOccurInvoices(invoice)}>
+        {/*<CardContent className={classes.content} onClick={()=>getOccurInvoices(invoice)}>*/}
+        <CardContent className={classes.content}>
           <div className={classes.infoColumn}>
-            <Typography variant="body2">배치번호/문서번호</Typography>
+            <Typography variant="body2">배치번호/입금번호</Typography>
             <Typography variant="h6">{invoice.RPICU}/{invoice.RPDOC}</Typography>
           </div>
           <div className={classes.infoColumn}>
@@ -142,7 +143,6 @@ function MY_InvoiceCard({
             <Typography variant="h6">{invoice.RPAN8} / {invoice.RPTAX}</Typography>
           </div>
         </CardContent>
-        </Tooltip>
         <CardContent className={classes.contentBottom}>
           <div className={classes.infoColumn}>
             <Typography variant="body2">G/L일자/전표유형</Typography>
@@ -158,7 +158,7 @@ function MY_InvoiceCard({
           </div>
         </CardContent>
         <CardContent className={classes.erpDetailTable}>
-          <MY_erpDetailTable invoices={invoices.filter(my_invoice => my_invoice.RPCKNU === invoice.RPCKNU)} />
+          <MY_erpDetailTable_R invoices={invoices.filter(my_invoice => my_invoice.RPCKNU === invoice.RPCKNU)} onGetOccurInvoices={getOccurInvoices}/>
         </CardContent>
         <Divider />
           <MY_InvoiceDetailCard_Attachment
