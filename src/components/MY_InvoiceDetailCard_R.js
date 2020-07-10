@@ -23,7 +23,6 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(3)
   },
   content: {
-    cursor: 'pointer',
     padding: theme.spacing(1),
     paddingBottom: theme.spacing(0.1),
     flexGrow: 1,

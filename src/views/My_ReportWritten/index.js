@@ -32,6 +32,7 @@ const filterInitialValues = {
   batchNumber: '',
   user: '',
   department: '',
+  isNotReaded: false
 };
 
 
@@ -89,6 +90,10 @@ function ReportWritten() {
 
     if (filterValues.department) {
       params['department'] = filterValues.department;
+    }
+
+    if (filterValues.isNotReaded === true) {
+      params['isNotReaded'] = true;
     }
 
     const config = {

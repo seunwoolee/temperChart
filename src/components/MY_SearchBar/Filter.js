@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
-import { makeStyles } from '@material-ui/styles';
+import {makeStyles} from '@material-ui/styles';
 import {
   Button,
   Chip,
@@ -15,12 +15,13 @@ import {
   TextField,
   Typography
 } from '@material-ui/core';
-import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
+import {ToggleButton, ToggleButtonGroup} from '@material-ui/lab';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import CloseIcon from '@material-ui/icons/Close';
 import DeleteIcon from '@material-ui/icons/DeleteOutlined';
 import AddIcon from '@material-ui/icons/Add';
+import Checkbox from "@material-ui/core/Checkbox";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -93,22 +94,23 @@ const initialValues = {
   batchNumber: '',
   user: '',
   department: '',
+  isNotReaded: false
 };
 
 function Filter({
-  open,
-  onClose,
-  onFilter,
-  className,
-  values,
-  setValues,
-  ...rest
-}) {
+                  open,
+                  onClose,
+                  onFilter,
+                  className,
+                  values,
+                  setValues,
+                  ...rest
+                }) {
   const classes = useStyles();
   const [expandCustomer, setExpandCustomer] = useState(true);
 
   const handleClear = () => {
-    setValues({ ...initialValues });
+    setValues({...initialValues});
   };
 
   const handleFieldChange = (event, field, value) => {
@@ -131,10 +133,12 @@ function Filter({
     onFilter();
   };
 
+  console.log(values);
+
   return (
     <Drawer
       anchor="right"
-      classes={{ paper: classes.drawer }}
+      classes={{paper: classes.drawer}}
       onClose={onClose}
       open={open}
       variant="temporary"
@@ -149,7 +153,7 @@ function Filter({
             onClick={onClose}
             size="small"
           >
-            <CloseIcon className={classes.buttonIcon} />
+            <CloseIcon className={classes.buttonIcon}/>
             닫기
           </Button>
         </div>
@@ -160,9 +164,9 @@ function Filter({
               onClick={handleToggleCustomer}
             >
               <Typography variant="h5">상세검색</Typography>
-              {expandCustomer ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+              {expandCustomer ? <ExpandLessIcon/> : <ExpandMoreIcon/>}
             </div>
-            <Divider />
+            <Divider/>
             <Collapse in={expandCustomer}>
               <div className={classes.contentSectionContent}>
                 <div className={classes.contentSectionContent}>
@@ -215,6 +219,22 @@ function Filter({
                       variant="outlined"
                     />
                   </div>
+                  <div className={classes.formGroup}>
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          checked={values.isNotReaded}
+                          onChange={(event) => handleFieldChange(
+                            event,
+                            'isNotReaded',
+                            event.target.checked
+                          )}
+                          name="isNotReaded"
+                        />
+                      }
+                      label="미열람문서"
+                    />
+                  </div>
                 </div>
               </div>
             </Collapse>
@@ -226,7 +246,7 @@ function Filter({
             onClick={handleClear}
             variant="contained"
           >
-            <DeleteIcon className={classes.buttonIcon} />
+            <DeleteIcon className={classes.buttonIcon}/>
             초기화
           </Button>
           <Button

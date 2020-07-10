@@ -34,6 +34,8 @@ function MY_erpDetailTable({invoices, onGetOccurInvoices}) {
   const getSumRPZ5DEBITAT = () => getThousand(invoices.map(invoice => invoice.RPZ5DEBITAT)
     .reduce((prev, curr) => prev + curr));
 
+  console.log(invoices);
+
   return (
     <TableContainer component={Paper}>
       <Table className={classes.table} size="small" aria-label="a dense table">
@@ -50,7 +52,8 @@ function MY_erpDetailTable({invoices, onGetOccurInvoices}) {
         <TableBody>
           {invoices.map(invoice => (
             <Tooltip title="채권발생보기">
-            <TableRow style={{'cursor': 'pointer'}} onClick={ invoice.RPDOCM > 0 ? ()=>onGetOccurInvoices(invoice) : null} key={invoice.id}>
+            {/*<TableRow style={{'cursor': 'pointer'}} onClick={ invoice.RPDOCM > 0 ? ()=>onGetOccurInvoices(invoice) : null} key={invoice.id}>*/}
+            <TableRow style={{'cursor': 'pointer'}} onClick={()=>onGetOccurInvoices(invoice)} key={invoice.id}>
               <TableCell style={{whiteSpace: 'nowrap'}} component="th" scope="row">{invoice.RPCODE}</TableCell>
               <TableCell style={{whiteSpace: 'nowrap'}} component="th" scope="row">{invoice.RPDL02}</TableCell>
               <TableCell style={{whiteSpace: 'nowrap'}} align="right">{invoice.RPZ5DEBITAT === 0 ? <br /> : getThousand(invoice.RPZ5DEBITAT)}</TableCell>
