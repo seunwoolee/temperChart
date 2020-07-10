@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
 
 const initialValues = {
   name: '',
-  startDate: moment().add(-3, 'month'),
+  startDate: moment().add(-15, 'day'),
   endDate: moment()
 };
 
