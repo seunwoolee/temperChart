@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
 const initialValues = {
   name: '',
   startDate: moment().add(-15, 'day'),
-  endDate: moment()
+  endDate: moment().add(10, 'day')
 };
 
 const filterInitialValues = {

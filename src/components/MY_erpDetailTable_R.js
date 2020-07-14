@@ -1,5 +1,5 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import {makeStyles} from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -12,6 +12,7 @@ import MY_InvoiceCard from "./MY_InvoiceDetailCard";
 import getCurrency from "../utils/getCurrency";
 import getThousand from "../utils/getThousand";
 import {Tooltip} from "@material-ui/core";
+import clsx from "clsx";
 
 const useStyles = makeStyles((theme) => ({
   table: {
@@ -22,6 +23,15 @@ const useStyles = makeStyles((theme) => ({
     '& .MuiTableRow-head': {
       backgroundColor: '#e0e0e0'
     }
+  },
+  tableRowCursor: {
+    cursor: "pointer"
+  },
+  tableCellNowrap: {
+    whiteSpace: 'nowrap'
+  },
+  tableCellFontweight: {
+    fontWeight: 600
   },
 }));
 
@@ -34,7 +44,23 @@ function MY_erpDetailTable({invoices, onGetOccurInvoices}) {
   const getSumRPZ5DEBITAT = () => getThousand(invoices.map(invoice => invoice.RPZ5DEBITAT)
     .reduce((prev, curr) => prev + curr));
 
-  console.log(invoices);
+  const tableRow = (invoice) => {
+    return (
+      <TableRow
+        className={invoice.RPDOCM > 0 ? classes.tableRowCursor : null}
+        onClick={invoice.RPDOCM > 0 ? () => onGetOccurInvoices(invoice) : null}
+        key={invoice.id}>
+        <TableCell className={classes.tableCellNowrap} scope="row">{invoice.RPCODE}</TableCell>
+        <TableCell className={classes.tableCellNowrap} component="th" scope="row">{invoice.RPDL02}</TableCell>
+        <TableCell className={classes.tableCellNowrap} align="right">{invoice.RPZ5DEBITAT === 0 ?
+          <br/> : getThousand(invoice.RPZ5DEBITAT)}</TableCell>
+        <TableCell className={classes.tableCellNowrap} align="right">{invoice.RPZ5CREDITAT === 0 ?
+          <br/> : getThousand(invoice.RPZ5CREDITAT)}</TableCell>
+        <TableCell className={classes.tableCellNowrap}>{invoice.RPRMK}</TableCell>
+        <TableCell className={classes.tableCellNowrap}>{invoice.RPSEQ === 3 ? (invoice.RPALPH) : <br/>}</TableCell>
+      </TableRow>
+    )
+  }
 
   return (
     <TableContainer component={Paper}>
@@ -51,26 +77,16 @@ function MY_erpDetailTable({invoices, onGetOccurInvoices}) {
         </TableHead>
         <TableBody>
           {invoices.map(invoice => (
-            <Tooltip title="채권발생보기">
-            {/*<TableRow style={{'cursor': 'pointer'}} onClick={ invoice.RPDOCM > 0 ? ()=>onGetOccurInvoices(invoice) : null} key={invoice.id}>*/}
-            <TableRow style={{'cursor': 'pointer'}} onClick={()=>onGetOccurInvoices(invoice)} key={invoice.id}>
-              <TableCell style={{whiteSpace: 'nowrap'}} component="th" scope="row">{invoice.RPCODE}</TableCell>
-              <TableCell style={{whiteSpace: 'nowrap'}} component="th" scope="row">{invoice.RPDL02}</TableCell>
-              <TableCell style={{whiteSpace: 'nowrap'}} align="right">{invoice.RPZ5DEBITAT === 0 ? <br /> : getThousand(invoice.RPZ5DEBITAT)}</TableCell>
-              <TableCell style={{whiteSpace: 'nowrap'}} align="right">{invoice.RPZ5CREDITAT === 0 ? <br /> : getThousand(invoice.RPZ5CREDITAT)}</TableCell>
-              <TableCell style={{whiteSpace: 'nowrap'}} >{invoice.RPRMK}</TableCell>
-              <TableCell style={{whiteSpace: 'nowrap'}} >{invoice.RPSEQ === 3 ? (invoice.RPALPH) : <br />}</TableCell>
-            </TableRow>
-            </Tooltip>
+            invoice.RPDOCM > 0 ? (<Tooltip title="채권발생보기">{tableRow(invoice)}</Tooltip>) : tableRow(invoice)
           ))}
-            <TableRow>
-              <TableCell><br /></TableCell>
-              <TableCell component="th" scope="row" style={{fontWeight: 600, whiteSpace: 'nowrap'}}>문서별합계</TableCell>
-              <TableCell align="right" style={{fontWeight: 600}}>{getSumRPZ5DEBITAT()}</TableCell>
-              <TableCell align="right" style={{fontWeight: 600}}>{getSumRPZ5CREDITAT()}</TableCell>
-              <TableCell><br /></TableCell>
-              <TableCell><br /></TableCell>
-            </TableRow>
+          <TableRow>
+            <TableCell><br/></TableCell>
+            <TableCell component="th" scope="row" className={clsx(classes.tableCellNowrap, classes.tableCellFontweight)}>문서별합계</TableCell>
+            <TableCell align="right" className={classes.tableCellFontweight}>{getSumRPZ5DEBITAT()}</TableCell>
+            <TableCell align="right" className={classes.tableCellFontweight}>{getSumRPZ5CREDITAT()}</TableCell>
+            <TableCell><br/></TableCell>
+            <TableCell><br/></TableCell>
+          </TableRow>
         </TableBody>
       </Table>
     </TableContainer>
