@@ -22,6 +22,10 @@ import CloseIcon from '@material-ui/icons/Close';
 import DeleteIcon from '@material-ui/icons/DeleteOutlined';
 import AddIcon from '@material-ui/icons/Add';
 import Checkbox from "@material-ui/core/Checkbox";
+import {useLocation} from "react-router";
+import {getTodoCount, isloading} from "../../actions";
+import axios from "../../utils/my_axios";
+import {useDispatch, useSelector} from "react-redux";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -108,6 +112,9 @@ function Filter({
                 }) {
   const classes = useStyles();
   const [expandCustomer, setExpandCustomer] = useState(true);
+  const location = useLocation();
+  const session = useSelector((state) => state.session);
+  const dispatch = useDispatch();
 
   const handleClear = () => {
     setValues({...initialValues});
@@ -133,7 +140,29 @@ function Filter({
     onFilter();
   };
 
-  console.log(values);
+  const readAllDocument = () => {
+    const token = localStorage.getItem('token');
+    const headers = {Authorization: `Token ${token}`};
+    dispatch(isloading(true));
+    let data = {};
+
+    if (location.pathname === '/reportWritten') {
+      data = {pathname: '상신함'};
+    } else if (location.pathname === '/reportCc') {
+      data = {pathname: '수신참조함'};
+    }
+
+    axios.post('ea/read_all_documents/', data, {headers})
+      .then(response => {
+        dispatch(isloading(false));
+        dispatch(getTodoCount(token));
+      })
+      .catch(error => {
+        dispatch(isloading(false));
+      });
+
+  }
+
 
   return (
     <Drawer
@@ -234,6 +263,13 @@ function Filter({
                       }
                       label="미열람문서"
                     />
+                    <Button
+                      onClick={readAllDocument}
+                      size="small"
+                      color="primary"
+                      variant="contained">
+                      미열람문서 모두 읽기
+                    </Button>
                   </div>
                 </div>
               </div>

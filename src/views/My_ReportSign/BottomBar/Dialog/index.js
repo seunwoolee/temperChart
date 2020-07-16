@@ -41,7 +41,6 @@ export default function MyDialog({open, onCloseDialog, selectedDocuments, setSel
         fetchDocuments();
         setSelectedDocuments([]);
       });
-
   };
 
   const handleClose = () => {
