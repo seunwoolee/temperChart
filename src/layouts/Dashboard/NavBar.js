@@ -19,13 +19,13 @@ import {
   colors
 } from '@material-ui/core';
 import NavItem from 'src/components/NavItem';
+import IconButton from "@material-ui/core/IconButton";
+import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
+import Tooltip from "@material-ui/core/Tooltip";
 import axios from "../../utils/my_axios";
 // import navConfig from './navConfig';
 import {MY_navConfig} from './navConfig';
-import IconButton from "@material-ui/core/IconButton";
-import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import ChangePasswordDialog from "../../components/MY_changePassword";
-import Tooltip from "@material-ui/core/Tooltip";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -38,8 +38,8 @@ const useStyles = makeStyles((theme) => ({
   },
   desktopDrawer: {
     width: 256,
-    top: 48,
-    height: 'calc(100% - 48px)'
+    top: 64,
+    height: 'calc(100% - 64px)'
   },
   navigation: {
     overflow: 'auto',
@@ -143,7 +143,9 @@ function reduceChildRoutes({
   return acc;
 }
 
-function NavBar({ openMobile, onMobileClose, className, ...rest }) {
+function NavBar({
+  openMobile, onMobileClose, className, ...rest
+}) {
   const classes = useStyles();
   const location = useLocation();
   const session = useSelector((state) => state.session);
@@ -173,12 +175,12 @@ function NavBar({ openMobile, onMobileClose, className, ...rest }) {
       <Divider className={classes.divider} />
       <Tooltip title="개인 정보 변경">
         <div className={classes.profile} onClick={() => setOpen(true)}>
-            <Avatar
-              alt="Person"
+          <Avatar
+            alt="Person"
               // onClick={() => setOpen(true)}
-              className={classes.avatar}
-              src={session.user.avatar}
-            />
+            className={classes.avatar}
+            src={session.user.avatar}
+          />
           <div className={classes.details}>
             <Link
               variant="h5"
@@ -221,7 +223,7 @@ function NavBar({ openMobile, onMobileClose, className, ...rest }) {
           {content}
         </Drawer>
       </Hidden>
-      <ChangePasswordDialog open={open} onClose={() => setOpen(false)}/>
+      <ChangePasswordDialog open={open} onClose={() => setOpen(false)} />
     </>
   );
 }

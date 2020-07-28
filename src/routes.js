@@ -36,7 +36,7 @@ export default [
         component: lazy(() => import('src/views/Register'))
       },
       {
-        component: () => <Redirect to="/errors/error-404"/>
+        component: () => <Redirect to="/errors/error-404" />
       }
     ]
   },
@@ -60,7 +60,7 @@ export default [
         component: lazy(() => import('src/views/Error500'))
       },
       {
-        component: () => <Redirect to="/errors/error-404"/>
+        component: () => <Redirect to="/errors/error-404" />
       }
     ]
   },
@@ -289,7 +289,7 @@ export default [
         component: lazy(() => import('src/views/GettingStarted'))
       },
       {
-        component: () => <Redirect to="/errors/error-404"/>
+        component: () => <Redirect to="/errors/error-404" />
       }
     ]
   }

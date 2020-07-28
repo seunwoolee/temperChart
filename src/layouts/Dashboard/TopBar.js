@@ -45,10 +45,10 @@ const useStyles = makeStyles((theme) => ({
   root: {
     boxShadow: 'none',
   },
-  toolbar: {
-    minHeight: 48,
-    backgroundColor: '#1e4a6d',
-  },
+  // toolbar: {
+  //   minHeight: 48,
+  //   backgroundColor: '#1e4a6d',
+  // },
   flexGrow: {
     flexGrow: 1
   },
@@ -172,7 +172,7 @@ function TopBar({
             className={classes.logos}
           >
             <NoteOutlinedIcon className={classes.logoutIcon} />
-            PaperLess
+            온도차트
           </Button>
         </RouterLink>
         <div className={classes.flexGrow} />
@@ -190,21 +190,21 @@ function TopBar({
         {/*  </Badge> */}
         {/* </IconButton> */}
         {/* </Hidden> */}
-        {/*<IconButton*/}
-        {/*  className={classes.notificationsButton}*/}
-        {/*  color="inherit"*/}
-        {/*  // onClick={handleNotificationsOpen}*/}
-        {/*  onClick={setPushSubscribe}*/}
-        {/*  ref={notificationsRef}*/}
-        {/*>*/}
-        {/*  <Badge*/}
-        {/*    badgeContent={notifications.length}*/}
-        {/*    classes={{ badge: classes.notificationsBadge }}*/}
-        {/*    variant="dot"*/}
-        {/*  >*/}
-        {/*    <NotificationsIcon />*/}
-        {/*  </Badge>*/}
-        {/*</IconButton>*/}
+        {/* <IconButton */}
+        {/*  className={classes.notificationsButton} */}
+        {/*  color="inherit" */}
+        {/*  // onClick={handleNotificationsOpen} */}
+        {/*  onClick={setPushSubscribe} */}
+        {/*  ref={notificationsRef} */}
+        {/* > */}
+        {/*  <Badge */}
+        {/*    badgeContent={notifications.length} */}
+        {/*    classes={{ badge: classes.notificationsBadge }} */}
+        {/*    variant="dot" */}
+        {/*  > */}
+        {/*    <NotificationsIcon /> */}
+        {/*  </Badge> */}
+        {/* </IconButton> */}
         <Button
           className={classes.logoutButton}
           color="inherit"
