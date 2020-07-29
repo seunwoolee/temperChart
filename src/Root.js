@@ -29,7 +29,7 @@ export default function Root() {
 
   return (
     <Route exact path="/">
-      {token ? <Redirect to="/reportSign" /> : <Redirect to="/auth/login" />}
+      {token ? <Redirect to="/dashboards/default" /> : <Redirect to="/auth/login" />}
     </Route>
   );
 }

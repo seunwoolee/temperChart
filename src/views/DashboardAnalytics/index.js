@@ -10,6 +10,7 @@ import TopReferrals from './TopReferrals';
 import MostProfitableProducts from './MostProfitableProducts';
 import CustomerActivity from './CustomerActivity';
 import LatestOrders from './LatestOrders';
+import TextButtons from "./MYButton";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -81,6 +82,13 @@ function DashboardAnalytics() {
             xs={12}
           >
             <TopReferrals />
+          </Grid>
+          <Grid
+            item
+            lg={4}
+            xs={12}
+          >
+            <TextButtons />
           </Grid>
         </Grid>
       </Container>

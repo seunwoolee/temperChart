@@ -1,15 +1,10 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import { makeStyles } from '@material-ui/styles';
 import { Container, Grid } from '@material-ui/core';
 import Page from 'src/components/Page';
-import Header from './Header';
+import Header from '../DashboardAnalytics/Header';
 import LatestProjects from './LatestProjects';
-import NewProjects from './NewProjects';
-import RealTime from './RealTime';
-import RoiPerCustomer from './RoiPerCustomer';
 import TeamTasks from './TeamTasks';
-import TodaysMoney from './TodaysMoney';
-import SystemHealth from './SystemHealth';
 import PerformanceOverTime from './PerformanceOverTime';
 
 const useStyles = makeStyles((theme) => ({
@@ -28,57 +23,57 @@ function DashboardDefault() {
   return (
     <Page
       className={classes.root}
-      title="Default Dashboard"
+      title="온도차트"
     >
       <Container maxWidth={false}>
-        <Header />
+        {/*<Header />*/}
         <Grid
           container
           spacing={3}
           className={classes.grid}
         >
+          {/* <Grid */}
+          {/*  item */}
+          {/*  lg={3} */}
+          {/*  sm={6} */}
+          {/*  xs={12} */}
+          {/* > */}
+          {/*  <TodaysMoney /> */}
+          {/* </Grid> */}
+          {/* <Grid */}
+          {/*  item */}
+          {/*  lg={3} */}
+          {/*  sm={6} */}
+          {/*  xs={12} */}
+          {/* > */}
+          {/*  <NewProjects /> */}
+          {/* </Grid> */}
+          {/* <Grid */}
+          {/*  item */}
+          {/*  lg={3} */}
+          {/*  sm={6} */}
+          {/*  xs={12} */}
+          {/* > */}
+          {/*  <SystemHealth /> */}
+          {/* </Grid> */}
+          {/* <Grid */}
+          {/*  item */}
+          {/*  lg={3} */}
+          {/*  sm={6} */}
+          {/*  xs={12} */}
+          {/* > */}
+          {/*  <RoiPerCustomer /> */}
+          {/* </Grid> */}
+          {/* <Grid */}
+          {/*  item */}
+          {/*  lg={3} */}
+          {/*  xs={12} */}
+          {/* > */}
+          {/*  <RealTime /> */}
+          {/* </Grid> */}
           <Grid
             item
-            lg={3}
-            sm={6}
-            xs={12}
-          >
-            <TodaysMoney />
-          </Grid>
-          <Grid
-            item
-            lg={3}
-            sm={6}
-            xs={12}
-          >
-            <NewProjects />
-          </Grid>
-          <Grid
-            item
-            lg={3}
-            sm={6}
-            xs={12}
-          >
-            <SystemHealth />
-          </Grid>
-          <Grid
-            item
-            lg={3}
-            sm={6}
-            xs={12}
-          >
-            <RoiPerCustomer />
-          </Grid>
-          <Grid
-            item
-            lg={3}
-            xs={12}
-          >
-            <RealTime />
-          </Grid>
-          <Grid
-            item
-            lg={9}
+            lg={12}
             xs={12}
           >
             <PerformanceOverTime />

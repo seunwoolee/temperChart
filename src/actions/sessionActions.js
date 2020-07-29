@@ -6,25 +6,24 @@ export const PUSHSAVE = 'PUSHSAVE';
 export const ISLOADING = 'ISLOADING';
 export const TODO_COUNT_SIGN = 'TODO_COUNT_SIGN';
 export const TODO_COUNT_ERP = 'TODO_COUNT_ERP';
-export const EXPIRATIONDATE = 3600
+export const EXPIRATIONDATE = 3600;
 
-
-export const authSuccess = (data: Object) => ({
+export const authSuccess = (data) => ({
   type: SESSION_LOGIN,
   data,
 });
 
-export const pushSave = (data: Object) => ({
+export const pushSave = (data) => ({
   type: PUSHSAVE,
   data,
 });
 
-export const todoCountSingSave = (data: int) => ({
+export const todoCountSingSave = (data) => ({
   type: TODO_COUNT_SIGN,
   data,
 });
 
-export const todoCountErpSave = (data: Array) => ({
+export const todoCountErpSave = (data) => ({
   type: TODO_COUNT_ERP,
   data,
 });
@@ -63,7 +62,7 @@ export const getUserData = (token) => dispatch => {
     .catch(error => (error.response));
 };
 
-export const login = (username: string, password: string) => dispatch => {
+export const login = (username, password) => dispatch => {
   const authData = {
     username,
     password,
@@ -87,7 +86,7 @@ export const logout = () => {
 };
 
 
-export const isloading = (bool: boolean) => {
+export const isloading = (bool) => {
   return {
     type: ISLOADING,
     bool: bool

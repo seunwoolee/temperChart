@@ -15,13 +15,11 @@ import './mixins/prismjs';
 import './mock';
 import './assets/scss/main.scss';
 import {authCheckState} from "./actions";
-import {Dispatch} from "redux";
-
 
 const history = createBrowserHistory();
 
 function App() {
-  const dispatch: Dispatch = useDispatch();
+  const dispatch = useDispatch();
   const [token, setToken] = useState(localStorage.getItem('token'));
 
   useEffect(() => {
@@ -33,12 +31,12 @@ function App() {
 
   return (
     <MuiPickersUtilsProvider utils={MomentUtils}>
-      {/*<HashRouter history={history}>*/}
+      {/* <HashRouter history={history}> */}
       <Router history={history}>
-        <ScrollReset/>
+        <ScrollReset />
         {renderRoutes(routes)}
       </Router>
-      {/*</HashRouter>*/}
+      {/* </HashRouter> */}
     </MuiPickersUtilsProvider>
   );
 }

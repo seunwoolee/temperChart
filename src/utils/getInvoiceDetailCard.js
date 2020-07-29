@@ -5,7 +5,7 @@ import MY_InvoiceDetailCard_P from "../components/MY_InvoiceDetailCard_P";
 import MY_InvoiceDetailCard_R from "../components/MY_InvoiceDetailCard_R";
 import MY_InvoiceDetailCard_G from "../components/MY_InvoiceDetailCard_G";
 
-export default (document_type: string, invoices: Array, attachments: Array, type='read', handleAttachments=null) => {
+export default (document_type, invoices, attachments, type='read', handleAttachments=null) => {
   const [openAttachment, setOpenAttachment] = useState('None');
   const [selectedImgPath, setSelectedImgPath] = React.useState('');
 

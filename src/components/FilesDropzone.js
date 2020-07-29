@@ -73,7 +73,7 @@ function FilesDropzone({ invoiceId, attachments, handleAttachments, className })
     }
 
     for(let i=0; i< acceptedFiles.length; i++){
-      const fileName: Array = acceptedFiles[i].name.split('_');
+      const fileName = acceptedFiles[i].name.split('_');
       if(fileName.length !== 3){
         validation = false;
         setInfo("파일명을 규칙에 맞게 작성해주세요.")
@@ -94,8 +94,8 @@ function FilesDropzone({ invoiceId, attachments, handleAttachments, className })
     const newAttachments ={};
     newAttachments[invoiceId] = acceptedFiles;
     handleAttachments((prevFiles) => {
-      const prevInvoiceAttachments: Array = prevFiles.filter(file => invoiceId in file)
-      const prevOthersAttachments: Array = prevFiles.filter(file => !(invoiceId in file))
+      const prevInvoiceAttachments = prevFiles.filter(file => invoiceId in file)
+      const prevOthersAttachments = prevFiles.filter(file => !(invoiceId in file))
       if(prevInvoiceAttachments.length > 0) {
         newAttachments[invoiceId] = [...prevInvoiceAttachments[0][invoiceId], ...newAttachments[invoiceId]]
       }
@@ -105,7 +105,7 @@ function FilesDropzone({ invoiceId, attachments, handleAttachments, className })
 
 
   useEffect(() => {
-    const newAttachments: Array = attachments.filter(attachment => invoiceId in attachment)
+    const newAttachments = attachments.filter(attachment => invoiceId in attachment)
     if(newAttachments.length > 0) {
       return setInvoiceAttachments(newAttachments[0][invoiceId])
     }
@@ -113,7 +113,7 @@ function FilesDropzone({ invoiceId, attachments, handleAttachments, className })
   }, [attachments])
 
   const handleRemoveAll = (invoiceId) => {
-    const othersAttachments: Array = attachments.filter(attachment => !(invoiceId in attachment))
+    const othersAttachments = attachments.filter(attachment => !(invoiceId in attachment))
     handleAttachments([...othersAttachments])
   };
 

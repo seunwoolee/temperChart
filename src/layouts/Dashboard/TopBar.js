@@ -8,47 +8,24 @@ import {useDispatch, useSelector} from 'react-redux';
 import { makeStyles } from '@material-ui/styles';
 import {
   AppBar,
-  Badge,
   Button,
   IconButton,
   Toolbar,
   Hidden,
-  Input,
   colors,
-  Popper,
-  Paper,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-  ClickAwayListener
 } from '@material-ui/core';
-import LockIcon from '@material-ui/icons/LockOutlined';
-import NotificationsIcon from '@material-ui/icons/NotificationsOutlined';
-import PeopleIcon from '@material-ui/icons/PeopleOutline';
 import InputIcon from '@material-ui/icons/Input';
 import MenuIcon from '@material-ui/icons/Menu';
-import SearchIcon from '@material-ui/icons/Search';
-// import axios from 'src/utils/axios';
 import NotificationsPopover from 'src/components/NotificationsPopover';
 import PricingModal from 'src/components/PricingModal';
 import {authSuccess, logout} from 'src/actions';
-import NoteOutlinedIcon from '@material-ui/icons/NoteOutlined';
-import axios from "../../utils/my_axios";
+import AssessmentIcon from '@material-ui/icons/Assessment';
 import ChatBar from './ChatBar';
-import {swRegistration} from "../../registerServiceWorker";
-import {pushSave} from "../../actions";
-import LoadingBar from "../../components/MY_LoadingBar";
-
 
 const useStyles = makeStyles((theme) => ({
   root: {
     boxShadow: 'none',
   },
-  // toolbar: {
-  //   minHeight: 48,
-  //   backgroundColor: '#1e4a6d',
-  // },
   flexGrow: {
     flexGrow: 1
   },
@@ -150,7 +127,6 @@ function TopBar({
     setOpenNotifications(false);
   };
 
-
   return (
     <AppBar
       {...rest}
@@ -171,40 +147,11 @@ function TopBar({
           <Button
             className={classes.logos}
           >
-            <NoteOutlinedIcon className={classes.logoutIcon} />
+            <AssessmentIcon className={classes.logoutIcon} />
             온도차트
           </Button>
         </RouterLink>
         <div className={classes.flexGrow} />
-        {/* <Hidden mdDown> */}
-        {/*  <IconButton */}
-        {/*    className={classes.chatButton} */}
-        {/*  color="inherit" */}
-        {/*  onClick={handleChatBarOpen} */}
-        {/* > */}
-        {/*  <Badge */}
-        {/*    badgeContent={6} */}
-        {/*    color="secondary" */}
-        {/*  > */}
-        {/*    <PeopleIcon /> */}
-        {/*  </Badge> */}
-        {/* </IconButton> */}
-        {/* </Hidden> */}
-        {/* <IconButton */}
-        {/*  className={classes.notificationsButton} */}
-        {/*  color="inherit" */}
-        {/*  // onClick={handleNotificationsOpen} */}
-        {/*  onClick={setPushSubscribe} */}
-        {/*  ref={notificationsRef} */}
-        {/* > */}
-        {/*  <Badge */}
-        {/*    badgeContent={notifications.length} */}
-        {/*    classes={{ badge: classes.notificationsBadge }} */}
-        {/*    variant="dot" */}
-        {/*  > */}
-        {/*    <NotificationsIcon /> */}
-        {/*  </Badge> */}
-        {/* </IconButton> */}
         <Button
           className={classes.logoutButton}
           color="inherit"

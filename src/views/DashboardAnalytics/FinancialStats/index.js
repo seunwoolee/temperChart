@@ -3,8 +3,10 @@ import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import { makeStyles } from '@material-ui/styles';
-import { Card, CardHeader, CardContent, Divider } from '@material-ui/core';
-import GenericMoreButton  from 'src/components/GenericMoreButton';
+import {
+  Card, CardHeader, CardContent, Divider
+} from '@material-ui/core';
+import GenericMoreButton from 'src/components/GenericMoreButton';
 import Chart from './Chart';
 
 const useStyles = makeStyles(theme => ({
@@ -32,18 +34,18 @@ function FinancialStats({ className, ...rest }) {
   };
 
   const labels = [
-    'Jan',
-    'Feb',
-    'Mar',
-    'Apr',
-    'May',
-    'Jun',
-    'Jul',
-    'Aug',
-    'Sep',
-    'Oct',
-    'Nov',
-    'Dec'
+    '07:00',
+    '08:00',
+    '09:00',
+    '10:00',
+    '11:00',
+    '12:00',
+    '13:00',
+    '14:00',
+    '15:00',
+    '16:00',
+    '17:00',
+    '18:00'
   ];
 
   return (

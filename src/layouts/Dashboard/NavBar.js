@@ -19,13 +19,10 @@ import {
   colors
 } from '@material-ui/core';
 import NavItem from 'src/components/NavItem';
-import IconButton from "@material-ui/core/IconButton";
-import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import Tooltip from "@material-ui/core/Tooltip";
 import axios from "../../utils/my_axios";
 // import navConfig from './navConfig';
 import {MY_navConfig} from './navConfig';
-import ChangePasswordDialog from "../../components/MY_changePassword";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -223,7 +220,6 @@ function NavBar({
           {content}
         </Drawer>
       </Hidden>
-      <ChangePasswordDialog open={open} onClose={() => setOpen(false)} />
     </>
   );
 }

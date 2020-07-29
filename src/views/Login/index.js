@@ -96,7 +96,7 @@ function Login() {
             로그인
           </Typography>
           <Typography variant="subtitle2">
-            페이퍼리스 전자결재
+            온도차트
           </Typography>
           <LoginForm className={classes.loginForm} />
         </CardContent>

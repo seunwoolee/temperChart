@@ -67,7 +67,7 @@ function LoginForm({className, ...rest}) {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const result: AxiosResponse = await dispatch(
+    const result = await dispatch(
       login(formState.values.username, formState.values.password)
     );
 
@@ -96,12 +96,11 @@ function LoginForm({className, ...rest}) {
     const token = localStorage.getItem('token');
 
     if (token && logging) {
-      history.push('/reportSign');
+      history.push('/dashboards/default');
     } else {
       console.log('[LoginForm] useEffect');
     }
   }, [history, logging]);
-
 
   useEffect(() => {
     const errors = validate(formState.values, schema);

@@ -5,14 +5,14 @@ import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/styles';
 import {AppBar, Button, Toolbar} from '@material-ui/core';
 import NoteOutlinedIcon from "@material-ui/icons/NoteOutlined";
+import AssessmentIcon from "@material-ui/icons/Assessment";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     boxShadow: 'none'
   },
   toolbar: {
-      minHeight: 48,
-      backgroundColor: '#1e4a6d',
+    // minHeight: 64,
   },
   logos: {
     fontSize: '1rem',
@@ -34,8 +34,8 @@ function Topbar({ className, ...rest }) {
           <Button
             className={classes.logos}
           >
-            <NoteOutlinedIcon className={classes.logoutIcon} />
-            PaperLess
+            <AssessmentIcon className={classes.logoutIcon} />
+            온도차트
           </Button>
         </RouterLink>
       </Toolbar>

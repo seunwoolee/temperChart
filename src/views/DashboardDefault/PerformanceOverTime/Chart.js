@@ -1,9 +1,10 @@
 import React from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import { Line } from 'react-chartjs-2';
-import { makeStyles, useTheme } from '@material-ui/styles';
-import { fade } from '@material-ui/core/styles/colorManipulator';
+import {Line} from 'react-chartjs-2';
+import {makeStyles, useTheme} from '@material-ui/styles';
+import {fade} from '@material-ui/core/styles/colorManipulator';
+import * as zoom from 'chartjs-plugin-zoom';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -11,9 +12,7 @@ const useStyles = makeStyles(() => ({
   }
 }));
 
-function Chart({
-  className, data: dataProp, labels, ...rest
-}) {
+function Chart({className, data: dataProp, labels}) {
   const classes = useStyles();
   const theme = useTheme();
 
@@ -28,12 +27,23 @@ function Chart({
     return {
       datasets: [
         {
-          data: dataProp,
-          backgroundColor: gradient,
-          borderColor: theme.palette.secondary.main,
+          label: 'This year',
+          data: dataProp.currentTemperRows.data,
+          backgroundColor: '#ffffff',
+          borderColor: '#ff0101',
           pointBorderColor: '#FFFFFF',
-          pointBorderWidth: 3,
-          pointRadius: 6,
+          pointBorderWidth: 1,
+          pointRadius: 2,
+          pointBackgroundColor: '#ff0101'
+        },
+        {
+          label: 'Last year',
+          backgroundColor: '#ffffff',
+          data: dataProp.settingTemperRows.data,
+          borderColor: theme.palette.secondary.dark,
+          pointBorderColor: '#FFFFFF',
+          pointBorderWidth: 1,
+          pointRadius: 2,
           pointBackgroundColor: theme.palette.secondary.main
         }
       ],
@@ -59,7 +69,7 @@ function Chart({
             drawBorder: false
           },
           ticks: {
-            padding: 20,
+            padding: 10,
             fontColor: theme.palette.text.secondary
           }
         }
@@ -76,12 +86,12 @@ function Chart({
             zeroLineColor: theme.palette.divider
           },
           ticks: {
-            padding: 20,
+            padding: 10,
             fontColor: theme.palette.text.secondary,
             beginAtZero: true,
             min: 0,
             maxTicksLimit: 7,
-            callback: (value) => (value > 0 ? `${value}K` : value)
+            callback: (value) => `${value}℃`
           }
         }
       ]
@@ -100,23 +110,29 @@ function Chart({
       bodyFontColor: theme.palette.text.secondary,
       footerFontColor: theme.palette.text.secondary,
       callbacks: {
-        title: () => {},
+        title: (tooltipItem) => tooltipItem[0].xLabel,
         label: (tooltipItem) => {
-          let label = `Income: ${tooltipItem.yLabel}`;
-
-          if (tooltipItem.yLabel > 0) {
-            label += 'K';
-          }
-
-          return label;
+          let title = '';
+          tooltipItem.datasetIndex === 0 ? title = '실제온도' : title = '설정온도';
+          return `${title}: ${tooltipItem.yLabel}℃`;
         }
       }
-    }
+    },
+    // pan: {
+    //   enabled: true,
+    //   mode: "x",
+    //   sensitivity: 0.1,
+    // },
+    // zoom: {
+    //   enabled: true,
+    //   // drag: false,
+    //   mode: "x",
+    //   sensitivity: 0.1,
+    // }
   };
 
   return (
     <div
-      {...rest}
       className={clsx(classes.root, className)}
     >
       <Line

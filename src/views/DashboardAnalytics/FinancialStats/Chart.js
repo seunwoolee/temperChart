@@ -11,7 +11,9 @@ const useStyles = makeStyles(() => ({
   }
 }));
 
-function Chart({ data: dataProp, labels, className, ...rest }) {
+function Chart({
+  data: dataProp, labels, className, ...rest
+}) {
   const classes = useStyles();
   const theme = useTheme();
 
@@ -80,9 +82,7 @@ function Chart({ data: dataProp, labels, className, ...rest }) {
             beginAtZero: true,
             min: 0,
             maxTicksLimit: 5,
-            callback: value => {
-              return value > 0 ? value + 'K' : value;
-            }
+            callback: value => (value > 0 ? `${value}K` : value)
           }
         }
       ]

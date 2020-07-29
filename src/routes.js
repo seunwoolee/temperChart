@@ -1,25 +1,18 @@
 import React, {lazy} from 'react';
 import {Redirect} from 'react-router-dom';
 import AuthLayout from './layouts/Auth';
-import ErrorLayout from './layouts/Error';
 import DashboardLayout from './layouts/Dashboard';
 import DashboardAnalyticsView from './views/DashboardAnalytics';
 import DashboardDefaultView from './views/DashboardDefault';
-import OverviewView from './views/Overview';
-import PresentationView from './views/Presentation';
+import ErrorLayout from './layouts/Error';
+
 import Root from "./Root";
-import MY_Print from "./components/MY_Print";
 
 export default [
   {
     path: '/',
     exact: true,
     component: Root
-  },
-  {
-    path: '/reportPrint',
-    exact: true,
-    component: MY_Print
   },
   {
     path: '/auth',
@@ -35,9 +28,6 @@ export default [
         exact: true,
         component: lazy(() => import('src/views/Register'))
       },
-      {
-        component: () => <Redirect to="/errors/error-404" />
-      }
     ]
   },
   {
@@ -69,111 +59,6 @@ export default [
     component: DashboardLayout,
     routes: [
       {
-        path: '/reportSign',
-        exact: true,
-        component: lazy(() => import('src/views/My_ReportSign'))
-      },
-      {
-        path: '/reportWritten',
-        exact: true,
-        component: lazy(() => import('src/views/My_ReportWritten'))
-      },
-      {
-        path: '/reportWrite',
-        exact: true,
-        component: lazy(() => import('src/views/My_ReportCreate'))
-      },
-      {
-        path: '/reportWritePayment',
-        exact: true,
-        component: lazy(() => import('src/views/My_ReportCreate'))
-      },
-      {
-        path: '/reportWriteInvoice',
-        exact: true,
-        component: lazy(() => import('src/views/My_ReportCreate'))
-      },
-      {
-        path: '/reportWriteReceipt',
-        exact: true,
-        component: lazy(() => import('src/views/My_ReportCreate'))
-      },
-      {
-        path: '/reportWriteNacct',
-        exact: true,
-        component: lazy(() => import('src/views/My_ReportCreate'))
-      },
-      {
-        path: '/reportApproved',
-        exact: true,
-        component: lazy(() => import('src/views/My_ReportWritten'))
-      },
-      {
-        path: '/reportRejected',
-        exact: true,
-        component: lazy(() => import('src/views/My_ReportWritten'))
-      },
-      {
-        path: '/reportCc',
-        exact: true,
-        component: lazy(() => import('src/views/My_ReportWritten'))
-      },
-      {
-        path: '/calendar',
-        exact: true,
-        component: lazy(() => import('src/views/Calendar'))
-      },
-      {
-        path: '/changelog',
-        exact: true,
-        component: lazy(() => import('src/views/Changelog'))
-      },
-      {
-        path: '/chat',
-        exact: true,
-        component: lazy(() => import('src/views/MY_GroupSettings'))
-      },
-      {
-        path: '/chat/:id',
-        exact: true,
-        component: lazy(() => import('src/views/MY_GroupSettings'))
-      },
-      {
-        path: '/components/buttons',
-        exact: true,
-        component: lazy(() => import('src/views/Buttons'))
-      },
-      {
-        path: '/components/cards',
-        exact: true,
-        component: lazy(() => import('src/views/Cards'))
-      },
-      {
-        path: '/components/chips',
-        exact: true,
-        component: lazy(() => import('src/views/Chips'))
-      },
-      {
-        path: '/components/forms',
-        exact: true,
-        component: lazy(() => import('src/views/Forms'))
-      },
-      {
-        path: '/components/lists',
-        exact: true,
-        component: lazy(() => import('src/views/Lists'))
-      },
-      {
-        path: '/components/modals',
-        exact: true,
-        component: lazy(() => import('src/views/Modals'))
-      },
-      {
-        path: '/components/typography',
-        exact: true,
-        component: lazy(() => import('src/views/Typography'))
-      },
-      {
         path: '/dashboards/analytics',
         exact: true,
         component: DashboardAnalyticsView
@@ -182,111 +67,6 @@ export default [
         path: '/dashboards/default',
         exact: true,
         component: DashboardDefaultView
-      },
-      {
-        path: '/documents/:id',
-        exact: true,
-        component: lazy(() => import('src/views/InvoiceDetails'))
-      },
-      {
-        path: '/kanban-board',
-        exact: true,
-        component: lazy(() => import('src/views/KanbanBoard'))
-      },
-      {
-        path: '/mail',
-        exact: true,
-        component: lazy(() => import('src/views/Mail'))
-      },
-      {
-        path: '/management/customers',
-        exact: true,
-        component: lazy(() => import('src/views/CustomerManagementList'))
-      },
-      {
-        path: '/management/customers/:id',
-        exact: true,
-        component: lazy(() => import('src/views/CustomerManagementDetails'))
-      },
-      {
-        path: '/management/customers/:id/:tab',
-        exact: true,
-        component: lazy(() => import('src/views/CustomerManagementDetails'))
-      },
-      {
-        path: '/management/projects',
-        exact: true,
-        component: lazy(() => import('src/views/ProjectManagementList'))
-      },
-      {
-        path: '/management/orders',
-        exact: true,
-        component: lazy(() => import('src/views/OrderManagementList'))
-      },
-      {
-        path: '/management/orders/:id',
-        exact: true,
-        component: lazy(() => import('src/views/OrderManagementDetails'))
-      },
-      {
-        path: '/overview',
-        exact: true,
-        component: OverviewView
-      },
-      {
-        path: '/presentation',
-        exact: true,
-        component: PresentationView
-      },
-      {
-        path: '/profile/:id',
-        exact: true,
-        component: lazy(() => import('src/views/Profile'))
-      },
-      {
-        path: '/profile/:id/:tab',
-        exact: true,
-        component: lazy(() => import('src/views/Profile'))
-      },
-      {
-        path: '/projects/create',
-        exact: true,
-        component: lazy(() => import('src/views/ProjectCreate'))
-      },
-      {
-        path: '/projects/:id',
-        exact: true,
-        component: lazy(() => import('src/views/ProjectDetails'))
-      },
-      {
-        path: '/projects/:id/:tab',
-        exact: true,
-        component: lazy(() => import('src/views/ProjectDetails'))
-      },
-      {
-        path: '/projects',
-        exact: true,
-        component: lazy(() => import('src/views/ProjectList'))
-      },
-      {
-        path: '/settings',
-        exact: true,
-        component: lazy(() => import('src/views/Settings'))
-      },
-      {
-        path: '/settings/:tab',
-        exact: true,
-        component: lazy(() => import('src/views/Settings'))
-      },
-      {
-        path: '/social-feed',
-        exact: true,
-        component: lazy(() => import('src/views/SocialFeed'))
-      },
-      {
-        path: '/getting-started',
-        exact: true,
-        component: lazy(() => import('src/views/GettingStarted'))
       },
       {
         component: () => <Redirect to="/errors/error-404" />

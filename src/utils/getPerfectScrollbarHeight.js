@@ -1,4 +1,4 @@
-export default (rowsPerPage: number, length: number, defaultHeight: number) => {
+export default (rowsPerPage, length, defaultHeight) => {
     if(length > rowsPerPage){
       return rowsPerPage * defaultHeight;
     }
