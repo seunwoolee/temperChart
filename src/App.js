@@ -29,14 +29,14 @@ function App() {
     }
   }, []);
 
+  console.log('APP');
+
   return (
     <MuiPickersUtilsProvider utils={MomentUtils}>
-      {/* <HashRouter history={history}> */}
       <Router history={history}>
         <ScrollReset />
         {renderRoutes(routes)}
       </Router>
-      {/* </HashRouter> */}
     </MuiPickersUtilsProvider>
   );
 }
