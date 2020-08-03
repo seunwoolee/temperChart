@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import {makeStyles} from '@material-ui/styles';
 import {
-  Card, CardHeader, CardContent, Divider
+  Card, CardHeader, CardContent, Divider, Grid
 } from '@material-ui/core';
 import ControlCameraIcon from '@material-ui/icons/ControlCamera';
 import ZoomInIcon from '@material-ui/icons/ZoomIn';
@@ -18,6 +18,7 @@ import moment from "moment";
 import {useDispatch} from "react-redux";
 import {isloading} from "../../../actions";
 import LoadingBar from "../../../components/MY_LoadingBar";
+import TemperTable from "../temperChart";
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -41,18 +42,18 @@ const useStyles = makeStyles((theme) => ({
 function PerformanceOverTime({className}) {
   const classes = useStyles();
   const [temperRows, setTemperRows] = useState([]);
-  const [startDate, setStartDate] = useState(moment().subtract(1, 'days'));
-  const [endDate, setEndDate] = useState(moment().subtract(1, 'days'));
-  const [detail, setDetail] = useState(0.5);
-  const history = useHistory();
+  const [currentTemperRow, setCurrentTemperRow] = useState([]);
+  const [startDate, setStartDate] = useState(moment());
+  const [endDate, setEndDate] = useState(moment());
+  const [detail, setDetail] = useState(0.0);
   const dispatch = useDispatch();
 
   const increaseDetail = () => {
-    setDetail(prevState => prevState + 0.2);
+    setDetail(prevState => prevState + 0.1);
   };
 
   const decreaseDetail = () => {
-    setDetail(prevState => (prevState > 0 ? prevState - 0.2 : 0));
+    setDetail(prevState => (prevState > 0 ? prevState - 0.1 : 0));
   };
 
   const fetchTemperRows = () => {
@@ -69,46 +70,47 @@ function PerformanceOverTime({className}) {
       .then((response) => {
         setTemperRows(response.data);
         dispatch(isloading(false));
-        setDetail(0.5);
+        setDetail(0);
       })
       .catch(error => {
         dispatch(isloading(false));
-        setDetail(0.5);
+        setDetail(0);
       });
-
   };
 
   useEffect(() => {
-    if (!(localStorage.getItem('token'))) {
-      history.push('/auth/login');
-    }
     fetchTemperRows();
-  }, [history]);
-
+  }, []);
 
   const xLabel = [];
   const currentTemperRows = [];
   const settingTemperRows = [];
   let initTemperature = 0;
 
+
   temperRows.forEach(row => {
-    if (Math.abs(row[4] - initTemperature) > detail) {
-      xLabel.push(row[0].substring(5) + row[1]);
+    if (Math.abs(row[4] - initTemperature) >= detail) {
+      xLabel.push(row[0].substring(5) + ' ' + row[1]);
       currentTemperRows.push(row[4]);
       settingTemperRows.push(row[3]);
       initTemperature = row[4];
     }
   });
 
-  // const xLabel = temperRows.map(row => row[1]);
-  // const currentTemperRows = temperRows.map(row => row[4]);
-  // const settingTemperRows = temperRows.map(row => row[3]);
-
   const data = {
     currentTemperRows: {data: currentTemperRows},
-    settingTemperRows: {data: settingTemperRows}
+    settingTemperRows: {data: settingTemperRows},
+    currentTemper: 0,
   };
 
+  if (currentTemperRow.length > 0) {
+    data.currentTemper = currentTemperRow[4];
+  }
+
+  const tableRows = [];
+  for(let i = 0; i<data.currentTemperRows.data.length; i++){
+    tableRows.push({time:xLabel[i], temper: data.currentTemperRows.data[i]});
+  }
 
   return (
     <Card
@@ -149,6 +151,9 @@ function PerformanceOverTime({className}) {
           </div>
         </PerfectScrollbar>
       </CardContent>
+      {tableRows.length > 0 ? (<TemperTable tableRows={tableRows} />) : null}
+
+
     </Card>
   );
 }

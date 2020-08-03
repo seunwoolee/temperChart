@@ -3,11 +3,9 @@ import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/styles';
 import {
-  Card, Typography, Avatar, colors
+  Card, Typography, Avatar
 } from '@material-ui/core';
-import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
-import Label from 'src/components/Label';
-import gradients from 'src/utils/gradients';
+import NotInterestedIcon from '@material-ui/icons/NotInterested';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -25,19 +23,14 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: theme.spacing(1)
   },
   avatar: {
-    backgroundImage: gradients.green,
+    backgroundColor: "red",
     height: 48,
     width: 48
   }
 }));
 
-function TodaysMoney({ className, ...rest }) {
+function FailCard({ className, ...rest }) {
   const classes = useStyles();
-  const data = {
-    value: '24,000',
-    currency: '$',
-    difference: '+4.5%'
-  };
 
   return (
     <Card
@@ -45,36 +38,21 @@ function TodaysMoney({ className, ...rest }) {
       className={clsx(classes.root, className)}
     >
       <div>
-        <Typography
-          component="h3"
-          gutterBottom
-          variant="overline"
-        >
-          Todays money
-        </Typography>
         <div className={classes.details}>
           <Typography variant="h3">
-            {data.currency}
-            {data.value}
+            기준이탈
           </Typography>
-          <Label
-            className={classes.label}
-            color={colors.green[600]}
-            variant="outlined"
-          >
-            {data.difference}
-          </Label>
         </div>
       </div>
       <Avatar className={classes.avatar}>
-        <AttachMoneyIcon />
+        <NotInterestedIcon />
       </Avatar>
     </Card>
   );
 }
 
-TodaysMoney.propTypes = {
+FailCard.propTypes = {
   className: PropTypes.string
 };
 
-export default TodaysMoney;
+export default FailCard;

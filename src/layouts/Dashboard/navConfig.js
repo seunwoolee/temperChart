@@ -10,12 +10,7 @@ export function MY_navConfig() {
           title: '온도차트',
           href: '/dashboards/default',
           icon: AssessmentIcon,
-        },
-        {
-          title: '온도차트2',
-          href: '/dashboards/analytics',
-          icon: AssessmentIcon,
-        },
+        }
       ]
     },
   ];

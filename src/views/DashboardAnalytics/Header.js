@@ -30,7 +30,9 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-function Header({ startDate, onStartDateChange, endDate, onEndDateChange, onSearchClick }) {
+function Header({
+  startDate, onStartDateChange, endDate, onEndDateChange, onSearchClick
+}) {
   const classes = useStyles();
   const [selectEdge, setSelectEdge] = useState(null);
   const [calendarDate, setCalendarDate] = useState(moment());

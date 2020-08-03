@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import {Line} from 'react-chartjs-2';
 import {makeStyles, useTheme} from '@material-ui/styles';
 import {fade} from '@material-ui/core/styles/colorManipulator';
-import * as zoom from 'chartjs-plugin-zoom';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -118,17 +117,6 @@ function Chart({className, data: dataProp, labels}) {
         }
       }
     },
-    // pan: {
-    //   enabled: true,
-    //   mode: "x",
-    //   sensitivity: 0.1,
-    // },
-    // zoom: {
-    //   enabled: true,
-    //   // drag: false,
-    //   mode: "x",
-    //   sensitivity: 0.1,
-    // }
   };
 
   return (

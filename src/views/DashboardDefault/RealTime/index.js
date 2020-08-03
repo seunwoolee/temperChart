@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import React, {useState, useEffect} from 'react';
+import {Link as RouterLink} from 'react-router-dom';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/styles';
+import {makeStyles} from '@material-ui/styles';
 import {
   Card,
   CardActions,
@@ -17,11 +17,16 @@ import {
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import gradients from 'src/utils/gradients';
 import Chart from './Chart';
+import moment from "moment";
+import {MachineState} from "../index";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     backgroundImage: gradients.indigo,
-    color: theme.palette.primary.contrastText
+    color: theme.palette.primary.contrastText,
+    '& .MuiCardHeader-action': {
+      margin: 0
+    }
   },
   content: {
     paddingTop: 0
@@ -35,19 +40,22 @@ const useStyles = makeStyles((theme) => ({
   },
   arrowForwardIcon: {
     marginLeft: theme.spacing(1)
+  },
+  sleep: {
+    backgroundImage: gradients.orange
+  },
+  error: {
+    backgroundImage: gradients.red
+  },
+  ok: {
+    backgroundImage: gradients.indigo
   }
 }));
 
-function getRandomInt(min, max) {
-  min = Math.ceil(min);
-  max = Math.floor(max);
 
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
-function RealTime({ className, ...rest }) {
+function RealTime({machineState, currentTemperRows}) {
   const classes = useStyles();
-
+  const dateFormat = "YYYY-MM-DD HH:mm:ss";
   const [data, setData] = useState([
     163,
     166,
@@ -63,66 +71,21 @@ function RealTime({ className, ...rest }) {
     172
   ]);
 
-  useEffect(() => {
-    let mounted = true;
-
-    setInterval(() => {
-      if (mounted) {
-        setData((data) => {
-          const newData = [...data];
-
-          newData.shift();
-          newData.push(0);
-
-          return newData;
-        });
-      }
-
-      setTimeout(() => {
-        if (mounted) {
-          setData((prevData) => {
-            const newData = [...prevData];
-            const random = getRandomInt(100, 200);
-
-            newData.pop();
-            newData.push(random);
-
-            return newData;
-          });
-        }
-      }, 500);
-    }, 2000);
-
-    return () => {
-      mounted = false;
-    };
-  }, []);
-
-  const labels = data.map((value, i) => i);
-
-  const pages = [
-    {
-      pathname: '/projects',
-      views: '24'
-    },
-    {
-      pathname: '/chat',
-      views: '21'
-    },
-    {
-      pathname: '/cart',
-      views: '15'
-    },
-    {
-      pathname: '/cart/checkout',
-      views: '8'
+  const getMachineState = () => {
+    if (machineState === MachineState.sleep) {
+      return classes.sleep;
+    } else if (machineState === MachineState.ok) {
+      return classes.ok;
+    } else {
+      return classes.error;
     }
-  ];
+  }
+
+  const labels = currentTemperRows.map((value, i) => i);
 
   return (
     <Card
-      {...rest}
-      className={clsx(classes.root, className)}
+      className={clsx(classes.root, getMachineState())}
     >
       <CardHeader
         action={(
@@ -131,57 +94,34 @@ function RealTime({ className, ...rest }) {
             gutterBottom
             variant="h3"
           >
-            {
-              data[data.length - 1] === 0
-                ? data[data.length - 2]
-                : data[data.length - 1]
-            }
+            현재온도 :
+            {' '}
+            {currentTemperRows[5]}
           </Typography>
         )}
-        subheader="Page views per second"
-        subheaderTypographyProps={{ color: 'inherit' }}
-        title="Active users"
-        titleTypographyProps={{ color: 'inherit' }}
+        title={(
+          <Typography
+            color="inherit"
+            variant="h4"
+          >
+            {moment().format(dateFormat)}
+          </Typography>
+        )}
       />
       <CardContent className={classes.content}>
         <Chart
-          data={data}
+          data={currentTemperRows}
           labels={labels}
         />
-        <List>
-          {pages.map((page) => (
-            <ListItem
-              classes={{ divider: classes.itemDivider }}
-              divider
-              key={page.pathname}
-            >
-              <ListItemText
-                primary={page.pathname}
-                primaryTypographyProps={{ color: 'inherit', variant: 'body1' }}
-              />
-              <Typography color="inherit">{page.views}</Typography>
-            </ListItem>
-          ))}
-        </List>
       </CardContent>
-      <CardActions className={classes.actions}>
-        <Button
-          color="inherit"
-          component={RouterLink}
-          size="small"
-          to="#"
-          variant="text"
-        >
-          See all
-          <ArrowForwardIcon className={classes.arrowForwardIcon} />
-        </Button>
-      </CardActions>
+
     </Card>
   );
 }
 
 RealTime.propTypes = {
-  className: PropTypes.string
+  machineState: PropTypes.string.isRequired,
+  currentTemperRows: PropTypes.array.isRequired
 };
 
 export default RealTime;

@@ -5,9 +5,9 @@ import { makeStyles } from '@material-ui/styles';
 import {
   Card, Typography, Avatar, colors
 } from '@material-ui/core';
-import FolderOpenIcon from '@material-ui/icons/FolderOpenOutlined';
-import Label from 'src/components/Label';
-import gradients from 'src/utils/gradients';
+import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
+import SmsFailedIcon from '@material-ui/icons/SmsFailed';
+import RadioButtonUncheckedIcon from '@material-ui/icons/RadioButtonUnchecked';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -25,18 +25,14 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: theme.spacing(1)
   },
   avatar: {
-    backgroundImage: gradients.blue,
+    backgroundColor: "#2962ff",
     height: 48,
     width: 48
   }
 }));
 
-function FailCard({ className, ...rest }) {
+function OkCard({ className, ...rest }) {
   const classes = useStyles();
-  const data = {
-    value: '12',
-    difference: '-10%'
-  };
 
   return (
     <Card
@@ -45,25 +41,20 @@ function FailCard({ className, ...rest }) {
     >
       <div>
         <div className={classes.details}>
-          <Typography variant="h3">{data.value}</Typography>
-          <Label
-            className={classes.label}
-            color={colors.red[600]}
-            variant="outlined"
-          >
-            {data.difference}
-          </Label>
+          <Typography variant="h3">
+            살균중
+          </Typography>
         </div>
       </div>
       <Avatar className={classes.avatar}>
-        <FolderOpenIcon />
+        <RadioButtonUncheckedIcon />
       </Avatar>
     </Card>
   );
 }
 
-FailCard.propTypes = {
+OkCard.propTypes = {
   className: PropTypes.string
 };
 
-export default FailCard;
+export default OkCard;
