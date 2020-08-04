@@ -56,20 +56,6 @@ const useStyles = makeStyles((theme) => ({
 function RealTime({machineState, currentTemperRows}) {
   const classes = useStyles();
   const dateFormat = "YYYY-MM-DD HH:mm:ss";
-  const [data, setData] = useState([
-    163,
-    166,
-    161,
-    159,
-    99,
-    163,
-    173,
-    166,
-    167,
-    183,
-    176,
-    172
-  ]);
 
   const getMachineState = () => {
     if (machineState === MachineState.sleep) {
@@ -82,6 +68,29 @@ function RealTime({machineState, currentTemperRows}) {
   }
 
   const labels = currentTemperRows.map((value, i) => i);
+
+  const options = {
+    responsive: true,
+    maintainAspectRatio: false,
+    animation: false,
+    tooltips: {
+      enabled: true,
+      mode: 'index',
+      intersect: false,
+      caretSize: 10,
+      yPadding: 20,
+      xPadding: 20,
+      borderWidth: 1,
+      callbacks: {
+        title: (tooltipItem) => tooltipItem[0].xLabel,
+        label: (tooltipItem) => {
+          let title = '';
+          tooltipItem.datasetIndex === 0 ? title = '실제온도' : title = '설정온도';
+          return `${title}: ${tooltipItem.yLabel}℃`;
+        }
+      }
+    },
+  };
 
   return (
     <Card

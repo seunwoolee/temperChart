@@ -89,7 +89,7 @@ function Chart({
         legend: () => {},
         title: () => {},
         label: (tooltipItem) => {
-          const label = `Views: ${tooltipItem.yLabel}`;
+          const label = `온도: ${tooltipItem.yLabel}`;
 
           return label;
         }
