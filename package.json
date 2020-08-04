@@ -1,9 +1,9 @@
 {
-  "name": "devias-material-kit-pro",
-  "author": "DeviasIO",
-  "email": "contact@devias.io",
+  "name": "temperChart",
+  "author": "kcfeed",
+  "email": "swl21803@kcfeed.co.kr",
   "licence": "UNLICENSED",
-  "version": "1.3.0",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "start": "react-scripts start",

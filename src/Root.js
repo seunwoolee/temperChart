@@ -26,7 +26,6 @@ import {
 
 export default function Root() {
   const [token, setToken] = useState(localStorage.getItem('token'));
-
   return (
     <Route exact path="/">
       {token ? <Redirect to="/dashboards/default" /> : <Redirect to="/auth/login" />}

@@ -16,6 +16,4 @@ const app = (
     </ThemeProvider>
   </StoreProvider>
 );
-
-// const app = (<h1>dd</h1>);
 ReactDOM.render(app, document.getElementById('root'));

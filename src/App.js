@@ -15,6 +15,7 @@ import './mixins/prismjs';
 import './mock';
 import './assets/scss/main.scss';
 import {authCheckState} from "./actions";
+import ReactDOM from "react-dom";
 
 const history = createBrowserHistory();
 
@@ -29,7 +30,6 @@ function App() {
     }
   }, []);
 
-  console.log('APP');
 
   return (
     <MuiPickersUtilsProvider utils={MomentUtils}>
