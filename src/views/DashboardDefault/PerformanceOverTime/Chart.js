@@ -88,8 +88,9 @@ function Chart({className, data: dataProp, labels}) {
             padding: 10,
             fontColor: theme.palette.text.secondary,
             beginAtZero: true,
-            min: 0,
-            maxTicksLimit: 7,
+            min: 65,
+            max: 75,
+            // maxTicksLimit: 7,
             callback: (value) => `${value}℃`
           }
         }
