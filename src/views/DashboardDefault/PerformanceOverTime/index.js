@@ -112,6 +112,8 @@ function PerformanceOverTime({className}) {
     tableRows.push({time:xLabel[i], temper: data.currentTemperRows.data[i]});
   }
 
+  console.log(temperRows);
+
   return (
     <Card
       className={clsx(classes.root, className)}
@@ -132,6 +134,7 @@ function PerformanceOverTime({className}) {
         title="Temperature Chart"
       />
       <Header
+        temperRows={temperRows}
         startDate={startDate}
         onStartDateChange={setStartDate}
         endDate={endDate}

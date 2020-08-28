@@ -69,7 +69,7 @@ export default [
         component: DashboardDefaultView
       },
       {
-        component: () => <Redirect to="/errors/error-404" />
+        component: () => <Root />
       }
     ]
   }
