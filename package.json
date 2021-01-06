@@ -44,7 +44,7 @@
     "@material-ui/lab": "^4.0.0-alpha.42",
     "@material-ui/pickers": "^3.2.10",
     "@material-ui/styles": "^4.9.0",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "axios-mock-adapter": "^1.17.0",
     "chart.js": "^2.9.3",
     "chartjs-plugin-zoom": "^0.7.7",
